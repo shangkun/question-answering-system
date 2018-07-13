@@ -1,5 +1,6 @@
 package cn.ken.questionansweringsystem;
 
+import cn.ken.questionansweringsystem.utils.Base;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -29,7 +30,7 @@ import java.nio.charset.Charset;
                         "classpath*:config/applicationContext-mvc.xml"
                 }
         )
-public class JUnit4BaseConfig {
+public class JUnit4BaseConfig extends Base{
     @Autowired
     public WebApplicationContext wac;
 
