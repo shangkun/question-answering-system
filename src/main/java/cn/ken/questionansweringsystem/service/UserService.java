@@ -1,6 +1,10 @@
 package cn.ken.questionansweringsystem.service;
 
+import cn.ken.questionansweringsystem.model.PageData;
 import cn.ken.questionansweringsystem.model.User;
+import cn.ken.questionansweringsystem.model.request.UserRequest;
+
+import java.util.List;
 
 /**
  * author: shangkun <br/>
@@ -35,4 +39,11 @@ public interface UserService {
      * @return
      */
     public User getById(String id);
+
+    /**
+     * 根据条件查询一组数据
+     * @param request
+     * @return
+     */
+    public PageData<List<User>> getByAttribute(UserRequest request);
 }

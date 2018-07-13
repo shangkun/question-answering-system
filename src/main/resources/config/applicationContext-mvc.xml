@@ -2,38 +2,54 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-       <context:annotation-config/>
+    <context:annotation-config/>
 
-       <!-- 激活@controller模式 -->
-       <mvc:annotation-driven />
-       <!-- 配置包扫描位置（会在此包下扫描@controller控制器） -->
-       <context:component-scan base-package="cn.ken.questionansweringsystem.controller" />
-       <!--  swagger静态文件路径 -->
-       <mvc:resources mapping="/swagger/**" location="/swagger/" cache-period="31556926"/>
-       <mvc:default-servlet-handler />
-       <bean class="cn.ken.questionansweringsystem.config.SwaggerConfig" />
-       <bean class="cn.ken.questionansweringsystem.config.ControllerAspect" />
+    <!-- 激活@controller模式 -->
+    <mvc:annotation-driven/>
+    <!-- 配置包扫描位置（会在此包下扫描@controller控制器） -->
+    <context:component-scan base-package="cn.ken.questionansweringsystem.controller"/>
+    <!--  swagger静态文件路径 -->
+    <mvc:resources mapping="/swagger/**" location="/swagger/" cache-period="31556926"/>
+    <mvc:default-servlet-handler/>
+    <bean class="cn.ken.questionansweringsystem.config.SwaggerConfig"/>
+    <bean class="cn.ken.questionansweringsystem.config.ControllerAspect"/>
 
-       <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-              <property name="prefix" value="/views/"/>
-              <property name="suffix" value=".html"/>
-       </bean>
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/views/"/>
+        <property name="suffix" value=".html"/>
+    </bean>
 
-       <!--  这里申明的id必须为multipartResolver  -->
-       <bean id="multipartResolver"
-             class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-              <property name="maxUploadSize" value="5000000"/>
-       </bean>
+    <!--  这里申明的id必须为multipartResolver  -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="5000000"/>
+    </bean>
 
-       <mvc:annotation-driven>
-              <mvc:message-converters>
-                     <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
-                     <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
-              </mvc:message-converters>
-       </mvc:annotation-driven>
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
-       <mvc:default-servlet-handler/>
+    <mvc:default-servlet-handler/>
+    <!--启动aop-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
 </beans>

@@ -1,13 +1,18 @@
 package cn.ken.questionansweringsystem.controller;
 
+import cn.ken.questionansweringsystem.model.PageData;
 import cn.ken.questionansweringsystem.model.Response;
 import cn.ken.questionansweringsystem.model.User;
+import cn.ken.questionansweringsystem.model.request.UserRequest;
 import cn.ken.questionansweringsystem.service.UserService;
 import cn.ken.questionansweringsystem.utils.Base;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * author: shangkun <br/>
@@ -20,6 +25,14 @@ import org.springframework.web.bind.annotation.*;
 public class UserController extends Base{
     @Autowired
     private UserService userService;
+
+    @ApiOperation(value = "按条件查询用户", notes = "按条件查询用户")
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    @ResponseBody
+    public Response get(@RequestBody UserRequest request) {
+        PageData pageData = userService.getByAttribute(request);
+        return Response.SUCCESS(pageData);
+    }
 
     @ApiOperation(value = "单个添加用户", notes = "添加一个用户")
     @RequestMapping(value = "/add", method = RequestMethod.POST)

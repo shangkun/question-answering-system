@@ -1,10 +1,14 @@
 package cn.ken.questionansweringsystem.service;
 
 import cn.ken.questionansweringsystem.mapper.UserMapper;
+import cn.ken.questionansweringsystem.model.PageData;
 import cn.ken.questionansweringsystem.model.User;
+import cn.ken.questionansweringsystem.model.request.UserRequest;
 import cn.ken.questionansweringsystem.utils.Base;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * author: shangkun <br/>
@@ -33,5 +37,10 @@ public class UserServiceImpl extends Base implements UserService{
     @Override
     public User getById(String id) {
         return userMapper.selectById(id);
+    }
+
+    @Override
+    public PageData<List<User>> getByAttribute(UserRequest request) {
+        return new PageData(userMapper.getByAttribute(request),userMapper.countByAttribute(request));
     }
 }

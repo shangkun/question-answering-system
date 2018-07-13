@@ -39,8 +39,8 @@ public class ControllerAspect extends Base{
 
         //打印请求内容
         logger.info("===============Request Begin===============");
-        logger.info("Request From:" + IPUtils.getIpAddress(request));
-        logger.info("Request Address:" + request.getRequestURL().toString());
+        logger.info("Request IP:" + IPUtils.getIpAddress(request));
+        logger.info("Request URL:" + request.getRequestURL().toString());
         logger.info("Request Method:" + joinPoint.getSignature());
         logger.info("Request Param:" + getJoinPointStr(joinPoint));
     }
