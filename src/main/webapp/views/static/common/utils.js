@@ -1,7 +1,8 @@
 /**
  * Created by shangkun on 2018/7/13.
  */
-timeout=60000;
+var timeout=60000;
+var async=false;
 /**
  * ajax数据请求
  * @param url

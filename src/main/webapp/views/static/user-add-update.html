@@ -24,13 +24,13 @@
 <![endif]-->
 <!--/meta 作为公共模版分离出去-->
 
-<title>添加用户</title>
+<title>添加或修改用户</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 </head>
 <body>
 <article class="page-container">
-	<form action="" method="post" class="form form-horizontal" id="form-member-add">
+	<form action="" method="post" class="form form-horizontal" id="user-form">
 		<input type="hidden" id="id" name="id">
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>账号：</label>
@@ -44,22 +44,22 @@
 				<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
 			</div>
 		</div>
-		<div class="row cl">
+		<div class="row cl" id="password-div">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="password" class="input-text" value="" placeholder="" id="password" name="password">
 			</div>
 		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
+		<div class="row cl" id="confirm-div">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="password" class="input-text" value="" placeholder="" id="password" name="password">
+				<input type="password" class="input-text" value="" placeholder="" id="confirm" name="confirm">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>状态：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" placeholder="@" name="email" id="email">
+				<input type="text" class="input-text" placeholder="0" name="status" id="status">
 			</div>
 		</div>
 		<div class="row cl">
@@ -81,12 +81,50 @@
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate-methods.js"></script> 
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="../static/common/base.js"></script>
+<script type="text/javascript" src="../static/common/utils.js"></script>
 <script type="text/javascript">
 $(function(){
 
+	var rules = {
+		account:{
+			required:true,
+			minlength:3,
+			maxlength:100
+		},
+		name:{
+			required:true,
+			minlength:3,
+			maxlength:100
+		},
+		status:{
+			isIntGteZero:true,
+			required:true
+		}
+	};
+
 	var id = get_page_param('id');
+	var account = get_page_param('account');
+	var name = get_page_param('name');
+	var status = get_page_param('status');
 	if(id!=""){
-		console.log("id:",id);
+		$("#user-form").attr("action",userUrl+"update");
+		$("#password-div").hide();
+		$("#confirm-div").hide();
+		$("#id").val(id);
+		$("#account").val(account);
+		$("#name").val(name);
+		$("#status").val(status);
+	}else{
+		$("#user-form").attr("action",userUrl+"add");
+		rules.password={
+			required:true,
+			minlength:3,
+			maxlength:100
+		}
+		rules.confirm={
+			equalTo:"#password"
+		}
 	}
 
 	$('.skin-minimal input').iCheck({
@@ -95,29 +133,8 @@ $(function(){
 		increaseArea: '20%'
 	});
 	
-	$("#form-member-add").validate({
-		rules:{
-			username:{
-				required:true,
-				minlength:2,
-				maxlength:16
-			},
-			sex:{
-				required:true,
-			},
-			mobile:{
-				required:true,
-				isMobile:true,
-			},
-			email:{
-				required:true,
-				email:true,
-			},
-			uploadfile:{
-				required:true,
-			},
-			
-		},
+	$("#user-form").validate({
+		rules:rules,
 		onkeyup:false,
 		focusCleanup:true,
 		success:"valid",
