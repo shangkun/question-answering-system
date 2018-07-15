@@ -6,4 +6,5 @@ package cn.ken.questionansweringsystem.common;
  * what: 枚举 <br/>
  */
 public enum Enum {
+
 }
