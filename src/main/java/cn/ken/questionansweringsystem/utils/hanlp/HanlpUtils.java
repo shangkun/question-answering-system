@@ -2,6 +2,7 @@ package cn.ken.questionansweringsystem.utils.hanlp;
 
 import cn.ken.questionansweringsystem.common.PartOfSpeech;
 import cn.ken.questionansweringsystem.utils.StringUtils;
+import cn.ken.questionansweringsystem.utils.excel.ExcelReader;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.collection.AhoCorasick.AhoCorasickDoubleArrayTrie;
 import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLSentence;
@@ -9,6 +10,7 @@ import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLWord;
 import com.hankcs.hanlp.dictionary.CoreDictionary;
 import com.hankcs.hanlp.dictionary.CustomDictionary;
 import com.hankcs.hanlp.seg.CRF.CRFSegment;
+import com.hankcs.hanlp.seg.DictionaryBasedSegment;
 import com.hankcs.hanlp.seg.Dijkstra.DijkstraSegment;
 import com.hankcs.hanlp.seg.NShort.NShortSegment;
 import com.hankcs.hanlp.seg.Segment;
@@ -18,9 +20,7 @@ import com.hankcs.hanlp.tokenizer.IndexTokenizer;
 import com.hankcs.hanlp.tokenizer.NLPTokenizer;
 import com.hankcs.hanlp.tokenizer.SpeedTokenizer;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * author: shangkun <br/>
@@ -30,23 +30,57 @@ import java.util.Locale;
 public class HanlpUtils {
 
     public static void main(String[] args){
-        String string = "来到杨过曾经生活过的地方，小龙女动情地说：“我也想过过儿过过的生活”。";
-        String string1 = "那天开大会的时候，校长说衣服上除了校徽别别别的。我？？？";
-        String string2 = "这几天天天天气不好，出门一定要记得带伞";
-        String string3 = "你看到王刚了吗？看见了，王刚刚刚走了啊。";
-        String string4 = "听说羽生结弦是滑花滑滑的最好的花滑手";
-        String string5 = "走到奶茶店前：我有一点点想点一点一点点喝";
-        String string6 = "我背有点驼，麻麻说：你的背得背背背背佳";
-        String string7 = "来到儿子等校车的地方，邓超对孙俪说：我也想等等等等等过的那辆车";
-        String string8 = "张杰陪俩女儿跳格子：俏俏我们不要跳跳跳跳过的格子啦";
-        String string9 = "汪峰一大早叫女儿起床：醒醒醒醒醒醒醒醒...";
-        String string10 = "知道晓明要出差后，baby对闺蜜抱怨道：晓明明明明天是要带我出去玩的";
-        String string11 = "公司新来了一个牛逼且妖娆的会计张，我望向事务所一直自诩的一姐，问道：你等会会会会会计张吗？";
-        String string12 = "雨天骑自行车，车轮打滑，还好我反应快，一把把把把住了";
-        List<Term> termList = NLPTokenizer.segment(string12);
-        for (Term term:termList){
-            System.out.println(term.word+":"+ PartOfSpeech.getValue(term.nature.toString()));
+//        String string = "来到杨过曾经生活过的地方，小龙女动情地说：“我也想过过儿过过的生活”。";
+//        String string1 = "那天开大会的时候，校长说衣服上除了校徽别别别的。我？？？";
+//        String string2 = "这几天天天天气不好，出门一定要记得带伞";
+//        String string3 = "你看到王刚了吗？看见了，王刚刚刚走了啊。";
+//        String string4 = "听说羽生结弦是滑花滑滑的最好的花滑手";
+//        String string5 = "走到奶茶店前：我有一点点想点一点一点点喝";
+//        String string6 = "我背有点驼，麻麻说：你的背得背背背背佳";
+//        String string7 = "来到儿子等校车的地方，邓超对孙俪说：我也想等等等等等过的那辆车";
+//        String string8 = "张杰陪俩女儿跳格子：俏俏我们不要跳跳跳跳过的格子啦";
+//        String string9 = "汪峰一大早叫女儿起床：醒醒醒醒醒醒醒醒...";
+//        String string10 = "知道晓明要出差后，baby对闺蜜抱怨道：晓明明明明天是要带我出去玩的";
+//        String string11 = "公司新来了一个牛逼且妖娆的会计张，我望向事务所一直自诩的一姐，问道：你等会会会会会计张吗？";
+//        String string12 = "雨天骑自行车，车轮打滑，还好我反应快，一把把把把住了";
+        String question = "银行卡是啥?";
+        System.out.println(NLPTokenizer.segment(question));
+        Map<String,String> map = knowledgeMap();
+        double thresholdUpper = 0.8;
+        double thresholdLower = 0.6;
+        String answer = "我不知道";
+        List<Retrieval> retrievalList = new ArrayList<>();
+        for(String key:map.keySet()){
+            double similarity = org.apache.commons.lang3.StringUtils.getJaroWinklerDistance(question,key);
+            System.out.println(NLPTokenizer.segment(key)+":"+key+":"+similarity);
+            if(similarity<thresholdLower){
+                continue;
+            }
+            Retrieval retrieval = new Retrieval(key,similarity);
+            retrievalList.add(retrieval);
         }
+
+        if(retrievalList.size()>0){
+            CompareUtils compareUtils = new CompareUtils();
+            Collections.sort(retrievalList,compareUtils);
+            if(retrievalList.get(0).getSimilarity()>thresholdUpper){
+                answer = map.get(retrievalList.get(0).getKnowledge());
+                retrievalList.remove(0);
+            }
+        }
+
+        System.out.println(answer);
+        if(retrievalList.size()>0){
+            System.out.println("您是不是要问以下问题?");
+            for(Retrieval retrieval:retrievalList){
+                System.out.println(retrieval.getKnowledge()+":"+retrieval.getSimilarity());
+            }
+        }
+
+//        List<Term> termList = NLPTokenizer.segment(string12);
+//        for (Term term:termList){
+//            System.out.println(term.word+":"+ PartOfSpeech.getValue(term.nature.toString()));
+//        }
 //        System.out.println(termList);
 //        System.out.println(HanLP.extractKeyword(string,1));
 //        System.out.println(HanLP.extractPhrase(string,1));
@@ -69,7 +103,7 @@ public class HanlpUtils {
 //        CustomDictionary.insert("白富美", "nz 1024");
 //        // 删除词语（注释掉试试）
 ////        CustomDictionary.remove("攻城狮");
-//        System.out.println(CustomDictionary.add("单身狗", "nz 1024 n 1"));
+        System.out.println(CustomDictionary.add("单身狗", "nz 1024 n 1"));
 //        System.out.println(CustomDictionary.get("单身狗"));
 //
 //        String text = "攻城狮逆袭单身狗，迎娶白富美，走上人生巅峰";  // 怎么可能噗哈哈！
@@ -137,6 +171,21 @@ public class HanlpUtils {
 //            if (head == CoNLLWord.ROOT) System.out.println(head.LEMMA);
 //            else System.out.printf("%s --(%s)--> ", head.LEMMA, head.DEPREL);
 //        }
+    }
+
+    public static Map<String,String> knowledgeMap(){
+        Map<String,String> map = new HashMap<>();
+        String excelUrl = "F:\\2017-07-13\\bankcard20.xlsx";
+        try {
+            int[] arr = {0,1};
+            ArrayList<ArrayList<String>> arrayLists = ExcelReader.xlsxReader(excelUrl, arr);
+            for(ArrayList<String> arrayList:arrayLists){
+                map.put(arrayList.get(0),arrayList.get(1));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return map;
     }
 
     public static List<Term> segment(String string){
