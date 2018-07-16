@@ -8,6 +8,7 @@ import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLSentence;
 import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLWord;
 import com.hankcs.hanlp.dictionary.CoreDictionary;
 import com.hankcs.hanlp.dictionary.CustomDictionary;
+import com.hankcs.hanlp.seg.CRF.CRFSegment;
 import com.hankcs.hanlp.seg.Dijkstra.DijkstraSegment;
 import com.hankcs.hanlp.seg.NShort.NShortSegment;
 import com.hankcs.hanlp.seg.Segment;
@@ -29,15 +30,27 @@ import java.util.Locale;
 public class HanlpUtils {
 
     public static void main(String[] args){
-        String string = "说明本文主要论述的问题和自己的工作，注明是实现别人的算法，还是有自己的改进工作，如果是别人没有做过的工作，要在此强调一下，如果是实现某种算法和系统，没有照搬别人的想法，即使有现成的系统，也是很好的工作，因此也要注明，同时，要论述一下对论文工作的进一步考虑";
-        List<Term> termList = NLPTokenizer.segment(string);
+        String string = "来到杨过曾经生活过的地方，小龙女动情地说：“我也想过过儿过过的生活”。";
+        String string1 = "那天开大会的时候，校长说衣服上除了校徽别别别的。我？？？";
+        String string2 = "这几天天天天气不好，出门一定要记得带伞";
+        String string3 = "你看到王刚了吗？看见了，王刚刚刚走了啊。";
+        String string4 = "听说羽生结弦是滑花滑滑的最好的花滑手";
+        String string5 = "走到奶茶店前：我有一点点想点一点一点点喝";
+        String string6 = "我背有点驼，麻麻说：你的背得背背背背佳";
+        String string7 = "来到儿子等校车的地方，邓超对孙俪说：我也想等等等等等过的那辆车";
+        String string8 = "张杰陪俩女儿跳格子：俏俏我们不要跳跳跳跳过的格子啦";
+        String string9 = "汪峰一大早叫女儿起床：醒醒醒醒醒醒醒醒...";
+        String string10 = "知道晓明要出差后，baby对闺蜜抱怨道：晓明明明明天是要带我出去玩的";
+        String string11 = "公司新来了一个牛逼且妖娆的会计张，我望向事务所一直自诩的一姐，问道：你等会会会会会计张吗？";
+        String string12 = "雨天骑自行车，车轮打滑，还好我反应快，一把把把把住了";
+        List<Term> termList = NLPTokenizer.segment(string12);
         for (Term term:termList){
             System.out.println(term.word+":"+ PartOfSpeech.getValue(term.nature.toString()));
         }
 //        System.out.println(termList);
 //        System.out.println(HanLP.extractKeyword(string,1));
 //        System.out.println(HanLP.extractPhrase(string,1));
-//        System.out.println(HanLP.extractSummary(string,1));
+//        System.out.println(HanLP.extractSummary(string,5));
 //        System.out.println(HanLP.extractWords(string,1));
 //        System.out.println(HanLP.convertToPinyinList(string));
 //        System.out.println(HanLP.s2t(string));
@@ -103,27 +116,27 @@ public class HanlpUtils {
 //        System.out.println(org.apache.commons.lang3.StringUtils.getJaroWinklerDistance(text,query));
 
         //
-        CoNLLSentence sentence = HanLP.parseDependency(string);
-        System.out.println(sentence);
-        // 可以方便地遍历它
-        for (CoNLLWord word : sentence)
-        {
-            System.out.printf("%s --(%s)--> %s\n", word.LEMMA, word.DEPREL, word.HEAD.LEMMA);
-        }
-        // 也可以直接拿到数组，任意顺序或逆序遍历
-        CoNLLWord[] wordArray = sentence.getWordArray();
-        for (int i = wordArray.length - 1; i >= 0; i--)
-        {
-            CoNLLWord word = wordArray[i];
-            System.out.printf("%s --(%s)--> %s\n", word.LEMMA, word.DEPREL, word.HEAD.LEMMA);
-        }
-        // 还可以直接遍历子树，从某棵子树的某个节点一路遍历到虚根
-        CoNLLWord head = wordArray[12];
-        while ((head = head.HEAD) != null)
-        {
-            if (head == CoNLLWord.ROOT) System.out.println(head.LEMMA);
-            else System.out.printf("%s --(%s)--> ", head.LEMMA, head.DEPREL);
-        }
+//        CoNLLSentence sentence = HanLP.parseDependency(string);
+//        System.out.println(sentence);
+//        // 可以方便地遍历它
+//        for (CoNLLWord word : sentence)
+//        {
+//            System.out.printf("%s --(%s)--> %s\n", word.LEMMA, word.DEPREL, word.HEAD.LEMMA);
+//        }
+//        // 也可以直接拿到数组，任意顺序或逆序遍历
+//        CoNLLWord[] wordArray = sentence.getWordArray();
+//        for (int i = wordArray.length - 1; i >= 0; i--)
+//        {
+//            CoNLLWord word = wordArray[i];
+//            System.out.printf("%s --(%s)--> %s\n", word.LEMMA, word.DEPREL, word.HEAD.LEMMA);
+//        }
+//        // 还可以直接遍历子树，从某棵子树的某个节点一路遍历到虚根
+//        CoNLLWord head = wordArray[12];
+//        while ((head = head.HEAD) != null)
+//        {
+//            if (head == CoNLLWord.ROOT) System.out.println(head.LEMMA);
+//            else System.out.printf("%s --(%s)--> ", head.LEMMA, head.DEPREL);
+//        }
     }
 
     public static List<Term> segment(String string){
