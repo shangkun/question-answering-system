@@ -9,6 +9,7 @@ import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLSentence;
 import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLWord;
 import com.hankcs.hanlp.dictionary.CoreDictionary;
 import com.hankcs.hanlp.dictionary.CustomDictionary;
+import com.hankcs.hanlp.dictionary.common.CommonSynonymDictionary;
 import com.hankcs.hanlp.seg.CRF.CRFSegment;
 import com.hankcs.hanlp.seg.DictionaryBasedSegment;
 import com.hankcs.hanlp.seg.Dijkstra.DijkstraSegment;
@@ -41,9 +42,12 @@ public class HanlpUtils {
 //        String string8 = "张杰陪俩女儿跳格子：俏俏我们不要跳跳跳跳过的格子啦";
 //        String string9 = "汪峰一大早叫女儿起床：醒醒醒醒醒醒醒醒...";
 //        String string10 = "知道晓明要出差后，baby对闺蜜抱怨道：晓明明明明天是要带我出去玩的";
-//        String string11 = "公司新来了一个牛逼且妖娆的会计张，我望向事务所一直自诩的一姐，问道：你等会会会会会计张吗？";
+//        String string11 = "公司新来了一个牛逼且妖娆的会计张，我望向事务所一直自诩的一姐，问道：你等会儿会会会会计张吗？";
 //        String string12 = "雨天骑自行车，车轮打滑，还好我反应快，一把把把把住了";
+
         String question = "银行卡是啥?";
+//        CommonSynonymDictionary
+
         System.out.println(NLPTokenizer.segment(question));
         Map<String,String> map = knowledgeMap();
         double thresholdUpper = 0.8;
@@ -70,7 +74,14 @@ public class HanlpUtils {
         }
 
         System.out.println(answer);
-        if(retrievalList.size()>0){
+        if(!answer.equals("我不知道")){
+            if(retrievalList.size()>0){
+                System.out.println("您也可能对以下问题感兴趣!");
+                for(Retrieval retrieval:retrievalList){
+                    System.out.println(retrieval.getKnowledge()+":"+retrieval.getSimilarity());
+                }
+            }
+        } else if(retrievalList.size()>0){
             System.out.println("您是不是要问以下问题?");
             for(Retrieval retrieval:retrievalList){
                 System.out.println(retrieval.getKnowledge()+":"+retrieval.getSimilarity());
@@ -103,7 +114,7 @@ public class HanlpUtils {
 //        CustomDictionary.insert("白富美", "nz 1024");
 //        // 删除词语（注释掉试试）
 ////        CustomDictionary.remove("攻城狮");
-        System.out.println(CustomDictionary.add("单身狗", "nz 1024 n 1"));
+//        System.out.println(CustomDictionary.add("单身狗", "nz 1024 n 1"));
 //        System.out.println(CustomDictionary.get("单身狗"));
 //
 //        String text = "攻城狮逆袭单身狗，迎娶白富美，走上人生巅峰";  // 怎么可能噗哈哈！

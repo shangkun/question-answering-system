@@ -21,11 +21,12 @@
 
     <context:annotation-config/>
 
-    <!-- 激活@controller模式 -->
+    <context:property-placeholder location="classpath:config/*.properties"/>
+
     <mvc:annotation-driven/>
-    <!-- 配置包扫描位置（会在此包下扫描@controller控制器） -->
-    <context:component-scan base-package="cn.ken.questionansweringsystem.controller"/>
-    <!--  swagger静态文件路径 -->
+
+    <context:component-scan base-package="cn.ken.questionansweringsystem.*"/>
+
     <mvc:resources mapping="/swagger/**" location="/swagger/" cache-period="31556926"/>
     <mvc:default-servlet-handler/>
     <bean class="cn.ken.questionansweringsystem.config.SwaggerConfig"/>
@@ -48,7 +49,13 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+    <mvc:interceptors>
+        <bean class="cn.ken.questionansweringsystem.config.MineHandlerInterceptor"/>
+    </mvc:interceptors>
+
     <mvc:default-servlet-handler/>
     <!--启动aop-->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <import resource="applicationContext-redis.xml"/>
 </beans>
