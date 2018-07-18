@@ -81,6 +81,8 @@
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate-methods.js"></script> 
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="../lib/jquery-form.js"></script>
+<script type="text/javascript" src="../lib/json2.js"></script>
 <script type="text/javascript" src="../static/common/base.js"></script>
 <script type="text/javascript" src="../static/common/utils.js"></script>
 <script type="text/javascript">
@@ -94,7 +96,7 @@ $(function(){
 		},
 		name:{
 			required:true,
-			minlength:3,
+			minlength:1,
 			maxlength:100
 		},
 		status:{
@@ -139,10 +141,16 @@ $(function(){
 		focusCleanup:true,
 		success:"valid",
 		submitHandler:function(form){
-			//$(form).ajaxSubmit();
-			var index = parent.layer.getFrameIndex(window.name);
-			//parent.$('.btn-refresh').click();
-			parent.layer.close(index);
+			$(form).ajaxSubmit({
+				success: function(data){
+					layer.msg(data.message,{icon: 1,time:1000});
+					parent.table.ajax.reload();
+					var index = parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+				},
+				resetForm: true,
+				dataType: "json"
+			});
 		}
 	});
 });

@@ -1,5 +1,7 @@
 package cn.ken.questionansweringsystem.model;
 
+import java.util.Date;
+
 /**
  * author: shangkun <br/>
  * date: 2018/7/13 <br/>
@@ -15,7 +17,17 @@ public class User {
 
     private String password;
 
+    private Date modifyTime;
+
     private int status;
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
 
     public String getId() {
         return id;

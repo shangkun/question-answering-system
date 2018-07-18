@@ -3,6 +3,8 @@
  */
 var timeout=60000;
 var async=false;
+var day_format="yyyy-MM-dd";
+var second_format="yyyy-MM-dd HH:mm:ss";
 /**
  * ajax数据请求
  * @param url
@@ -63,7 +65,7 @@ var get_page_param = function(key) {
     var url = decodeURI(location.search); //获取url中"?"符后的字串
     if (url.indexOf("?") != -1) {
         var str = url.substr(1);
-        strs = str.split("&");
+        var strs = str.split("&");
         for (var i = 0; i < strs.length; i++) {
             if(key==strs[i].split("=")[0]){
                 return unescape(strs[i].split("=")[1]);
@@ -71,4 +73,35 @@ var get_page_param = function(key) {
         }
     }
     return "";
+}
+/**
+ * 时间格式化
+ * @param format
+ * @returns {*}
+ */
+var date_format = function (data_format,timestamp) {
+    var newDate = new Date();
+    newDate.setTime(timestamp);
+    return newDate.format(data_format);
+}
+Date.prototype.format = function (format) {
+    var date = {
+        "M+": this.getMonth() + 1,
+        "d+": this.getDate(),
+        "H+": this.getHours(),
+        "m+": this.getMinutes(),
+        "s+": this.getSeconds(),
+        "q+": Math.floor((this.getMonth() + 3) / 3),
+        "S+": this.getMilliseconds()
+    };
+    if (/(y+)/i.test(format)) {
+        format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+    }
+    for (var k in date) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+        }
+    }
+    return format;
 }

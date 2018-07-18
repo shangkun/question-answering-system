@@ -2,7 +2,6 @@ package cn.ken.questionansweringsystem.config;
 
 import cn.ken.questionansweringsystem.common.Constant;
 import cn.ken.questionansweringsystem.utils.Base;
-import cn.ken.questionansweringsystem.utils.IPUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -14,14 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * author: shangkun <br/>
  * date: 2018/7/17 <br/>
- * what: MineHandlerInterceptor <br/>
+ * what: ControllerHandlerInterceptor <br/>
  */
-public class MineHandlerInterceptor extends Base implements HandlerInterceptor {
-    ThreadLocal<Long> start = new ThreadLocal();
+public class ControllerHandlerInterceptor extends Base implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        start.set(System.currentTimeMillis());
-
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
         String url = request.getRequestURL().toString();
@@ -29,10 +25,7 @@ public class MineHandlerInterceptor extends Base implements HandlerInterceptor {
         if(isWhiteList(url)){
             return true;
         }
-        logger.info("=============preHandle=============");
-
-        logger.info("Request IP:{}", IPUtils.getIpAddress(request));
-        logger.info("Request URL:{}",url);
+        logger.info(Constant.printPattern+"preHandle"+Constant.printPattern);
         return false;
     }
 
@@ -52,12 +45,11 @@ public class MineHandlerInterceptor extends Base implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-        logger.info("=============postHandle=============");
+        logger.info(Constant.printPattern+"postHandle"+Constant.printPattern);
     }
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-        logger.info("=============afterCompletion=============");
-        logger.info("Response Waste Time:{}",(System.currentTimeMillis() - start.get()) + "ms");
+        logger.info(Constant.printPattern+"afterCompletion"+Constant.printPattern);
     }
 }

@@ -5,9 +5,11 @@ import cn.ken.questionansweringsystem.model.PageData;
 import cn.ken.questionansweringsystem.model.User;
 import cn.ken.questionansweringsystem.model.request.UserRequest;
 import cn.ken.questionansweringsystem.utils.Base;
+import cn.ken.questionansweringsystem.utils.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +23,8 @@ public class UserServiceImpl extends Base implements UserService{
     private UserMapper userMapper;
 
     public int add(User user) {
+        user.setId(IdWorker.getInstance().nextId());
+        user.setModifyTime(new Date());
         return userMapper.insert(user);
     }
 

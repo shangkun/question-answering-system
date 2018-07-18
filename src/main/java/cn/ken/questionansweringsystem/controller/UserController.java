@@ -9,10 +9,7 @@ import cn.ken.questionansweringsystem.utils.Base;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * author: shangkun <br/>
@@ -20,7 +17,7 @@ import java.util.List;
  * what: 用户接口类 <br/>
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @Api(tags="用户管理")
 public class UserController extends Base{
     @Autowired
@@ -37,7 +34,7 @@ public class UserController extends Base{
     @ApiOperation(value = "单个添加用户", notes = "添加一个用户")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    public Response add(@RequestBody User user) {
+    public Response add(User user) {
         userService.add(user);
         return Response.SUCCESS();
     }
@@ -53,7 +50,7 @@ public class UserController extends Base{
     @ApiOperation(value = "更新用户", notes = "更新用户")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Response update(@RequestBody User user) {
+    public Response update(User user) {
         userService.update(user);
         return Response.SUCCESS();
     }

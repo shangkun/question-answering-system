@@ -40,6 +40,7 @@
 					<th width="80">账号</th>
 					<th width="200">姓名</th>
 					<th width="120">状态</th>
+					<th width="120">修改时间</th>
 					<th width="100">操作</th>
 				</tr>
 			</thead>
@@ -65,13 +66,14 @@
 	});
 
 	function load_user(){
-		table = $('#user').dataTable({
+		table = $("#user").DataTable({
 			autoWidth:false,
 			autoHeight:false,
 			stripeClasses: ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
 			processing: true, //隐藏加载提示,自行处理
 			serverSide: true, //启用服务器端分页
 			searching: false, //禁用原生搜索
+			destroy: true,
 			ordering: false, //启用多列排序
 			order: [], //取消默认排序查询,否则复选框一列会出现小箭头
 			info: true,
@@ -104,6 +106,12 @@
 				{"data":"name"},
 				{"data":"status"},
 				{
+					"data":"modifyTime",
+					"render" : function(data,type,row) {
+						return date_format(second_format,data);
+					}
+				},
+				{
 					"data" : "id",
 					"render" : function(data,type,row) {
 						var html = '<a style="text-decoration:none" onClick="layer_show(\'用户编辑\',\'user-add-update.html?id='+data+'&account='+row.account+'&name='+row.name+'&status='+row.status+'\',\'510\',\'400\')" href="javascript:;" title="编辑">' +
@@ -112,13 +120,13 @@
 					}
 				}
 			]
-		}).api();
+		});
 	}
 	function user_del(obj,id){
 		layer.confirm('确认要删除吗？',function(index){
 			GET(userUrl+"delete/"+id,null,function(data){
 				if(data.statusCode==200){
-					table.ajax.reload()
+					table.ajax.reload();
 					layer.msg(data.message,{icon:1,time:1000});
 				}else{
 					layer.msg(data.message,{icon:5,time:1000});

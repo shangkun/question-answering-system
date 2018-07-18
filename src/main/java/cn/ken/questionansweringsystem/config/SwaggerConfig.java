@@ -11,6 +11,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import static springfox.documentation.builders.PathSelectors.regex;
+
 /**
  * author: shangkun <br/>
  * date: 2018/7/13 <br/>
@@ -25,8 +27,10 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 
     @Bean
     public Docket customDocket() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo());
+        ApiInfo apiInfo = apiInfo();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2).select().paths(regex("/api/.*")).build()
+                .apiInfo(apiInfo).useDefaultResponseMessages(false);
+        return docket;
     }
 
     private ApiInfo apiInfo() {

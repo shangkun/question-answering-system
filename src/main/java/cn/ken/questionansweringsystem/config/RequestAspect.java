@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 public class RequestAspect extends Base{
     //线程局部变量 用于解决大并发情况下开始时间错乱问题
     ThreadLocal<Long> start = new ThreadLocal();
+    private static long count = 0;
 
     @Pointcut("execution(* cn.ken.questionansweringsystem.controller.*.*(..))")
     public void customAspect() {}
@@ -38,6 +39,7 @@ public class RequestAspect extends Base{
         logger.info("Request URL:{}",request.getRequestURL().toString());
         logger.info("Request Method:{}",joinPoint.getSignature());
         logger.info("Request Param:{}",getJoinPointStr(joinPoint));
+        logger.info("Request Count:{}",count++);
     }
 
 
