@@ -1,0 +1,142 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="../lib/html5shiv.js"></script>
+    <script type="text/javascript" src="../lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="../static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/chat.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="../lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>聊天页面</title>
+</head>
+<body>
+<div class="page-container">
+    <div class="abs cover pnl">
+        <div class="abs top pnl-head" id="pnlHead" style="background-color: rgb(42, 0, 234);">
+            <div class="pnl-site hide" id="siteName" style="color: rgb(236, 236, 236);">聊天页面</div>
+        </div>
+        <div class="abs cover pnl-body" id="pnlBody">
+            <div class="abs cover pnl-left">
+                <div class="abs top pnl-alert" id="alert">这是一则消息</div>
+                <div class="abs cover pnl-msgs scroll" id="show" style="padding-top: 35px;">
+                    <!--<div class="msg min time" id="histStart">加载历史消息</div>-->
+                    <div class="pnl-list" id="hists">
+                        <!-- 历史消息 -->
+                    </div>
+                    <div class="pnl-list" id="msgs">
+                        <div class="msg robot" id="robot">
+                            <div class="msg-left">
+                                <div class="msg-host"><i class="Hui-iconfont Hui-iconfont-kefu"></i></div>
+                                <div class="msg-ball" title="今天 14:54:41"><span>你好,我是小Q,请向我发问吧!</span></div>
+                            </div>
+                        </div>
+                        <div class="msg guest" id="guest">
+                            <div class="msg-right">
+                                <div class="msg-host"><i class="Hui-iconfont Hui-iconfont-avatar"></i></div>
+                                <div class="msg-ball" title="今天 14:54:43">你好</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pnl-list hide" id="unreadLine">
+                        <div class="msg min time unread">未读消息</div>
+                    </div>
+                    <div class="pnl-mask hide" id="msg-mask"></div>
+                </div>
+                <div class="abs bottom pnl-text">
+                    <div class="abs bottom pnl-ext hide" id="pnlExt">
+                        <div class="emoji-pnl scroll hide" id="emojiPnl">
+                        </div>
+                    </div>
+                    <div class="ques-pnl scroll hide" id="quesPnl">
+                        <ul class="questions unselect" id="ques">
+                            <li class="q-item">功能介绍</li>
+                        </ul>
+                    </div>
+                    <div class="abs top pnl-warn" id="pnlWarn">
+                        <div class="fl btns rel pnl-warn-free">
+                            <i class="Hui-iconfont Hui-iconfont-face2"></i>
+                        </div>
+                        <div class="fl right pnl-warn-right">
+                            <span class="sess-status" id="sessStatus"></span>
+                            <span id="val-left" style="display:none;">您还可以输入<span id="valleft">450</span>字</span>
+                        </div>
+                    </div>
+                    <div class="abs cover pnl-input">
+                        <textarea class="scroll" id="text" placeholder="在此输入..." wrap="hard"></textarea>
+
+                        <div class="abs atcom-pnl scroll hide" id="atcomPnl">
+                            <ul class="atcom" id="atcom">
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="abs br pnl-btn" id="submit"
+                         style="background-color: rgb(42, 0, 234); color: rgb(255, 255, 255);">发送
+                    </div>
+                    <div class="abs cover input-mask hide" id="recon">
+                        <div class="recon-tip" id="distype">
+                            <span id="closeTip">因长时间未活动会话已关闭</span>，您可以<i id="refresh">&nbsp;刷新 </i>或<i id="startChat">
+                            继续对话 </i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="abs right pnl-right">
+                <div class="pnl-right-content">
+                    <div class="pnl-tabs">
+                        <div class="tab-btn active" id="hot-tab">常见问题</div>
+                        <div class="tab-btn" id="rel-tab">相关问题</div>
+                    </div>
+                    <div class="pnl-hot">
+                        <ul class="rel-list unselect" id="hots">
+                            <li class="rel-item" title="点击发送问题">功能介绍</li>
+                            <li class="rel-item" title="点击发送问题">什么是智能客服？</li>
+                            <li class="rel-item" title="点击发送问题">V5机器人有多智能？</li>
+                            <li class="rel-item" title="点击发送问题">你们的优势在哪？</li>
+                            <li class="rel-item" title="点击发送问题">V5是免费的吗？</li>
+                            <li class="rel-item" title="点击发送问题">可以接入哪些渠道/平台？</li>
+                            <li class="rel-item" title="点击发送问题">如何接入微信公众账号？</li>
+                            <li class="rel-item" title="点击发送问题">如何接入小程序？</li>
+                            <li class="rel-item" title="点击发送问题">怎么接入网站？</li>
+                        </ul>
+                    </div>
+                    <div class="pnl-rel" style="display: none;">
+                        <ul class="rel-list unselect" id="rels">
+                            <!-- <li class="rel-item">这是一个问题，这是一个问题？</li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../static/h-ui.admin/js/H-ui.admin.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="../lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="../lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src=""></script>
+<script type="text/javascript">
+</script>
+</body>
+</html>
