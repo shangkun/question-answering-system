@@ -7,19 +7,22 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="login_count" jdbcType="INTEGER" property="loginCount"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
     </resultMap>
 
     <sql id="table">user</sql>
 
     <sql id="column">
-        id,name,account,password,modify_time,email,phone,status
+        id,name,account,password,modify_time,last_login_time,email,last_login_ip,phone,login_count,status
     </sql>
 
     <sql id="insertColumnValue">
-        #{id},#{name},#{account},#{password},#{modifyTime},#{email},#{phone},#{status}
+        #{id},#{name},#{account},#{password},#{modifyTime},#{lastLoginTime},#{email},#{lastLoginIp},#{phone},#{loginCount},#{status}
     </sql>
 
     <insert id="insert">
@@ -45,8 +48,11 @@
             <if test="account!=null and account!=''">
                 account = #{account},
             </if>
-            <if test="password!=null and password!=''">
-                password = #{password},
+            <if test="email!=null and email!=''">
+                email = #{email},
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone = #{phone},
             </if>
             <if test="status!=null">
                 status = #{status}
@@ -57,12 +63,40 @@
         </where>
     </update>
 
+    <update id="updateLoginInfo">
+        update
+        <include refid="table"/>
+        <set>
+            <if test="lastLoginIp!=null and lastLoginIp!=''">
+                last_login_ip = #{lastLoginIp},
+            </if>
+            <if test="lastLoginTime!=null">
+                last_login_time = #{lastLoginTime},
+            </if>
+            <if test="status!=null">
+                status = #{status}
+            </if>
+            login_count = login_count+1
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <select id="selectById" resultMap="ResultMap">
         select
-        <include refid="column"/>
+        id,name,account,modify_time,last_login_time,email,last_login_ip,phone,login_count,status
         from
         <include refid="table"/>
         where id = #{id}
+    </select>
+
+    <select id="login" resultMap="ResultMap">
+        select
+        id,name,account,password,modify_time,last_login_time,email,last_login_ip,phone,login_count,status
+        from
+        <include refid="table"/>
+        where account = #{account}
     </select>
 
     <select id="getByAttribute" resultMap="ResultMap">
@@ -101,5 +135,22 @@
         <if test="status!=null">
             and status = #{status}
         </if>
+    </select>
+
+    <select id="countByAccount" resultType="int">
+        select
+        count(id)
+        from
+        <include refid="table"/>
+        where account = #{0}
+    </select>
+
+    <select id="countByIdAndAccount" resultType="int">
+        select
+        count(id)
+        from
+        <include refid="table"/>
+        where id != #{0}
+        and acount = #{1}
     </select>
 </mapper>

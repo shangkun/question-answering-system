@@ -20,4 +20,10 @@ public class Constant {
     public static String[] whiteList = {"login","logout"};
 
     public static final String printPattern = "=====================";
+
+    public static final int TIMEOUT = 1800;
+
+    public static final String ACCESS_TOKEN = "access_token";
+
+    public static final String ACCESS_TOKEN_WITH_PREFIX = "access_token:";
 }

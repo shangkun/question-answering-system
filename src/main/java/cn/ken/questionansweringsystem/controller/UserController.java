@@ -31,12 +31,27 @@ public class UserController extends Base{
         return Response.SUCCESS(pageData);
     }
 
+    @ApiOperation(value = "登录名校验", notes = "登录名校验")
+    @RequestMapping(value = "/repeat", method = RequestMethod.POST)
+    @ResponseBody
+    public Response repeat(User user) {
+        if (userService.isRepeat(user)) {
+            return Response.FAIL("登录名重复");
+        } else {
+            return Response.SUCCESS("登录名不重复");
+        }
+    }
+
     @ApiOperation(value = "单个添加用户", notes = "添加一个用户")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Response add(User user) {
-        userService.add(user);
-        return Response.SUCCESS();
+        String result = userService.add(user);
+        if(result!=null){
+            return Response.SUCCESS(result);
+        }else{
+            return Response.SUCCESS();
+        }
     }
 
     @ApiOperation(value = "单个删除用户", notes = "删除一个用户")

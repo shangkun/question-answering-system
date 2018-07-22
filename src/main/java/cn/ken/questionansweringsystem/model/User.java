@@ -2,7 +2,13 @@ package cn.ken.questionansweringsystem.model;
 
 import java.util.Date;
 
+/**
+ * author: shangkun <br/>
+ * date: 2018/7/13 <br/>
+ * what: User <br/>
+ */
 public class User {
+
     private String id;
 
     private String account;
@@ -17,7 +23,37 @@ public class User {
 
     private String phone;
 
+    private Integer loginCount;
+
+    private String lastLoginIp;
+
+    private Date lastLoginTime;
+
     private Integer status;
+
+    public String getLastLoginIp() {
+        return lastLoginIp;
+    }
+
+    public void setLastLoginIp(String lastLoginIp) {
+        this.lastLoginIp = lastLoginIp;
+    }
+
+    public Integer getLoginCount() {
+        return loginCount;
+    }
+
+    public void setLoginCount(Integer loginCount) {
+        this.loginCount = loginCount;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
 
     public String getId() {
         return id;

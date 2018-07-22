@@ -3,7 +3,9 @@ package cn.ken.questionansweringsystem.service;
 import cn.ken.questionansweringsystem.model.PageData;
 import cn.ken.questionansweringsystem.model.User;
 import cn.ken.questionansweringsystem.model.request.UserRequest;
+import cn.ken.questionansweringsystem.model.response.UserResponse;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -17,7 +19,14 @@ public interface UserService {
      * @param user
      * @return
      */
-    public int add(User user);
+    public String add(User user);
+
+    /**
+     * 重复校验
+     * @param user
+     * @return
+     */
+    public boolean isRepeat(User user);
 
     /**
      * 删除一个用户
@@ -46,4 +55,19 @@ public interface UserService {
      * @return
      */
     public PageData<List<User>> getByAttribute(UserRequest request);
+
+    /**
+     * 管理员登陆
+     * @param httpServletRequest
+     * @param request
+     * @return
+     */
+    public UserResponse login(HttpServletRequest httpServletRequest,UserRequest request);
+
+    /**
+     * 管理员登出
+     * @param httpServletRequest
+     * @return
+     */
+    public String logout(HttpServletRequest httpServletRequest);
 }

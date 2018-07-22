@@ -11,6 +11,8 @@ public class Response<T> {
 
     private String message;
 
+    private String info;
+
     private T data;
 
     public Response() {
@@ -27,10 +29,27 @@ public class Response<T> {
         this.data = data;
     }
 
+    public Response(int statusCode, String message,String info) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.info = info;
+    }
+
     public static Response SUCCESS(){
         Response response = new Response(200,"请求成功");
         return response;
     }
+
+    public static Response SUCCESS(String info){
+        Response response = new Response(200,"请求成功",info);
+        return response;
+    }
+
+    public static Response FAIL(String info){
+        Response response = new Response(500,"请求失败",info);
+        return response;
+    }
+
 
     public static Response FAIL(){
         Response response = new Response(500,"请求失败");
@@ -40,6 +59,14 @@ public class Response<T> {
     public static Response SUCCESS(Object data){
         Response response = new Response(200,"请求成功",data);
         return response;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public int getStatusCode() {

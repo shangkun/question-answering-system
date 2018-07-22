@@ -10,4 +10,12 @@ public interface UserMapper extends BaseMapper<User,String>{
     int countByAttribute(UserRequest request);
 
     List<User> getByAttribute(UserRequest request);
+
+    int updateLoginInfo(User user);
+
+    User login(UserRequest request);
+
+    int countByAccount(String account);
+
+    int countByIdAndAccount(String id,String account);
 }

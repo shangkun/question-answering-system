@@ -11,6 +11,8 @@ public class LogQa {
 
     private String sessionId;
 
+    private String userId;
+
     private Date requestTime;
 
     private String knowledgeId;
@@ -24,6 +26,24 @@ public class LogQa {
     private Date responseTime;
 
     private Date createTime;
+
+    private String accessToken;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 
     public String getId() {
         return id;

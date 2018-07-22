@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="cn.ken.questionansweringsystem.model.Menu">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>

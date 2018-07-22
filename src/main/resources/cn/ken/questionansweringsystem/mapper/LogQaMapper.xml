@@ -6,6 +6,7 @@
     <result column="question" jdbcType="VARCHAR" property="question" />
     <result column="channel_id" jdbcType="INTEGER" property="channelId" />
     <result column="session_id" jdbcType="VARCHAR" property="sessionId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="request_time" jdbcType="TIMESTAMP" property="requestTime" />
     <result column="knowledge_id" jdbcType="VARCHAR" property="knowledgeId" />
     <result column="classification_id" jdbcType="VARCHAR" property="classificationId" />
@@ -13,5 +14,6 @@
     <result column="response_type" jdbcType="INTEGER" property="responseType" />
     <result column="response_time" jdbcType="TIMESTAMP" property="responseTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="access_token" jdbcType="VARCHAR" property="accessToken" />
   </resultMap>
 </mapper>
