@@ -2,20 +2,16 @@ package cn.ken.questionansweringsystem.model;
 
 import java.util.Date;
 
-public class User {
+public class Lexicon {
     private String id;
-
-    private String account;
 
     private String name;
 
-    private String password;
+    private Integer type;
 
     private Date modifyTime;
 
-    private String email;
-
-    private String phone;
+    private String modifyerId;
 
     private Integer status;
 
@@ -27,14 +23,6 @@ public class User {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account == null ? null : account.trim();
-    }
-
     public String getName() {
         return name;
     }
@@ -43,12 +31,12 @@ public class User {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getPassword() {
-        return password;
+    public Integer getType() {
+        return type;
     }
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public Date getModifyTime() {
@@ -59,20 +47,12 @@ public class User {
         this.modifyTime = modifyTime;
     }
 
-    public String getEmail() {
-        return email;
+    public String getModifyerId() {
+        return modifyerId;
     }
 
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+    public void setModifyerId(String modifyerId) {
+        this.modifyerId = modifyerId == null ? null : modifyerId.trim();
     }
 
     public Integer getStatus() {

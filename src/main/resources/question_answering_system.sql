@@ -1,0 +1,267 @@
+/*
+Navicat MySQL Data Transfer
+
+Source Server         : localhost
+Source Server Version : 50549
+Source Host           : localhost:3306
+Source Database       : question_answering_system
+
+Target Server Type    : MYSQL
+Target Server Version : 50549
+File Encoding         : 65001
+
+Date: 2018-07-22 18:52:01
+*/
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for access_token
+-- ----------------------------
+DROP TABLE IF EXISTS `access_token`;
+CREATE TABLE `access_token` (
+  `id` varchar(20) NOT NULL,
+  `name` varchar(200) DEFAULT NULL COMMENT '令牌名称',
+  `token` varchar(50) DEFAULT NULL COMMENT '访问令牌',
+  `modifier_id` varchar(50) DEFAULT NULL COMMENT '创建人',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '修改时间',
+  `status` int(1) DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='访问令牌表';
+
+-- ----------------------------
+-- Table structure for answer
+-- ----------------------------
+DROP TABLE IF EXISTS `answer`;
+CREATE TABLE `answer` (
+  `id` varchar(20) NOT NULL,
+  `content` varchar(2000) DEFAULT NULL COMMENT '答案',
+  `channel_id` int(10) DEFAULT NULL COMMENT '渠道id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='答案表';
+
+-- ----------------------------
+-- Table structure for classification
+-- ----------------------------
+DROP TABLE IF EXISTS `classification`;
+CREATE TABLE `classification` (
+  `id` varchar(20) NOT NULL,
+  `name` varchar(50) DEFAULT NULL COMMENT '分类名称',
+  `description` varchar(500) DEFAULT NULL COMMENT '分类描述',
+  `modify_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `modifier_id` varchar(50) DEFAULT NULL COMMENT '修改人',
+  `p_id` varchar(20) NOT NULL COMMENT '父级id',
+  `status` int(1) DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='分类表';
+
+-- ----------------------------
+-- Table structure for configuration
+-- ----------------------------
+DROP TABLE IF EXISTS `configuration`;
+CREATE TABLE `configuration` (
+  `welcome` varchar(500) NOT NULL COMMENT '欢迎语',
+  `threshold_upper_limit` double NOT NULL COMMENT '上限阈值',
+  `threshold_lower_limit` double NOT NULL COMMENT '下限阈值',
+  `timeout` int(10) unsigned zerofill NOT NULL COMMENT '超时时间',
+  `recommend_question_number` int(10) unsigned zerofill NOT NULL COMMENT '推荐问题数量',
+  `greeting_threshold_upper_limit` double NOT NULL COMMENT '寒暄上限阈值',
+  `unknown` varchar(500) NOT NULL COMMENT '未知问题回复',
+  `has_answer_and_recommend` varchar(500) NOT NULL COMMENT '有答案且有推荐问的回复',
+  `has_recommend` varchar(500) NOT NULL COMMENT '仅有推荐问的回复',
+  `hot_question_limit` int(10) unsigned zerofill NOT NULL COMMENT '热点问题限制个数'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='问答配置表';
+
+-- ----------------------------
+-- Table structure for extension_question
+-- ----------------------------
+DROP TABLE IF EXISTS `extension_question`;
+CREATE TABLE `extension_question` (
+  `id` varchar(20) NOT NULL,
+  `title` varchar(500) DEFAULT NULL COMMENT '扩展问题',
+  `knowledge_id` varchar(20) DEFAULT NULL COMMENT '知识id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扩展问题表';
+
+-- ----------------------------
+-- Table structure for greeting
+-- ----------------------------
+DROP TABLE IF EXISTS `greeting`;
+CREATE TABLE `greeting` (
+  `id` varchar(20) NOT NULL,
+  `title` varchar(300) DEFAULT NULL,
+  `modify_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `modifier_id` varchar(50) DEFAULT NULL COMMENT '修改人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='寒暄表';
+
+-- ----------------------------
+-- Table structure for greeting_answer
+-- ----------------------------
+DROP TABLE IF EXISTS `greeting_answer`;
+CREATE TABLE `greeting_answer` (
+  `id` varchar(20) NOT NULL,
+  `answer` varchar(2000) DEFAULT NULL COMMENT '寒暄回答',
+  `channel_id` int(10) DEFAULT NULL COMMENT '渠道id',
+  `greeting_id` varchar(20) DEFAULT NULL COMMENT '寒暄id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='寒暄答案表';
+
+-- ----------------------------
+-- Table structure for greeting_extension_question
+-- ----------------------------
+DROP TABLE IF EXISTS `greeting_extension_question`;
+CREATE TABLE `greeting_extension_question` (
+  `id` varchar(20) NOT NULL,
+  `title` varchar(300) DEFAULT NULL COMMENT '寒暄扩展问',
+  `greeting_id` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='寒暄扩展问表';
+
+-- ----------------------------
+-- Table structure for knowledge
+-- ----------------------------
+DROP TABLE IF EXISTS `knowledge`;
+CREATE TABLE `knowledge` (
+  `id` varchar(20) NOT NULL,
+  `title` varchar(300) DEFAULT NULL COMMENT '知识标题',
+  `classification_id` varchar(20) DEFAULT NULL COMMENT '分类id',
+  `modify_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `modifier_id` varchar(50) DEFAULT NULL COMMENT '修改人',
+  `teacher_id` varchar(50) DEFAULT NULL COMMENT '教师id',
+  `status` int(1) DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='知识表';
+
+-- ----------------------------
+-- Table structure for lexicon
+-- ----------------------------
+DROP TABLE IF EXISTS `lexicon`;
+CREATE TABLE `lexicon` (
+  `id` varchar(20) NOT NULL,
+  `name` varchar(100) DEFAULT NULL COMMENT '词名称',
+  `type` int(11) DEFAULT NULL COMMENT '词类型',
+  `modify_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `modifyer_id` varchar(50) DEFAULT NULL COMMENT '修改人',
+  `status` int(11) DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='词库';
+
+-- ----------------------------
+-- Table structure for log_qa
+-- ----------------------------
+DROP TABLE IF EXISTS `log_qa`;
+CREATE TABLE `log_qa` (
+  `id` varchar(20) NOT NULL,
+  `question` varchar(500) DEFAULT NULL COMMENT '用户问题',
+  `channel_id` int(10) DEFAULT NULL COMMENT '渠道id',
+  `session_id` varchar(20) DEFAULT NULL COMMENT '回话id',
+  `request_time` timestamp NULL DEFAULT NULL COMMENT '请求时间',
+  `knowledge_id` varchar(20) DEFAULT NULL COMMENT '知识id',
+  `classification_id` varchar(20) DEFAULT NULL COMMENT '分类id',
+  `answer` varchar(3000) DEFAULT NULL COMMENT '答案',
+  `response_type` int(10) DEFAULT NULL COMMENT '回复类型',
+  `response_time` timestamp NULL DEFAULT NULL COMMENT '回复时间',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='问答日志';
+
+-- ----------------------------
+-- Table structure for log_qa_evaluate
+-- ----------------------------
+DROP TABLE IF EXISTS `log_qa_evaluate`;
+CREATE TABLE `log_qa_evaluate` (
+  `id` varchar(20) NOT NULL,
+  `qa_id` varchar(20) DEFAULT NULL COMMENT '问答记录id',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `evaluate` int(11) DEFAULT NULL COMMENT '评价',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='问答评价表';
+
+-- ----------------------------
+-- Table structure for log_qa_recommend
+-- ----------------------------
+DROP TABLE IF EXISTS `log_qa_recommend`;
+CREATE TABLE `log_qa_recommend` (
+  `id` varchar(20) NOT NULL,
+  `qa_id` varchar(20) DEFAULT NULL COMMENT '问答id',
+  `session_id` varchar(20) DEFAULT NULL COMMENT '会话id',
+  `knowledge_id` varchar(20) DEFAULT NULL COMMENT '知识id',
+  `knowledge_title` varchar(300) DEFAULT NULL COMMENT '知识标题',
+  `sequence` int(10) DEFAULT NULL COMMENT '推荐问排序',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='问答推荐表';
+
+-- ----------------------------
+-- Table structure for menu
+-- ----------------------------
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE `menu` (
+  `id` varchar(20) NOT NULL,
+  `name` varchar(50) DEFAULT NULL COMMENT '菜单名称',
+  `description` varchar(200) DEFAULT NULL COMMENT '菜单描述',
+  `status` int(1) DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单表';
+
+-- ----------------------------
+-- Table structure for role
+-- ----------------------------
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE `role` (
+  `id` varchar(20) NOT NULL,
+  `name` varchar(50) DEFAULT NULL COMMENT '角色名称',
+  `description` varchar(200) DEFAULT NULL COMMENT '角色描述',
+  `modify_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `status` int(1) DEFAULT NULL COMMENT '角色状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
+
+-- ----------------------------
+-- Table structure for role_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `role_menu`;
+CREATE TABLE `role_menu` (
+  `id` varchar(20) NOT NULL,
+  `role_id` varchar(20) DEFAULT NULL COMMENT '角色id',
+  `menu_id` varchar(20) DEFAULT NULL COMMENT '菜单id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色菜单关联表';
+
+-- ----------------------------
+-- Table structure for sensitive_words
+-- ----------------------------
+DROP TABLE IF EXISTS `sensitive_words`;
+CREATE TABLE `sensitive_words` (
+  `id` varchar(20) NOT NULL,
+  `topic` varchar(500) DEFAULT NULL COMMENT '主题',
+  `topic_set` varchar(4000) DEFAULT NULL COMMENT '主题集合',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='敏感词';
+
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` varchar(50) NOT NULL,
+  `account` varchar(100) NOT NULL COMMENT '账户',
+  `name` varchar(100) DEFAULT NULL COMMENT '姓名',
+  `password` varchar(100) NOT NULL COMMENT '密码',
+  `modify_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
+  `phone` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `status` int(1) NOT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+
+-- ----------------------------
+-- Table structure for user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `user_role`;
+CREATE TABLE `user_role` (
+  `id` varchar(20) NOT NULL,
+  `user_id` varchar(50) DEFAULT NULL COMMENT '用户id',
+  `role_id` varchar(20) DEFAULT NULL COMMENT '角色id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色关联表';

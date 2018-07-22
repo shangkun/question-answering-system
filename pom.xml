@@ -105,12 +105,6 @@
             <artifactId>mybatis</artifactId>
             <version>${mybatis.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.solr/solr-solrj -->
-        <!--            <dependency>
-                        <groupId>org.apache.solr</groupId>
-                        <artifactId>solr-core</artifactId>
-                        <version>${solr.version}</version>
-                    </dependency>-->
 
         <dependency>
             <groupId>org.springframework.data</groupId>
