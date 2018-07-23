@@ -18,6 +18,7 @@
 <link rel="stylesheet" type="text/css" href="../lib/Hui-iconfont/1.0.8/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="../static/h-ui.admin/skin/default/skin.css" id="skin" />
 <link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/style.css" />
+	<link rel="stylesheet" href="../lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
 <!--[if IE 6]>
 <script type="text/javascript" src="../lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
@@ -29,34 +30,44 @@
 <meta name="description" content="">
 </head>
 <body>
-<article class="page-container">
-	<form action="" method="post" class="form form-horizontal" id="role-form">
-		<input type="hidden" id="id" name="id">
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="account" name="account">
-			</div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色描述：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
-			</div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>状态：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" placeholder="0" name="status" id="status">
-			</div>
-		</div>
-		<div class="row cl">
-			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
-			</div>
-		</div>
-	</form>
-</article>
+<table class="table">
+	<tr>
+		<td width="500" class="va-t">
+			<form action="" method="post" class="form form-horizontal" id="role-form">
+				<input type="hidden" id="id" name="id">
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色描述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="" placeholder="" id="description" name="description">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>状态：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" placeholder="0" name="status" id="status">
+					</div>
+				</div>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+						<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+					</div>
+				</div>
+			</form>
+		</td>
+		<td class="va-t">
+			<ul id="menu" class="ztree"></ul>
+		</td>
+	</tr>
+</table>
+<!--<article class="page-container">
+
+</article>-->
 
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script>
@@ -69,23 +80,52 @@
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate-methods.js"></script> 
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="../lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
 <script type="text/javascript" src="../lib/jquery-form.js"></script>
 <script type="text/javascript" src="../lib/json2.js"></script>
 <script type="text/javascript" src="js/base.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript">
 $(function(){
+	var setting = {
+		check: {
+			enable: true
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		},
+		callback: {
+			onCheck: onCheck
+		}
+	};
+
+	function onCheck(e, treeId, treeNode) {
+		var nodes = menu.getCheckedNodes();
+		for (var i=0, l=nodes.length; i<l; i++) {
+			console.log(nodes[i].id);
+		}
+	}
+
+	var zNodes =[
+		{ id:0, pId:-1, name:"公用模块", checked:true},
+		{ id:1, pId:-1, name:"管理员管理", checked:true},
+		{ id:2, pId:-1, name:"系统配置", checked:true},
+		{ id:3, pId:-1, name:"知识管理", checked:true},
+		{ id:4, pId:-1, name:"统计分析", checked:true}
+	];
 
 	var rules = {
-		account:{
-			required:true,
-			minlength:3,
-			maxlength:100
-		},
 		name:{
 			required:true,
+			minlength:3,
+			maxlength:50
+		},
+		description:{
+			required:true,
 			minlength:1,
-			maxlength:100
+			maxlength:200
 		},
 		status:{
 			isIntGteZero:true,
@@ -102,8 +142,8 @@ $(function(){
 		$("#password-div").hide();
 		$("#confirm-div").hide();
 		$("#id").val(id);
-		$("#account").val(account);
 		$("#name").val(name);
+		$("#description").val(description);
 		$("#status").val(status);
 	}else{
 		$("#role-form").attr("action",roleUrl+"add");
@@ -141,8 +181,8 @@ $(function(){
 			});
 		}
 	});
+	var menu = $.fn.zTree.init($("#menu"), setting, zNodes);
 });
-</script> 
-<!--/请在上方写此页面业务相关的脚本-->
+</script>
 </body>
 </html>
