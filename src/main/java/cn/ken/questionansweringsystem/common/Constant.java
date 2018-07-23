@@ -17,7 +17,7 @@ public class Constant {
 
     public static int recommendKnowledgeNumber;
 
-    public static String[] whiteList = {"login","logout"};
+    public static String[] whiteList = {"validate","login","logout","/"};
 
     public static final String printPattern = "=====================";
 
@@ -26,4 +26,8 @@ public class Constant {
     public static final String ACCESS_TOKEN = "access_token";
 
     public static final String ACCESS_TOKEN_WITH_PREFIX = "access_token:";
+
+    public static final String ERROR_INFO = "异常";
+
+    public static final String SESSION_ID = "session_id:";
 }

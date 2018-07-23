@@ -1,6 +1,7 @@
 package cn.ken.questionansweringsystem.service;
 
 import cn.ken.questionansweringsystem.common.Constant;
+import cn.ken.questionansweringsystem.mapper.RoleMapper;
 import cn.ken.questionansweringsystem.mapper.UserMapper;
 import cn.ken.questionansweringsystem.model.PageData;
 import cn.ken.questionansweringsystem.model.User;
@@ -10,7 +11,10 @@ import cn.ken.questionansweringsystem.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +29,12 @@ public class UserServiceImpl extends Base implements UserService{
     private UserMapper userMapper;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private RedisUtils redisUtils;
 
+    @Override
     public String add(User user) {
         String result = assemble(user);
         if(result!=null){
@@ -47,6 +55,11 @@ public class UserServiceImpl extends Base implements UserService{
         return false;
     }
 
+    /**
+     * 数据组装
+     * @param user
+     * @return
+     */
     public String assemble(User user){
         if(!StringUtils.lengthCheck(user.getAccount(),5,100)){
             return "账号长度不能小于5或大于100";
@@ -60,23 +73,20 @@ public class UserServiceImpl extends Base implements UserService{
         if(!StringUtils.lengthCheck(user.getPassword(),1,20)){
             return "手机号长度不能小于0或大于100";
         }
+        if(!roleService.isRoleExists(user.getRoleId())){
+            return "角色id不正确";
+        }
+        if(isRepeat(user)){
+            return "账号重复";
+        }
         if(StringUtils.isEmpty(user.getId())){
-            if(isRepeat(user)){
-                return "账号重复";
-            }
             user.setId(IdWorker.getInstance().nextId());
             user.setStatus(1);
             user.setLoginCount(0);
             user.setModifyTime(new Date());
-        }else{
-            if(isRepeat(user)){
-                return "账号重复";
-            }
         }
         return null;
     }
-
-
 
     @Override
     public int deleteById(String id) {
@@ -84,8 +94,13 @@ public class UserServiceImpl extends Base implements UserService{
     }
 
     @Override
-    public int update(User user) {
-        return userMapper.update(user);
+    public String update(User user) {
+        String result = assemble(user);
+        if(result!=null){
+            return result;
+        }
+        userMapper.update(user);
+        return null;
     }
 
     @Override
@@ -95,71 +110,100 @@ public class UserServiceImpl extends Base implements UserService{
 
     @Override
     public PageData<List<User>> getByAttribute(UserRequest request) {
-        return new PageData(userMapper.getByAttribute(request),userMapper.countByAttribute(request));
+        PageData pageData = new PageData(0);
+        int total = userMapper.countByAttribute(request);
+        if(total==0){
+            pageData.setData(Collections.emptyList());
+            return pageData;
+        }
+        pageData.setTotal(total);
+        List<User> users = userMapper.getByAttribute(request);
+        pageData.setData(users);
+        return pageData;
     }
 
     @Override
     public UserResponse login(HttpServletRequest httpServletRequest,UserRequest request) {
-        try {
-            UserResponse response = new UserResponse();
-            if(StringUtils.isEmpty(request.getAccount()) || StringUtils.isEmpty(request.getPassword())){
-                response.setMessage("账号密码不能为空!");
-                return response;
-            }
-            User user = userMapper.login(request);
-            if(user==null){
-                response.setMessage("该账号不存在!");
-                return response;
-            }else if(!user.getPassword().equals(request.getPassword())){
-                response.setMessage("密码错误!");
-                return response;
-            }else if(user.getStatus()==0){
-                response.setMessage("该账号已被禁用!");
-                return response;
-            }else{
-                //查询并设置用户信息、角色信息、权限信息与访问令牌
-                User user1 = new User();
-                if(user.getLastLoginTime()==null){
-                    user1.setLastLoginTime(new Date());
-                }else{
-                    user1.setLastLoginTime(user.getLastLoginTime());
-                }
-                if(StringUtils.isEmpty(user.getLastLoginIp())){
-                    user1.setLastLoginIp(IPUtils.getIpAddress(httpServletRequest));
-                }else{
-                    user1.setLastLoginIp(user.getLastLoginIp());
-                }
-                user1.setId(user.getId());
-                user1.setAccount(user.getAccount());
-                user1.setLoginCount(user.getLoginCount()+1);
-                user1.setName(user.getName());
-                response.setUser(user1);
-                String token = IdWorker.getInstance().nextId();
-                response.setAccessToken(token);
-                redisUtils.set(Constant.ACCESS_TOKEN_WITH_PREFIX+token,gson.toJson(user1), Constant.TIMEOUT);
-
-                //修改最后登录时间与登录ip
-                user.setLastLoginTime(new Date());
-                user.setLastLoginIp(IPUtils.getIpAddress(httpServletRequest));
-                userMapper.updateLoginInfo(user);
-                return response;
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage(),e);
-            return null;
+        UserResponse response = new UserResponse();
+        if(!validate(request.getValidateCode(),httpServletRequest)){
+            response.setMessage("验证码错误!");
+            return response;
         }
+        if(StringUtils.isEmpty(request.getAccount()) || StringUtils.isEmpty(request.getPassword())){
+            response.setMessage("账号密码不能为空!");
+            return response;
+        }
+        User user = userMapper.login(request);
+        if(user==null){
+            response.setMessage("该账号不存在!");
+            return response;
+        }else if(!user.getPassword().equals(request.getPassword())){
+            response.setMessage("密码错误!");
+            return response;
+        }else if(user.getStatus()==0){
+            response.setMessage("该账号已被禁用!");
+            return response;
+        }else{
+            //查询并设置用户信息、角色信息、权限信息与访问令牌
+            User user1 = new User();
+            if(user.getLastLoginTime()==null){
+                user1.setLastLoginTime(new Date());
+            }else{
+                user1.setLastLoginTime(user.getLastLoginTime());
+            }
+            if(StringUtils.isEmpty(user.getLastLoginIp())){
+                user1.setLastLoginIp(IPUtils.getIpAddress(httpServletRequest));
+            }else{
+                user1.setLastLoginIp(user.getLastLoginIp());
+            }
+            user1.setId(user.getId());
+            user1.setAccount(user.getAccount());
+            user1.setLoginCount(user.getLoginCount()+1);
+            user1.setName(user.getName());
+            response.setUser(user1);
+            String token = IdWorker.getInstance().nextId();
+            response.setAccessToken(token);
+            redisUtils.set(Constant.ACCESS_TOKEN_WITH_PREFIX+token,gson.toJson(user1), Constant.TIMEOUT);
+
+            //修改最后登录时间与登录ip
+            user.setLastLoginTime(new Date());
+            user.setLastLoginIp(IPUtils.getIpAddress(httpServletRequest));
+            userMapper.updateLoginInfo(user);
+            return response;
+        }
+    }
+
+
+    /**
+     * 验证
+     * @param code
+     * @param request
+     * @return
+     */
+    private boolean validate(String code,HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Cookie[] cookies = request.getCookies();
+        String sessionId = session.getId();
+        if (cookies != null && cookies.length>0){
+            for(Cookie cookie:cookies){
+                if(cookie.getName().equals("JSESSIONID") && !StringUtils.isEmpty(cookie.getValue())){
+                    sessionId = cookie.getValue();
+                }
+            }
+        }
+        String redisCode = redisUtils.get(Constant.SESSION_ID + sessionId);
+        if(StringUtils.isEmpty(redisCode) || !redisCode.equals(StringUtils.toLowerCaseLocal(code))){
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String logout(HttpServletRequest httpServletRequest) {
-        try {
-            if(StringUtils.isEmpty(httpServletRequest.getHeader(Constant.ACCESS_TOKEN))){
-                return "令牌不能为空";
-            }
-            redisUtils.delete(Constant.ACCESS_TOKEN_WITH_PREFIX+httpServletRequest.getHeader(Constant.ACCESS_TOKEN));
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+        if(StringUtils.isEmpty(httpServletRequest.getHeader(Constant.ACCESS_TOKEN))){
+            return "令牌不能为空";
         }
+        redisUtils.delete(Constant.ACCESS_TOKEN_WITH_PREFIX+httpServletRequest.getHeader(Constant.ACCESS_TOKEN));
         return null;
     }
 }

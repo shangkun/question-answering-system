@@ -19,42 +19,42 @@ public interface UserService {
      * @param user
      * @return
      */
-    public String add(User user);
+    public String add(User user) throws Exception;
 
     /**
      * 重复校验
      * @param user
      * @return
      */
-    public boolean isRepeat(User user);
+    public boolean isRepeat(User user) throws Exception;
 
     /**
      * 删除一个用户
      * @param id
      * @return
      */
-    public int deleteById(String id);
+    public int deleteById(String id) throws Exception;
 
     /**
      * 更新用户数据
      * @param user
      * @return
      */
-    public int update(User user);
+    public String update(User user) throws Exception;
 
     /**
      * 获取一个用户数据
      * @param id
      * @return
      */
-    public User getById(String id);
+    public User getById(String id) throws Exception;
 
     /**
      * 根据条件查询一组数据
      * @param request
      * @return
      */
-    public PageData<List<User>> getByAttribute(UserRequest request);
+    public PageData<List<User>> getByAttribute(UserRequest request) throws Exception;
 
     /**
      * 管理员登陆
@@ -62,12 +62,12 @@ public interface UserService {
      * @param request
      * @return
      */
-    public UserResponse login(HttpServletRequest httpServletRequest,UserRequest request);
+    public UserResponse login(HttpServletRequest httpServletRequest,UserRequest request) throws Exception;
 
     /**
      * 管理员登出
      * @param httpServletRequest
      * @return
      */
-    public String logout(HttpServletRequest httpServletRequest);
+    public String logout(HttpServletRequest httpServletRequest) throws Exception;
 }

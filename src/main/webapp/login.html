@@ -27,30 +27,23 @@
 <!--<div class="header"></div>-->
 <div class="loginWraper">
   <div id="loginform" class="loginBox">
-    <form class="form form-horizontal" action="views/index.html" method="post">
+    <form id="login-form" class="form form-horizontal" action="./api/admin/user/login" method="post">
       <div class="row cl">
         <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
         <div class="formControls col-xs-8">
-          <input id="" name="" type="text" placeholder="账户" class="input-text size-L">
+          <input id="account" name="account" type="text" placeholder="账户" class="input-text size-L">
         </div>
       </div>
       <div class="row cl">
         <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
         <div class="formControls col-xs-8">
-          <input id="password" name="" type="password" placeholder="密码" class="input-text size-L">
+          <input id="password" name="password" type="password" placeholder="密码" class="input-text size-L">
         </div>
       </div>
       <div class="row cl">
         <div class="formControls col-xs-8 col-xs-offset-3">
-          <input class="input-text size-L" type="text" placeholder="验证码" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;">
-          <img src=""> <a id="kanbuq" href="javascript:;">看不清，换一张</a> </div>
-      </div>
-      <div class="row cl">
-        <div class="formControls col-xs-8 col-xs-offset-3">
-          <label for="online">
-            <input type="checkbox" name="online" id="online" value="">
-            使我保持登录状态</label>
-        </div>
+          <input class="input-text size-L" id="validateCode" name="validateCode" type="text" placeholder="验证码" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;">
+          <img id="code" src="" onclick="refresh()"> <a href="javascript:;" onclick="refresh()">看不清，换一张</a> </div>
       </div>
       <div class="row cl">
         <div class="formControls col-xs-8 col-xs-offset-3">
@@ -61,8 +54,19 @@
     </form>
   </div>
 </div>
-<div class="footer">Copyright</div>
-<script type="text/javascript" src="views/lib/jquery/1.9.1/jquery.min.js"></script> 
+<div class="footer"></div>
+<script type="text/javascript" src="views/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="views/lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="views/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="views/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="views/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="views/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="views/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="views/lib/jquery-form.js"></script>
+<script type="text/javascript" src="views/lib/jquery.cookie.js"></script>
+<script type="text/javascript" src="views/lib/json2.js"></script>
+<script type="text/javascript" src="views/static/js/base.js"></script>
+<script type="text/javascript" src="views/static/js/utils.js"></script>
+<script type="text/javascript" src="views/static/js/login.js"></script>
 </body>
 </html>

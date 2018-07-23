@@ -105,3 +105,30 @@ Date.prototype.format = function (format) {
     }
     return format;
 }
+/**
+ * 随机码
+ * @returns {string}
+ */
+var randomCode = function(){
+    var seed = new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z',
+        'a','b','c','d','e','f','g','h','i','j','k','m','n','p','Q','r','s','t','u','v','w','x','y','z',
+        '2','3','4','5','6','7','8','9'
+    );
+    var seed_length = seed.length;
+    var code = '';
+    for (var i=0;i<20;i++) {
+        var j = Math.floor(Math.random()*seed_length);
+        code += seed[j];
+    }
+    return code;
+}
+
+var setCookie = function(key,value,day){
+    $.cookie(key, value, { expires: day, path: '/' });
+}
+var getCookie = function(key){
+    return $.cookie(key);
+}
+var delCookie = function(key){
+    $.cookie(key,null);
+}

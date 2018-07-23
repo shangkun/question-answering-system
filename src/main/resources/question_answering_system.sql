@@ -3,14 +3,14 @@ Navicat MySQL Data Transfer
 
 Source Server         : localhost
 Source Server Version : 50549
-Source Host           : localhost:3306
+Source Host           : 127.0.0.1:3306
 Source Database       : question_answering_system
 
 Target Server Type    : MYSQL
 Target Server Version : 50549
 File Encoding         : 65001
 
-Date: 2018-07-22 23:20:30
+Date: 2018-07-23 21:01:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -284,6 +284,7 @@ CREATE TABLE `role` (
 -- ----------------------------
 -- Records of role
 -- ----------------------------
+INSERT INTO `role` VALUES ('538945468713926656', '超级管理员', '超级管理员', '2018-07-23 20:34:24', '1');
 
 -- ----------------------------
 -- Table structure for role_menu
@@ -299,6 +300,11 @@ CREATE TABLE `role_menu` (
 -- ----------------------------
 -- Records of role_menu
 -- ----------------------------
+INSERT INTO `role_menu` VALUES ('538945468713926657', '538945468713926656', '0');
+INSERT INTO `role_menu` VALUES ('538945468713926658', '538945468713926656', '1');
+INSERT INTO `role_menu` VALUES ('538945468713926659', '538945468713926656', '2');
+INSERT INTO `role_menu` VALUES ('538945468713926660', '538945468713926656', '3');
+INSERT INTO `role_menu` VALUES ('538945468713926661', '538945468713926656', '4');
 
 -- ----------------------------
 -- Table structure for sensitive_words
@@ -324,6 +330,7 @@ CREATE TABLE `user` (
   `account` varchar(100) NOT NULL COMMENT '账户',
   `name` varchar(100) DEFAULT NULL COMMENT '姓名',
   `password` varchar(100) NOT NULL COMMENT '密码',
+  `role_id` varchar(20) DEFAULT NULL COMMENT '角色id',
   `modify_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
   `phone` varchar(20) DEFAULT NULL COMMENT '手机号',
@@ -337,19 +344,4 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('538559372305891328', '122', '122', '1222', '2018-07-22 18:57:35', '1561651', '416541561', null, null, '0000000000', '1');
-
--- ----------------------------
--- Table structure for user_role
--- ----------------------------
-DROP TABLE IF EXISTS `user_role`;
-CREATE TABLE `user_role` (
-  `id` varchar(20) NOT NULL,
-  `user_id` varchar(50) DEFAULT NULL COMMENT '用户id',
-  `role_id` varchar(20) DEFAULT NULL COMMENT '角色id',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色关联表';
-
--- ----------------------------
--- Records of user_role
--- ----------------------------
+INSERT INTO `user` VALUES ('538559372305891328', 'admin', 'admin', 'admin.1234', '538945468713926656', '2018-07-23 20:55:37', '1157317608@qq.com', '15810503656', '0:0:0:0:0:0:0:1', '2018-07-23 20:55:37', '0000000004', '1');

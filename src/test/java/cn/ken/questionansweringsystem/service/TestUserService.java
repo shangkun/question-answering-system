@@ -18,7 +18,7 @@ public class TestUserService extends JUnit4BaseConfig {
     @Autowired
     private UserService userService;
     @Test
-    public void add(){
+    public void add() throws Exception{
         User user = new User();
         user.setId("1");
         user.setAccount("1");
@@ -41,6 +41,5 @@ public class TestUserService extends JUnit4BaseConfig {
         PageData<List<User>> users = userService.getByAttribute(userRequest);
 
         users.getTotal();
-
     }
 }

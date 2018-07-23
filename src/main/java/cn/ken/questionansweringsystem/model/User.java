@@ -17,6 +17,8 @@ public class User {
 
     private String password;
 
+    private String roleId;
+
     private Date modifyTime;
 
     private String email;
@@ -30,6 +32,14 @@ public class User {
     private Date lastLoginTime;
 
     private Integer status;
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
 
     public String getLastLoginIp() {
         return lastLoginIp;

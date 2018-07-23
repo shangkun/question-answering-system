@@ -1,26 +1,28 @@
 package cn.ken.questionansweringsystem.model.request;
 
-import cn.ken.questionansweringsystem.model.User;
+import cn.ken.questionansweringsystem.model.Role;
+
+import java.util.List;
 
 /**
  * author: shangkun <br/>
- * date: 2018/7/13 <br/>
- * what: 用户请求类 <br/>
+ * date: 2018/7/23 <br/>
+ * what: RoleRequest <br/>
  */
-public class UserRequest extends User{
-
-    private String validateCode;
+public class RoleRequest extends Role{
 
     private int index;
 
     private int pageSize;
 
-    public String getValidateCode() {
-        return validateCode;
+    private List<String> menuList;
+
+    public List<String> getMenuList() {
+        return menuList;
     }
 
-    public void setValidateCode(String validateCode) {
-        this.validateCode = validateCode;
+    public void setMenuList(List<String> menuList) {
+        this.menuList = menuList;
     }
 
     public int getIndex() {

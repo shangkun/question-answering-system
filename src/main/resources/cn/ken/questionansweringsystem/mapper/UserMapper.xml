@@ -6,6 +6,7 @@
         <result column="account" jdbcType="VARCHAR" property="account"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="role_id" jdbcType="VARCHAR" property="roleId"/>
         <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
         <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
@@ -18,11 +19,11 @@
     <sql id="table">user</sql>
 
     <sql id="column">
-        id,name,account,password,modify_time,last_login_time,email,last_login_ip,phone,login_count,status
+        id,name,account,password,role_id,modify_time,last_login_time,email,last_login_ip,phone,login_count,status
     </sql>
 
     <sql id="insertColumnValue">
-        #{id},#{name},#{account},#{password},#{modifyTime},#{lastLoginTime},#{email},#{lastLoginIp},#{phone},#{loginCount},#{status}
+        #{id},#{name},#{account},#{password},#{roleId},#{modifyTime},#{lastLoginTime},#{email},#{lastLoginIp},#{phone},#{loginCount},#{status}
     </sql>
 
     <insert id="insert">
@@ -51,6 +52,9 @@
             <if test="email!=null and email!=''">
                 email = #{email},
             </if>
+            <if test="roleId!=null and roleId!=''">
+                role_id = #{roleId},
+            </if>
             <if test="phone!=null and phone!=''">
                 phone = #{phone},
             </if>
@@ -67,6 +71,7 @@
         update
         <include refid="table"/>
         <set>
+            login_count = login_count+1,
             <if test="lastLoginIp!=null and lastLoginIp!=''">
                 last_login_ip = #{lastLoginIp},
             </if>
@@ -76,7 +81,6 @@
             <if test="status!=null">
                 status = #{status}
             </if>
-            login_count = login_count+1
         </set>
         <where>
             id = #{id}
@@ -85,7 +89,7 @@
 
     <select id="selectById" resultMap="ResultMap">
         select
-        id,name,account,modify_time,last_login_time,email,last_login_ip,phone,login_count,status
+        id,name,account,modify_time,role_id,last_login_time,email,last_login_ip,phone,login_count,status
         from
         <include refid="table"/>
         where id = #{id}
@@ -93,7 +97,7 @@
 
     <select id="login" resultMap="ResultMap">
         select
-        id,name,account,password,modify_time,last_login_time,email,last_login_ip,phone,login_count,status
+        id,name,account,password,role_id,modify_time,last_login_time,email,last_login_ip,phone,login_count,status
         from
         <include refid="table"/>
         where account = #{account}
@@ -101,15 +105,13 @@
 
     <select id="getByAttribute" resultMap="ResultMap">
         select
-        id,name,account,modify_time,email,phone,status
+        id,name,account,role_id,modify_time,email,phone,status
         from
         <include refid="table"/>
         where 1=1
         <if test="name!=null and name!=''">
-            and name like concat('%',#{name},'%')
-        </if>
-        <if test="account!=null and account!=''">
-            and account like concat('%',#{account},'%')
+            and ( name like concat('%',#{name},'%')
+            or account like concat('%',#{account},'%'))
         </if>
         <if test="status!=null">
             and status = #{status}
@@ -127,10 +129,8 @@
         <include refid="table"/>
         where 1=1
         <if test="name!=null and name!=''">
-            and name like concat('%',#{name},'%')
-        </if>
-        <if test="account!=null and account!=''">
-            and account like concat('%',#{account},'%')
+            ( name like concat('%',#{name},'%')
+            or account like concat('%',#{account},'%'))
         </if>
         <if test="status!=null">
             and status = #{status}

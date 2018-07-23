@@ -1,3 +1,10 @@
 package cn.ken.questionansweringsystem.mapper;
 
-public interface MenuMapper {}
+import cn.ken.questionansweringsystem.model.Menu;
+
+import java.util.List;
+
+public interface MenuMapper {
+
+    List<Menu> get();
+}

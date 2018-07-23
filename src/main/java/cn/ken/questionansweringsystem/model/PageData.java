@@ -16,6 +16,13 @@ public class PageData<T> {
         this.total = total;
     }
 
+    public PageData(int total) {
+        this.total = total;
+    }
+
+    public PageData() {
+    }
+
     public T getData() {
         return data;
     }
