@@ -1,7 +1,7 @@
 package cn.ken.questionansweringsystem.config;
 
 import cn.ken.questionansweringsystem.common.Constant;
-import cn.ken.questionansweringsystem.model.Response;
+import cn.ken.questionansweringsystem.model.response.Response;
 import cn.ken.questionansweringsystem.utils.Base;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

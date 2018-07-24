@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ken.questionansweringsystem.mapper.admin.RoleMenuMapper">
+  <resultMap id="ResultMap" type="cn.ken.questionansweringsystem.model.admin.RoleMenu">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="menu_id" jdbcType="VARCHAR" property="menuId" />
+  </resultMap>
+
+  <sql id="table">role_menu</sql>
+
+  <sql id="column">
+    id,role_id,menu_id
+  </sql>
+
+  <sql id="insertColumnValue">
+    #{id},#{roleId},#{menuId}
+  </sql>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into
+    <include refid="table"/>
+    (<include refid="column"/>)
+    values
+    <foreach collection="list" item="item" index="i" separator=",">
+      (#{item.id},#{item.roleId},#{item.menuId})
+    </foreach>
+  </insert>
+
+  <select id="getByRoleId" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+    where
+    role_id=#{0}
+  </select>
+
+  <select id="getMenuByRoleId" resultType="java.lang.String">
+    select
+    menu_id
+    from
+    <include refid="table"/>
+    where
+    role_id=#{0}
+  </select>
+
+  <delete id="deleteByRoleId">
+    delete from
+    <include refid="table"/>
+    where
+    role_id=#{0}
+  </delete>
+
+  <delete id="deleteByRoleIdList">
+    delete from
+    <include refid="table"/>
+    where
+    role_id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+</mapper>

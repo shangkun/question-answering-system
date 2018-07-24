@@ -1,7 +1,8 @@
 package cn.ken.questionansweringsystem.controller;
 
 import cn.ken.questionansweringsystem.JUnit4BaseConfig;
-import cn.ken.questionansweringsystem.model.User;
+import cn.ken.questionansweringsystem.controller.admin.UserController;
+import cn.ken.questionansweringsystem.model.admin.User;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;

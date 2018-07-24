@@ -1,0 +1,199 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="/favicon.ico" >
+<link rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+	<script type="text/javascript" src="../../lib/html5shiv.js"></script>
+	<script type="text/javascript" src="../../lib/respond.min.js"></script>
+	<![endif]-->
+<link rel="stylesheet" type="text/css" href="../h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/css/style.css" />
+	<link rel="stylesheet" href="../../lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<!--[if IE 6]>
+	<script type="text/javascript" src="../../lib/DD_belatedPNG_0.0.8a-min.js"></script>
+	<script>DD_belatedPNG.fix('*');</script>
+	<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+
+<title>添加或修改角色</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+</head>
+<body>
+<table class="table">
+	<tr>
+		<td width="500" class="va-t">
+			<form action="" method="post" class="form form-horizontal" id="role-form">
+				<input type="hidden" id="id" name="id">
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色描述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="" placeholder="" id="description" name="description">
+					</div>
+				</div>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+						<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+					</div>
+				</div>
+			</form>
+		</td>
+		<td class="va-t">
+			<ul id="menu" class="ztree"></ul>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript" src="../../lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<script type="text/javascript" src="../../lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="../../lib/jquery-form.js"></script>
+<script type="text/javascript" src="../../lib/json2.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript">
+$(function(){
+	var menuList = new Array();
+
+	var id = get_page_param('id');
+	var name = get_page_param('name');
+	var description = get_page_param('description');
+	if(id!=""){
+		$("#role-form").attr("action",roleUrl+"update");
+		$("#id").val(id);
+		$("#name").val(name);
+		$("#description").val(description);
+	}else{
+		$("#role-form").attr("action",roleUrl+"add");
+	}
+
+	var setting = {
+		check: {
+			enable: true
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		},
+		callback: {
+			onCheck: onCheck
+		}
+	};
+
+	function onCheck(e, treeId, treeNode) {
+		console.log(treeNode);
+		if(treeNode.checked==true){
+			$("#role-form").append('<input type="hidden" id="'+treeNode.id+'" name="menuList" value="'+treeNode.id+'">');
+		}else{
+			$("#"+treeNode.id).remove();
+		}
+	}
+
+	var zNodes = new Array();
+
+	POST(roleUrl+"menu/get",new Object(),function(data){
+		if(data.statusCode==200){
+			if(id!=""){
+				GET(roleUrl+"get/"+id,null,function(menuListData){
+					if(menuListData.statusCode==200){
+						menuList=menuListData.data;
+						$.each(menuList,function(i,v){
+							$("#role-form").append('<input type="hidden" id="'+v+'" name="menuList" value="'+v+'">');
+						});
+						initTree(data,menuList,zNodes,setting);
+					}
+				},true);
+			}else{
+				initTree(data,menuList,zNodes,setting);
+			}
+		}
+	},true);
+
+	var rules = {
+		name:{
+			required:true,
+			minlength:3,
+			maxlength:50
+		},
+		description:{
+			required:true,
+			minlength:1,
+			maxlength:200
+		}
+	};
+
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+
+	$("#role-form").validate({
+		rules:rules,
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({
+				beforeSubmit:function(){
+					var menuList = $("input[name='menuList']");
+					if(menuList.length==0){
+						layer.msg("请至少选择一个菜单项",{icon: 5,time:1000});
+						return false;
+					}
+					return true;
+				},
+				success: function(data){
+					layer.msg(data.message,{icon: 1,time:1000});
+					parent.table.ajax.reload();
+					var index = parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+				},
+				resetForm: true,
+				dataType: "json"
+			});
+		}
+	});
+});
+function initTree(data,menuList,zNodes,setting){
+	$.each(data.data,function(i,v){
+		var menu = new Object();
+		menu.id= v.id;
+		menu.pId= -1;
+		menu.name= v.name;
+		if($.inArray(v.id,menuList)>=0){
+			menu.checked= true;
+		}else{
+			menu.checked= false;
+		}
+		zNodes.push(menu);
+	});
+	menu = $.fn.zTree.init($("#menu"), setting, zNodes);
+}
+</script>
+<script type="text/javascript" src="../../lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
+</body>
+</html>

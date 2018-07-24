@@ -1,0 +1,174 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+	<script type="text/javascript" src="../../lib/html5shiv.js"></script>
+	<script type="text/javascript" src="../../lib/respond.min.js"></script>
+	<![endif]-->
+<link rel="stylesheet" type="text/css" href="../h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/css/style.css" />
+<!--[if IE 6]>
+	<script type="text/javascript" src="../../lib/DD_belatedPNG_0.0.8a-min.js"></script>
+	<script>DD_belatedPNG.fix('*');</script>
+	<![endif]-->
+<title>角色管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 角色管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c"> 日期范围：
+		<input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin" class="input-text Wdate" style="width:120px;">
+		-
+		<input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax" class="input-text Wdate" style="width:120px;">
+		<input type="text" class="input-text" style="width:250px" placeholder="输入角色账号、名称" id="key_words" name="key_words">
+		<button type="submit" class="btn btn-success radius" onclick="table.ajax.reload();"><i class="Hui-iconfont">&#xe665;</i> 搜角色</button>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="batch_del()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="layer_show('添加角色','role-add-update.html','510','400');" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加角色</a></span> <span class="r">共有数据：<strong id="role_total">0</strong> 条</span> </div>
+	<div class="mt-20">
+		<table id="role" class="table table-border table-bordered table-bg table-sort">
+			<thead>
+				<tr class="text-c">
+					<th width="25"><input type="checkbox" name="" value=""></th>
+					<th width="80">角色名称</th>
+					<th width="200">角色描述</th>
+					<th width="120">修改时间</th>
+					<th width="100">操作</th>
+				</tr>
+			</thead>
+			<tbody class="text-c"></tbody>
+		</table>
+	</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../../lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="../../lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript">
+	$(function(){
+		load_role();
+	});
+
+	var request = new Object();
+
+	function load_role(){
+		table = $("#role").DataTable({
+			autoWidth:false,
+			autoHeight:false,
+			stripeClasses: ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
+			processing: true, //隐藏加载提示,自行处理
+			serverSide: true, //启用服务器端分页
+			searching: false, //禁用原生搜索
+			destroy: true,
+			ordering: false, //启用多列排序
+			order: [], //取消默认排序查询,否则复选框一列会出现小箭头
+			info: true,
+			"PaginationType" : "full_numbers",
+			"ajax": function (data, callback) {
+				request.index=data.start;
+				request.pageSize=data.length;
+				if($("#datemin").val() && $("#datemax").val()){
+					request.startTime=$("#datemin").val()+hour_start;
+					request.endTime=$("#datemax").val()+hour_end;
+				}else{
+					request.startTime=null;
+					request.endTime=null;
+				}
+				if($("#key_words").val()){
+					request.name = $("#key_words").val();
+				}else{
+					request.name = null;
+				}
+				POST(roleUrl+"get",request,function(result){
+					//封装返回数据
+					var returnData = {};
+					$("#role_total").html(result.data.total);
+					returnData.recordsTotal = result.data.total;
+					returnData.iTotalDisplayRecords = result.data.total;
+					returnData.data = result.data.data;
+
+					callback(returnData);
+				},false);
+
+			},
+			"columns":[
+				{
+					"data" : "id",
+					"render" : function(data,type,row) {
+						var html = '<input class="text-c" type="checkbox" value="'+data+'" name="sid"/>';
+						return html;
+					}
+				},
+				{"data":"name"},
+				{"data":"description"},
+				{
+					"data":"modifyTime",
+					"render" : function(data,type,row) {
+						return date_format(second_format,data);
+					}
+				},
+				{
+					"data" : "id",
+					"render" : function(data,type,row) {
+						var html = '<a style="text-decoration:none" onClick="layer_show(\'角色编辑\',\'role-add-update.html?id='+data+'&name='+row.name+'&description='+row.description+'\',\'510\',\'400\')" href="javascript:;" title="编辑">' +
+								'<i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="role_del(this,\''+data+'\')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>';
+						return html;
+					}
+				}
+			]
+		});
+	}
+	function role_del(obj,id){
+		layer.confirm('确认要删除吗？',function(index){
+			GET(roleUrl+"delete/"+id,null,function(data){
+				if(data.statusCode==200){
+					table.ajax.reload();
+					layer.msg(data.message,{icon:1,time:1000});
+				}else{
+					layer.msg(data.info,{icon:5,time:1000});
+				}
+			},false);
+		});
+	}
+	function batch_del(){
+		var id_array = $("input[name='sid']");
+		var idList = new Array();
+		$.each(id_array,function(i,v){
+			if(v.checked){
+				console.log(v.value);
+				idList.push(v.value);
+			}
+		});
+		if(idList.length==0){
+			layer.msg("请至少选择一条记录",{icon:5,time:1000});
+			return;
+		}
+
+		layer.confirm('确认要删除吗？',function(index){
+			POST(roleUrl+"batch/delete/",idList,function(data){
+				if(data.statusCode==200){
+					table.ajax.reload();
+					layer.msg(data.message,{icon:1,time:1000});
+				}else{
+					layer.msg(data.info,{icon:5,time:1000});
+				}
+			},false);
+		});
+	}
+</script>
+</body>
+</html>

@@ -2,8 +2,9 @@ package cn.ken.questionansweringsystem.service;
 
 import cn.ken.questionansweringsystem.JUnit4BaseConfig;
 import cn.ken.questionansweringsystem.model.PageData;
-import cn.ken.questionansweringsystem.model.Role;
-import cn.ken.questionansweringsystem.model.request.RoleRequest;
+import cn.ken.questionansweringsystem.model.admin.Role;
+import cn.ken.questionansweringsystem.model.admin.RoleRequest;
+import cn.ken.questionansweringsystem.service.admin.RoleService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

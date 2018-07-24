@@ -1,0 +1,210 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="/favicon.ico" >
+<link rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+	<script type="text/javascript" src="../../lib/html5shiv.js"></script>
+	<script type="text/javascript" src="../../lib/respond.min.js"></script>
+	<![endif]-->
+<link rel="stylesheet" type="text/css" href="../h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/css/style.css" />
+<!--[if IE 6]>
+	<script type="text/javascript" src="../../lib/DD_belatedPNG_0.0.8a-min.js"></script>
+	<script>DD_belatedPNG.fix('*');</script>
+	<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+
+<title>添加或修改用户</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+</head>
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="user-form">
+		<input type="hidden" id="id" name="id">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>账号：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="account" name="account">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>姓名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机号：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="phone" name="phone">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>邮箱：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="email" name="email">
+			</div>
+		</div>
+		<div class="row cl" id="password-div">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="password" class="input-text" value="" placeholder="" id="password" name="password">
+			</div>
+		</div>
+		<div class="row cl" id="confirm-div">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="password" class="input-text" value="" placeholder="" id="confirm" name="confirm">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>角色：</label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+				<select id="roleId" name="roleId" class="select"></select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>状态：</label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+				<select id="status" name="status" class="select">
+					<option value="1">可用</option>
+					<option value="0">禁用</option>
+				</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../../lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本--> 
+<script type="text/javascript" src="../../lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="../../lib/jquery-form.js"></script>
+<script type="text/javascript" src="../../lib/json2.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate.expand.js"></script>
+<script type="text/javascript">
+$(function(){
+
+	POST(roleUrl+"get",new Object(),function(data){
+		$("#roleId").empty();
+		if(data.statusCode==200){
+			$.each(data.data.data,function(i,v){
+				$("#roleId").append('<option value='+ v.id+'>'+ v.name+'</option>');
+			});
+			var rules = {
+				account:{
+					required:true,
+					minlength:3,
+					maxlength:100,
+					isAccountRepeat:true
+				},
+				name:{
+					required:true,
+					minlength:1,
+					maxlength:100
+				},
+				phone:{
+					required:true,
+					isTel:true
+				},
+				email:{
+					required:true,
+					isEmail:true
+				},
+				roleId:{
+					required:true
+				},
+				status:{
+					isIntGteZero:true,
+					required:true
+				}
+			};
+
+			var id = get_page_param('id');
+			var account = get_page_param('account');
+			var name = get_page_param('name');
+			var status = get_page_param('status');
+			var roleId = get_page_param('roleId');
+			var phone = get_page_param('phone');
+			var email = get_page_param('email');
+			if(id!=""){
+				$("#user-form").attr("action",userUrl+"update");
+				$("#password-div").hide();
+				$("#confirm-div").hide();
+				$("#id").val(id);
+				$("#account").val(account);
+				$("#name").val(name);
+				$("#status").val(status);
+				$("#roleId").val(roleId);
+				$("#phone").val(phone);
+				$("#email").val(email);
+			}else{
+				$("#user-form").attr("action",userUrl+"add");
+				rules.password={
+					required:true,
+					minlength:6,
+					maxlength:100
+				}
+				rules.confirm={
+					equalTo:"#password"
+				}
+			}
+
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			});
+
+			$("#user-form").validate({
+				rules:rules,
+				onkeyup:false,
+				focusCleanup:true,
+				success:"valid",
+				submitHandler:function(form){
+					$(form).ajaxSubmit({
+						success: function(data){
+							layer.msg(data.message,{icon: 1,time:1000});
+							parent.table.ajax.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+						},
+						resetForm: true,
+						dataType: "json"
+					});
+				}
+			});
+		}
+	},true);
+});
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>
