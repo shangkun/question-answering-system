@@ -111,7 +111,10 @@
         where 1=1
         <if test="name!=null and name!=''">
             and ( name like concat('%',#{name},'%')
-            or account like concat('%',#{account},'%'))
+            or account like concat('%',#{name},'%'))
+        </if>
+        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+            and modify_time &gt;= #{startTime} and modify_time &lt; #{endTime}
         </if>
         <if test="status!=null">
             and status = #{status}
@@ -129,8 +132,11 @@
         <include refid="table"/>
         where 1=1
         <if test="name!=null and name!=''">
-            ( name like concat('%',#{name},'%')
-            or account like concat('%',#{account},'%'))
+            and ( name like concat('%',#{name},'%')
+            or account like concat('%',#{name},'%'))
+        </if>
+        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+            and modify_time &gt;= #{startTime} and modify_time &lt; #{endTime}
         </if>
         <if test="status!=null">
             and status = #{status}
@@ -151,6 +157,23 @@
         from
         <include refid="table"/>
         where id != #{0}
-        and acount = #{1}
+        and account = #{1}
     </select>
+
+    <delete id="deleteByIdList">
+        delete
+        from
+        <include refid="table"/>
+        where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="updatePwd">
+        update
+        <include refid="table"/>
+        set password = #{password}
+        where id = #{id}
+    </update>
 </mapper>

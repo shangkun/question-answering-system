@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * author: shangkun <br/>
@@ -62,7 +63,7 @@ public class UserController extends Base{
     @ApiOperation(value = "登录名校验", notes = "登录名校验")
     @RequestMapping(value = "/repeat", method = RequestMethod.POST)
     @ResponseBody
-    public Response repeat(User user) throws Exception{
+    public Response repeat(@RequestBody User user) throws Exception{
         if (userService.isRepeat(user)) {
             return Response.FAIL("登录名重复");
         } else {
@@ -86,7 +87,32 @@ public class UserController extends Base{
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Response delete(@PathVariable("id") String id) throws Exception{
-        userService.deleteById(id);
+        String result = userService.deleteById(id);
+        if(result!=null){
+            return Response.FAIL(result);
+        }
+        return Response.SUCCESS();
+    }
+
+    @ApiOperation(value = "批量删除用户", notes = "批量删除用户")
+    @RequestMapping(value = "/batch/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Response batchDelete(@RequestBody List<String> idList) throws Exception{
+        String result = userService.deleteByIdList(idList);
+        if(result!=null){
+            return Response.FAIL(result);
+        }
+        return Response.SUCCESS();
+    }
+
+    @ApiOperation(value = "修改密码", notes = "修改密码")
+    @RequestMapping(value = "/pwd/update", method = RequestMethod.POST)
+    @ResponseBody
+    public Response updatePwd(User user) throws Exception{
+        String result = userService.updatePwd(user);
+        if(result!=null){
+            return Response.FAIL(result);
+        }
         return Response.SUCCESS();
     }
 

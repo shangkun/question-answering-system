@@ -48,12 +48,6 @@
 					</div>
 				</div>
 				<div class="row cl">
-					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>状态：</label>
-					<div class="formControls col-xs-8 col-sm-9">
-						<input type="text" class="input-text" placeholder="0" name="status" id="status">
-					</div>
-				</div>
-				<div class="row cl">
 					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
 						<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
 					</div>
@@ -65,28 +59,36 @@
 		</td>
 	</tr>
 </table>
-<!--<article class="page-container">
 
-</article>-->
-
-<!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script>
 <script type="text/javascript" src="../static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
 
-<!--请在下方写此页面业务相关的脚本--> 
 <script type="text/javascript" src="../lib/My97DatePicker/4.8/WdatePicker.js"></script>
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate-methods.js"></script> 
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/messages_zh.js"></script>
-<script type="text/javascript" src="../lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
 <script type="text/javascript" src="../lib/jquery-form.js"></script>
 <script type="text/javascript" src="../lib/json2.js"></script>
 <script type="text/javascript" src="js/base.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript">
 $(function(){
+	var menuList = new Array();
+
+	var id = get_page_param('id');
+	var name = get_page_param('name');
+	var description = get_page_param('description');
+	if(id!=""){
+		$("#role-form").attr("action",roleUrl+"update");
+		$("#id").val(id);
+		$("#name").val(name);
+		$("#description").val(description);
+	}else{
+		$("#role-form").attr("action",roleUrl+"add");
+	}
+
 	var setting = {
 		check: {
 			enable: true
@@ -102,19 +104,33 @@ $(function(){
 	};
 
 	function onCheck(e, treeId, treeNode) {
-		var nodes = menu.getCheckedNodes();
-		for (var i=0, l=nodes.length; i<l; i++) {
-			console.log(nodes[i].id);
+		console.log(treeNode);
+		if(treeNode.checked==true){
+			$("#role-form").append('<input type="hidden" id="'+treeNode.id+'" name="menuList" value="'+treeNode.id+'">');
+		}else{
+			$("#"+treeNode.id).remove();
 		}
 	}
 
-	var zNodes =[
-		{ id:0, pId:-1, name:"公用模块", checked:true},
-		{ id:1, pId:-1, name:"管理员管理", checked:true},
-		{ id:2, pId:-1, name:"系统配置", checked:true},
-		{ id:3, pId:-1, name:"知识管理", checked:true},
-		{ id:4, pId:-1, name:"统计分析", checked:true}
-	];
+	var zNodes = new Array();
+
+	POST(roleUrl+"menu/get",new Object(),function(data){
+		if(data.statusCode==200){
+			if(id!=""){
+				GET(roleUrl+"get/"+id,null,function(menuListData){
+					if(menuListData.statusCode==200){
+						menuList=menuListData.data;
+						$.each(menuList,function(i,v){
+							$("#role-form").append('<input type="hidden" id="'+v+'" name="menuList" value="'+v+'">');
+						});
+						initTree(data,menuList,zNodes,setting);
+					}
+				},true);
+			}else{
+				initTree(data,menuList,zNodes,setting);
+			}
+		}
+	},true);
 
 	var rules = {
 		name:{
@@ -126,43 +142,15 @@ $(function(){
 			required:true,
 			minlength:1,
 			maxlength:200
-		},
-		status:{
-			isIntGteZero:true,
-			required:true
 		}
 	};
-
-	var id = get_page_param('id');
-	var name = get_page_param('name');
-	var description = get_page_param('description');
-	var status = get_page_param('status');
-	if(id!=""){
-		$("#role-form").attr("action",roleUrl+"update");
-		$("#password-div").hide();
-		$("#confirm-div").hide();
-		$("#id").val(id);
-		$("#name").val(name);
-		$("#description").val(description);
-		$("#status").val(status);
-	}else{
-		$("#role-form").attr("action",roleUrl+"add");
-		rules.password={
-			required:true,
-			minlength:3,
-			maxlength:100
-		}
-		rules.confirm={
-			equalTo:"#password"
-		}
-	}
 
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',
 		increaseArea: '20%'
 	});
-	
+
 	$("#role-form").validate({
 		rules:rules,
 		onkeyup:false,
@@ -170,6 +158,14 @@ $(function(){
 		success:"valid",
 		submitHandler:function(form){
 			$(form).ajaxSubmit({
+				beforeSubmit:function(){
+					var menuList = $("input[name='menuList']");
+					if(menuList.length==0){
+						layer.msg("请至少选择一个菜单项",{icon: 5,time:1000});
+						return false;
+					}
+					return true;
+				},
 				success: function(data){
 					layer.msg(data.message,{icon: 1,time:1000});
 					parent.table.ajax.reload();
@@ -181,8 +177,23 @@ $(function(){
 			});
 		}
 	});
-	var menu = $.fn.zTree.init($("#menu"), setting, zNodes);
 });
+function initTree(data,menuList,zNodes,setting){
+	$.each(data.data,function(i,v){
+		var menu = new Object();
+		menu.id= v.id;
+		menu.pId= -1;
+		menu.name= v.name;
+		if($.inArray(v.id,menuList)>=0){
+			menu.checked= true;
+		}else{
+			menu.checked= false;
+		}
+		zNodes.push(menu);
+	});
+	menu = $.fn.zTree.init($("#menu"), setting, zNodes);
+}
 </script>
+<script type="text/javascript" src="../lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
 </body>
 </html>

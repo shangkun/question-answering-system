@@ -28,9 +28,11 @@ $(function(){
                     if(data.statusCode==200){
                         layer.msg(data.message,{icon: 1,time:1000});
                         setCookie("access_token",data.data.accessToken,1);
+                        setCookie("user",JSON.stringify(data.data.user),1);
+                        setCookie("role",JSON.stringify(data.data.role),1);
                         window.location.href="./views/static/index.html";
                     }else{
-                        layer.msg(data.message,{icon: 5,time:1000});
+                        layer.msg(data.info,{icon: 5,time:1000});
                     }
                 },
                 resetForm: true,

@@ -25,13 +25,13 @@
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 用户管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
 	<div class="text-c"> 日期范围：
-		<input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin" class="input-text Wdate" style="width:120px;">
+		<input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}',dateFmt:'yyyy-MM-dd'})" id="datemin" class="input-text Wdate" style="width:120px;">
 		-
-		<input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax" class="input-text Wdate" style="width:120px;">
-		<input type="text" class="input-text" style="width:250px" placeholder="输入用户账号、名称" id="" name="">
-		<button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+		<input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd'})" id="datemax" class="input-text Wdate" style="width:120px;">
+		<input type="text" class="input-text" style="width:250px" placeholder="输入用户账号、用户名称" id="key_words">
+		<button type="submit" class="btn btn-success radius" onclick="table.ajax.reload();"><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
 	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="layer_show('添加用户','user-add-update.html','510','400');" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加用户</a></span> <span class="r">共有数据：<strong id="user_total">0</strong> 条</span> </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="batch_del()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="layer_show('添加用户','user-add-update.html','510','500');" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加用户</a></span> <span class="r">共有数据：<strong id="user_total">0</strong> 条</span> </div>
 	<div class="mt-20">
 		<table id="user" class="table table-border table-bordered table-bg table-sort">
 			<thead>
@@ -39,6 +39,8 @@
 					<th width="25"><input type="checkbox" name="" value=""></th>
 					<th width="80">账号</th>
 					<th width="200">姓名</th>
+					<th width="150">手机号</th>
+					<th width="150">邮箱</th>
 					<th width="120">状态</th>
 					<th width="120">修改时间</th>
 					<th width="100">操作</th>
@@ -65,6 +67,8 @@
 		load_user();
 	});
 
+	var request = new Object();
+
 	function load_user(){
 		table = $("#user").DataTable({
 			autoWidth:false,
@@ -79,9 +83,20 @@
 			info: true,
 			"PaginationType" : "full_numbers",
 			"ajax": function (data, callback) {
-				var request = {};
 				request.index=data.start;
 				request.pageSize=data.length;
+				if($("#datemin").val() && $("#datemax").val()){
+					request.startTime=$("#datemin").val()+hour_start;
+					request.endTime=$("#datemax").val()+hour_end;
+				}else{
+					request.startTime=null;
+					request.endTime=null;
+				}
+				if($("#key_words").val()){
+					request.name = $("#key_words").val();
+				}else{
+					request.name = null;
+				}
 				POST(userUrl+"get",request,function(result){
 					//封装返回数据
 					var returnData = {};
@@ -92,7 +107,6 @@
 
 					callback(returnData);
 				},false);
-
 			},
 			"columns":[
 				{
@@ -104,7 +118,14 @@
 				},
 				{"data":"account"},
 				{"data":"name"},
-				{"data":"status"},
+				{"data":"phone"},
+				{"data":"email"},
+				{
+					"data":"status",
+					"render" : function(data,type,row) {
+						return status_trans(data);
+					}
+				},
 				{
 					"data":"modifyTime",
 					"render" : function(data,type,row) {
@@ -114,8 +135,10 @@
 				{
 					"data" : "id",
 					"render" : function(data,type,row) {
-						var html = '<a style="text-decoration:none" onClick="layer_show(\'用户编辑\',\'user-add-update.html?id='+data+'&account='+row.account+'&name='+row.name+'&status='+row.status+'\',\'510\',\'400\')" href="javascript:;" title="编辑">' +
-								'<i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="user_del(this,\''+data+'\')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>';
+						var html = '<a style="text-decoration:none" onClick="layer_show(\'用户编辑\',\'user-add-update.html?id='+data+'&account='+row.account+'&name='+row.name+'&status='+row.status+'&roleId='+row.roleId+'&phone='+row.phone+'&email='+row.email+'\',\'510\',\'410\')" href="javascript:;" title="编辑">' +
+								'<i class="Hui-iconfont">&#xe6df;</i></a> '+
+								'<a style="text-decoration:none" class="ml-5" onClick="layer_show(\'修改密码\',\'change-password.html?id='+data+'&account='+row.account+'\',\'600\',\'270\')" href="javascript:;" title="修改密码"><i class="Hui-iconfont">&#xe63f;</i></a>'+
+								'<a style="text-decoration:none" class="ml-5" onClick="user_del(this,\''+data+'\')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>';
 						return html;
 					}
 				}
@@ -125,6 +148,31 @@
 	function user_del(obj,id){
 		layer.confirm('确认要删除吗？',function(index){
 			GET(userUrl+"delete/"+id,null,function(data){
+				if(data.statusCode==200){
+					table.ajax.reload();
+					layer.msg(data.message,{icon:1,time:1000});
+				}else{
+					layer.msg(data.message,{icon:5,time:1000});
+				}
+			},false);
+		});
+	}
+	function batch_del(){
+		var id_array = $("input[name='sid']");
+		var idList = new Array();
+		$.each(id_array,function(i,v){
+			if(v.checked){
+				console.log(v.value);
+				idList.push(v.value);
+			}
+		});
+		if(idList.length==0){
+			layer.msg("请至少选择一条记录",{icon:5,time:1000});
+			return;
+		}
+
+		layer.confirm('确认要删除吗？',function(index){
+			POST(userUrl+"batch/delete/",idList,function(data){
 				if(data.statusCode==200){
 					table.ajax.reload();
 					layer.msg(data.message,{icon:1,time:1000});

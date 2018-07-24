@@ -1,10 +1,7 @@
 package cn.ken.questionansweringsystem.model.response;
 
 import cn.ken.questionansweringsystem.model.Role;
-import cn.ken.questionansweringsystem.model.RoleMenu;
 import cn.ken.questionansweringsystem.model.User;
-
-import java.util.List;
 
 /**
  * author: shangkun <br/>
@@ -18,8 +15,6 @@ public class UserResponse{
     private String message;
 
     private Role role;
-
-    private List<RoleMenu> roleMenuList;
 
     private String accessToken;
 
@@ -53,13 +48,5 @@ public class UserResponse{
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public List<RoleMenu> getRoleMenuList() {
-        return roleMenuList;
-    }
-
-    public void setRoleMenuList(List<RoleMenu> roleMenuList) {
-        this.roleMenuList = roleMenuList;
     }
 }

@@ -2,6 +2,7 @@ package cn.ken.questionansweringsystem.service;
 
 import cn.ken.questionansweringsystem.model.Menu;
 import cn.ken.questionansweringsystem.model.PageData;
+import cn.ken.questionansweringsystem.model.Role;
 import cn.ken.questionansweringsystem.model.RoleMenu;
 import cn.ken.questionansweringsystem.model.request.RoleRequest;
 
@@ -16,13 +17,17 @@ public interface RoleService {
 
     public List<Menu> getMenu() throws Exception;
 
-    public List<RoleMenu> getMenuByRoleId(String roleId) throws Exception;
+    public List<String> getMenuByRoleId(String roleId) throws Exception;
+
+    public Role getRole(String roleId);
 
     public String add(RoleRequest request) throws Exception;
 
     public boolean isRepeat(RoleRequest request) throws Exception;
 
     public String delete(String id) throws Exception;
+
+    public String deleteByIdList(List<String> list) throws Exception;
 
     public String update(RoleRequest request) throws Exception;
 

@@ -1,8 +1,8 @@
 package cn.ken.questionansweringsystem.controller;
 
+import cn.ken.questionansweringsystem.model.Menu;
 import cn.ken.questionansweringsystem.model.PageData;
 import cn.ken.questionansweringsystem.model.Response;
-import cn.ken.questionansweringsystem.model.RoleMenu;
 import cn.ken.questionansweringsystem.model.request.RoleRequest;
 import cn.ken.questionansweringsystem.service.RoleService;
 import cn.ken.questionansweringsystem.utils.Base;
@@ -61,7 +61,21 @@ public class RoleController extends Base{
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Response delete(@PathVariable("id") String id) throws Exception{
-        roleService.delete(id);
+        String result = roleService.delete(id);
+        if(result!=null){
+            return Response.FAIL(result);
+        }
+        return Response.SUCCESS();
+    }
+
+    @ApiOperation(value = "批量删除角色", notes = "批量删除角色")
+    @RequestMapping(value = "batch/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Response batchDelete(@RequestBody List<String> idList) throws Exception{
+        String result = roleService.deleteByIdList(idList);
+        if(result!=null){
+            return Response.FAIL(result);
+        }
         return Response.SUCCESS();
     }
 
@@ -77,13 +91,25 @@ public class RoleController extends Base{
         }
     }
 
-    @ApiOperation(value = "单个获取角色", notes = "获取一个角色")
+    @ApiOperation(value = "单个获取角色的菜单id列表", notes = "单个获取角色的菜单id列表")
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Response update(@PathVariable("id") String id) throws Exception{
-        List<RoleMenu> roleMenuList = roleService.getMenuByRoleId(id);
-        if(!CollectionUtils.isEmpty(roleMenuList)){
-            return Response.SUCCESS(roleMenuList);
+    public Response getRole(@PathVariable("id") String id) throws Exception{
+        List<String> menuList = roleService.getMenuByRoleId(id);
+        if(!CollectionUtils.isEmpty(menuList)){
+            return Response.SUCCESS(menuList);
+        }else{
+            return Response.FAIL("数据为空");
+        }
+    }
+
+    @ApiOperation(value = "获取所有菜单", notes = "获取所有菜单")
+    @RequestMapping(value = "/menu/get", method = RequestMethod.POST)
+    @ResponseBody
+    public Response getMenu() throws Exception{
+        List<Menu> menuList = roleService.getMenu();
+        if(!CollectionUtils.isEmpty(menuList)){
+            return Response.SUCCESS(menuList);
         }else{
             return Response.FAIL("数据为空");
         }

@@ -1,6 +1,7 @@
 package cn.ken.questionansweringsystem.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Role {
     private String id;
@@ -12,6 +13,16 @@ public class Role {
     private Date modifyTime;
 
     private Integer status;
+
+    private List<String> menuList;
+
+    public List<String> getMenuList() {
+        return menuList;
+    }
+
+    public void setMenuList(List<String> menuList) {
+        this.menuList = menuList;
+    }
 
     public String getId() {
         return id;

@@ -32,6 +32,15 @@
     where id = #{id}
   </delete>
 
+  <delete id="deleteByIdList">
+    delete from
+    <include refid="table"/>
+    where id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
   <update id="update">
     update
     <include refid="table"/>
@@ -66,10 +75,11 @@
     <include refid="table"/>
     where 1=1
     <if test="name!=null and name!=''">
-      and name like concat('%',#{name},'%')
+      and (name like concat('%',#{name},'%')
+       or description like concat('%',#{name},'%'))
     </if>
-    <if test="description!=null and description!=''">
-      and description like concat('%',#{description},'%')
+    <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+      and modify_time &gt;= #{startTime} and modify_time &lt; #{endTime}
     </if>
     <if test="status!=null">
       and status = #{status}
@@ -87,10 +97,11 @@
     <include refid="table"/>
     where 1=1
     <if test="name!=null and name!=''">
-      and name like concat('%',#{name},'%')
+      and (name like concat('%',#{name},'%')
+      or description like concat('%',#{name},'%'))
     </if>
-    <if test="description!=null and description!=''">
-      and description like concat('%',#{description},'%')
+    <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+      and modify_time &gt;= #{startTime} and modify_time &lt; #{endTime}
     </if>
     <if test="status!=null">
       and status = #{status}

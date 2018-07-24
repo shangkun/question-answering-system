@@ -1,5 +1,6 @@
 package cn.ken.questionansweringsystem.service;
 
+import cn.ken.questionansweringsystem.common.Constant;
 import cn.ken.questionansweringsystem.mapper.MenuMapper;
 import cn.ken.questionansweringsystem.mapper.RoleMapper;
 import cn.ken.questionansweringsystem.mapper.RoleMenuMapper;
@@ -42,11 +43,22 @@ public class RoleServiceImpl extends Base implements RoleService{
     }
 
     @Override
-    public List<RoleMenu> getMenuByRoleId(String roleId) throws Exception {
+    public List<String> getMenuByRoleId(String roleId) throws Exception {
         if(!isRoleExists(roleId)){
             return Collections.emptyList();
         }
-        return roleMenuMapper.getByRoleId(roleId);
+        return roleMenuMapper.getMenuByRoleId(roleId);
+    }
+
+    @Override
+    public Role getRole(String roleId){
+        if(!isRoleExists(roleId)){
+            return null;
+        }
+        Role role = roleMapper.selectById(roleId);
+        List<String> menuList = roleMenuMapper.getMenuByRoleId(roleId);
+        role.setMenuList(menuList);
+        return role;
     }
 
     @Override
@@ -114,6 +126,9 @@ public class RoleServiceImpl extends Base implements RoleService{
 
     @Override
     public String delete(String id) throws Exception {
+        if(id.equals(Constant.DEFAULT_ROLE)){
+            return "不能删除系统默认角色";
+        }
         if(roleMenuMapper.deleteByRoleId(id)==0){
             return "角色菜单关联数据删除失败";
         }
@@ -122,7 +137,22 @@ public class RoleServiceImpl extends Base implements RoleService{
     }
 
     @Override
+    public String deleteByIdList(List<String> list) throws Exception {
+        if(list.contains(Constant.DEFAULT_ROLE)){
+            return "不能删除系统默认角色";
+        }
+        if(roleMenuMapper.deleteByRoleIdList(list)==0){
+            return "角色菜单关联数据删除失败";
+        }
+        roleMapper.deleteByIdList(list);
+        return null;
+    }
+
+    @Override
     public String update(RoleRequest request) throws Exception {
+        if(request.getId().equals(Constant.DEFAULT_ROLE)){
+            return "不能修改系统默认角色";
+        }
         Role role = new Role();
         List<RoleMenu> roleMenuList = new ArrayList<>();
         String result = assemble(request,role,roleMenuList);

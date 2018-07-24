@@ -5,6 +5,15 @@ var timeout=60000;
 var async=false;
 var day_format="yyyy-MM-dd";
 var second_format="yyyy-MM-dd HH:mm:ss";
+var access_token = "";
+
+$(function(){
+    access_token = getCookie("access_token");
+    if(access_token==""){
+        layer.msg("cookie已经过期!",{icon: 5,time:1000});
+        window.location.href="./../../login.html";
+    }
+});
 /**
  * ajax数据请求
  * @param url
@@ -14,6 +23,9 @@ var second_format="yyyy-MM-dd HH:mm:ss";
  */
 var GET = function (url, data, callback, async) {
     $.ajax({
+        headers: {
+            'access_token': access_token
+        },
         url: url,
         type: "get",
         async: async,
@@ -38,7 +50,8 @@ var POST = function (url, data, callback,async) {
     $.ajax({
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'access_token': access_token
         },
         url: url,
         type: "post",
@@ -83,6 +96,13 @@ var date_format = function (data_format,timestamp) {
     var newDate = new Date();
     newDate.setTime(timestamp);
     return newDate.format(data_format);
+}
+var status_trans = function(val){
+    if(val=="0"){
+        return "禁用";
+    }else{
+        return "可用";
+    }
 }
 Date.prototype.format = function (format) {
     var date = {
@@ -130,5 +150,5 @@ var getCookie = function(key){
     return $.cookie(key);
 }
 var delCookie = function(key){
-    $.cookie(key,null);
+    $.cookie(key,null,{path: '/'});
 }

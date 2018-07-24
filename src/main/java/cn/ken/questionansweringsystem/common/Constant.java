@@ -30,4 +30,8 @@ public class Constant {
     public static final String ERROR_INFO = "异常";
 
     public static final String SESSION_ID = "session_id:";
+
+    public static final String DEFAULT_USER = "538559372305891328";
+
+    public static final String DEFAULT_ROLE = "538945468713926656";
 }

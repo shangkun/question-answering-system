@@ -44,6 +44,18 @@
 				<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
 			</div>
 		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机号：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="phone" name="phone">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>邮箱：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="email" name="email">
+			</div>
+		</div>
 		<div class="row cl" id="password-div">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
 			<div class="formControls col-xs-8 col-sm-9">
@@ -57,9 +69,20 @@
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>状态：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" placeholder="0" name="status" id="status">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>角色：</label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+				<select id="roleId" name="roleId" class="select"></select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>状态：</label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+				<select id="status" name="status" class="select">
+					<option value="1">可用</option>
+					<option value="0">禁用</option>
+				</select>
+				</span>
 			</div>
 		</div>
 		<div class="row cl">
@@ -79,25 +102,47 @@
 <!--请在下方写此页面业务相关的脚本--> 
 <script type="text/javascript" src="../lib/My97DatePicker/4.8/WdatePicker.js"></script>
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
-<script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate-methods.js"></script>
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/messages_zh.js"></script>
 <script type="text/javascript" src="../lib/jquery-form.js"></script>
 <script type="text/javascript" src="../lib/json2.js"></script>
 <script type="text/javascript" src="js/base.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate.expand.js"></script>
 <script type="text/javascript">
 $(function(){
+
+	POST(roleUrl+"get",new Object(),function(data){
+		$("#roleId").empty();
+		if(data.statusCode==200){
+			$.each(data.data.data,function(i,v){
+				$("#roleId").append('<option value='+ v.id+'>'+ v.name+'</option>');
+			});
+		}
+	},true);
 
 	var rules = {
 		account:{
 			required:true,
 			minlength:3,
-			maxlength:100
+			maxlength:100,
+			isAccountRepeat:true
 		},
 		name:{
 			required:true,
 			minlength:1,
 			maxlength:100
+		},
+		phone:{
+			required:true,
+			isTel:true
+		},
+		email:{
+			required:true,
+			isEmail:true
+		},
+		roleId:{
+			required:true
 		},
 		status:{
 			isIntGteZero:true,
@@ -109,6 +154,9 @@ $(function(){
 	var account = get_page_param('account');
 	var name = get_page_param('name');
 	var status = get_page_param('status');
+	var roleId = get_page_param('roleId');
+	var phone = get_page_param('phone');
+	var email = get_page_param('email');
 	if(id!=""){
 		$("#user-form").attr("action",userUrl+"update");
 		$("#password-div").hide();
@@ -117,11 +165,14 @@ $(function(){
 		$("#account").val(account);
 		$("#name").val(name);
 		$("#status").val(status);
+		$("#roleId").val(roleId);
+		$("#phone").val(phone);
+		$("#email").val(email);
 	}else{
 		$("#user-form").attr("action",userUrl+"add");
 		rules.password={
 			required:true,
-			minlength:3,
+			minlength:6,
 			maxlength:100
 		}
 		rules.confirm={

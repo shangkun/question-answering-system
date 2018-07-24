@@ -115,7 +115,7 @@ $(function(){
     // 电话号码验证    
     jQuery.validator.addMethod("isPhone", function(value, element) {    
       var tel = /^(\d{3,4}-?)?\d{7,9}$/g;    
-      return this.optional(element) || (tel.test(value));    
+      return this.optional(element) || (tel.test(value));
     }, "电话号码格式不正确");
 
     // 联系电话(手机/电话皆可)验证   
@@ -129,9 +129,9 @@ $(function(){
      // 匹配qq      
     jQuery.validator.addMethod("isQq", function(value, element) {       
          return this.optional(element) || /^[1-9]\d{4,12}$/;       
-    }, "QQ号码不合法");   
- 
-     // 邮政编码验证    
+    }, "QQ号码不合法");
+
+    // 邮政编码验证
     jQuery.validator.addMethod("isZipCode", function(value, element) {    
       var zip = /^[0-9]{6}$/;    
       return this.optional(element) || (zip.test(value));    
@@ -139,8 +139,8 @@ $(function(){
     
     // 匹配密码，以字母开头，长度在6-16之间，只能包含字符、数字和下划线。      
     jQuery.validator.addMethod("isPwd", function(value, element) {       
-         return this.optional(element) || /^[a-zA-Z]\\w{6,16}$/.test(value);       
-    }, "以字母开头，长度在6-12之间，只能包含字符、数字和下划线。");  
+         return this.optional(element) || /^[a-zA-Z]\\w{6,16}$/.test(value);
+    }, "以字母开头，长度在6-16之间，只能包含字符、数字和下划线。");
     
     // 身份证号码验证
     jQuery.validator.addMethod("isIdCardNo", function(value, element) { 

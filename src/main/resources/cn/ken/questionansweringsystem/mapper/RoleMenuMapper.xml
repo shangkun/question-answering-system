@@ -36,10 +36,29 @@
     role_id=#{0}
   </select>
 
+  <select id="getMenuByRoleId" resultType="java.lang.String">
+    select
+    menu_id
+    from
+    <include refid="table"/>
+    where
+    role_id=#{0}
+  </select>
+
   <delete id="deleteByRoleId">
     delete from
     <include refid="table"/>
     where
     role_id=#{0}
+  </delete>
+
+  <delete id="deleteByRoleIdList">
+    delete from
+    <include refid="table"/>
+    where
+    role_id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
   </delete>
 </mapper>

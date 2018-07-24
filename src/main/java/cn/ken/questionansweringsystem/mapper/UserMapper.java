@@ -18,4 +18,8 @@ public interface UserMapper extends BaseMapper<User,String>{
     int countByAccount(String account);
 
     int countByIdAndAccount(String id,String account);
+
+    int deleteByIdList(List<String> list);
+
+    int updatePwd(User user);
 }

@@ -1,7 +1,6 @@
 package cn.ken.questionansweringsystem.service;
 
 import cn.ken.questionansweringsystem.common.Constant;
-import cn.ken.questionansweringsystem.mapper.RoleMapper;
 import cn.ken.questionansweringsystem.mapper.UserMapper;
 import cn.ken.questionansweringsystem.model.PageData;
 import cn.ken.questionansweringsystem.model.User;
@@ -70,7 +69,7 @@ public class UserServiceImpl extends Base implements UserService{
         if(!StringUtils.lengthCheck(user.getEmail(),1,100)){
             return "邮箱长度不能小于0或大于100";
         }
-        if(!StringUtils.lengthCheck(user.getPassword(),1,20)){
+        if(!StringUtils.lengthCheck(user.getPhone(),1,20)){
             return "手机号长度不能小于0或大于100";
         }
         if(!roleService.isRoleExists(user.getRoleId())){
@@ -89,17 +88,45 @@ public class UserServiceImpl extends Base implements UserService{
     }
 
     @Override
-    public int deleteById(String id) {
-        return userMapper.deleteById(id);
+    public String deleteById(String id) {
+        if(id.equals(Constant.DEFAULT_USER)){
+            return "不能删除系统默认管理员";
+        }
+        userMapper.deleteById(id);
+        return null;
+    }
+
+    @Override
+    public String deleteByIdList(List<String> idList) throws Exception {
+        if(idList.contains(Constant.DEFAULT_USER)){
+            return "不能删除系统默认管理员";
+        }
+        userMapper.deleteByIdList(idList);
+        return null;
     }
 
     @Override
     public String update(User user) {
+        if(user.getId().equals(Constant.DEFAULT_USER)){
+            return "不能修改系统默认管理员";
+        }
         String result = assemble(user);
         if(result!=null){
             return result;
         }
         userMapper.update(user);
+        return null;
+    }
+
+    @Override
+    public String updatePwd(User user) throws Exception {
+        if(user.getId().equals(Constant.DEFAULT_USER)){
+            return "不能修改系统默认管理员";
+        }
+        if(StringUtils.isEmpty(user.getId()) || StringUtils.isEmpty(user.getPassword())){
+            return "用户id与密码不能为空";
+        }
+        userMapper.updatePwd(user);
         return null;
     }
 
@@ -163,6 +190,7 @@ public class UserServiceImpl extends Base implements UserService{
             response.setUser(user1);
             String token = IdWorker.getInstance().nextId();
             response.setAccessToken(token);
+            response.setRole(roleService.getRole(user.getRoleId()));
             redisUtils.set(Constant.ACCESS_TOKEN_WITH_PREFIX+token,gson.toJson(user1), Constant.TIMEOUT);
 
             //修改最后登录时间与登录ip

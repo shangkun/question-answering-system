@@ -33,7 +33,15 @@ public interface UserService {
      * @param id
      * @return
      */
-    public int deleteById(String id) throws Exception;
+    public String deleteById(String id) throws Exception;
+
+    /**
+     * 批量删除
+     * @param idList
+     * @return
+     * @throws Exception
+     */
+    public String deleteByIdList(List<String> idList) throws Exception;
 
     /**
      * 更新用户数据
@@ -41,6 +49,14 @@ public interface UserService {
      * @return
      */
     public String update(User user) throws Exception;
+
+    /**
+     * 更新用户状态
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    public String updatePwd(User user) throws Exception;
 
     /**
      * 获取一个用户数据

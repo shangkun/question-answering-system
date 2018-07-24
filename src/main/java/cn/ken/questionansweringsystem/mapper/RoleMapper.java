@@ -14,4 +14,6 @@ public interface RoleMapper extends BaseMapper<Role,String>{
     int countByName(String name);
 
     int countByIdAndName(String id,String name);
+
+    int deleteByIdList(List<String> list);
 }

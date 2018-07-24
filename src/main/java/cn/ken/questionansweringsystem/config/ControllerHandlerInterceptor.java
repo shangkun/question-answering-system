@@ -21,6 +21,8 @@ public class ControllerHandlerInterceptor extends Base implements HandlerInterce
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
         String url = request.getRequestURL().toString();
+        String accessToken = request.getHeader(Constant.ACCESS_TOKEN);
+        logger.info("accessToken:{}",accessToken);
         //直接放开白名单
         if(isWhiteList(url)){
             return true;
