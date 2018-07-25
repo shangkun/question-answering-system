@@ -37,7 +37,7 @@ public class RoleController extends Base{
     @ApiOperation(value = "角色名校验", notes = "角色名校验")
     @RequestMapping(value = "/repeat", method = RequestMethod.POST)
     @ResponseBody
-    public Response repeat(RoleRequest request) throws Exception{
+    public Response repeat(@RequestBody RoleRequest request) throws Exception{
         if (roleService.isRepeat(request)) {
             return Response.FAIL("角色名重复");
         } else {

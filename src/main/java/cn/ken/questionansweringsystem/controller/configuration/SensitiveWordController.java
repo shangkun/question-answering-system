@@ -50,7 +50,7 @@ public class SensitiveWordController extends Base{
     @ApiOperation(value = "敏感主题重复判断", notes = "敏感主题重复判断")
     @RequestMapping(value = "/repeat", method = RequestMethod.POST)
     @ResponseBody
-    public Response isRepeat(SensitiveWordRequest request) throws Exception{
+    public Response isRepeat(@RequestBody SensitiveWord request) throws Exception{
         if(sensitiveWordService.isRepeat(request)){
             return Response.FAIL("重复");
         }else{

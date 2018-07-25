@@ -50,7 +50,7 @@ public class LexiconController extends Base{
     @ApiOperation(value = "敏感主题重复判断", notes = "敏感主题重复判断")
     @RequestMapping(value = "/repeat", method = RequestMethod.POST)
     @ResponseBody
-    public Response isRepeat(LexiconRequest request) throws Exception{
+    public Response isRepeat(@RequestBody Lexicon request) throws Exception{
         if(lexiconService.isRepeat(request)){
             return Response.FAIL("重复");
         }else{

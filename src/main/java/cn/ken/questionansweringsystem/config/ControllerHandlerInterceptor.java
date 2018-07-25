@@ -26,17 +26,17 @@ public class ControllerHandlerInterceptor extends Base implements HandlerInterce
         HttpServletRequest request = requestAttributes.getRequest();
         String url = request.getRequestURL().toString();
         String accessToken = request.getHeader(Constant.ACCESS_TOKEN);
-        logger.info("accessToken:{}",accessToken);
         //直接放开白名单
         if(isWhiteList(url)){
             return true;
         }
         String userString = redisUtils.get(Constant.ACCESS_TOKEN_WITH_PREFIX+accessToken);
         if(userString==null){
+            logger.info("illegal access url:{}",url);
             return false;
         }
-        redisUtils.set(Constant.ACCESS_TOKEN_WITH_PREFIX+userString,userString, Constant.TIMEOUT);
-        logger.info(Constant.printPattern+"preHandle"+Constant.printPattern);
+        //访问令牌续期
+        redisUtils.set(Constant.ACCESS_TOKEN_WITH_PREFIX+accessToken,userString,Constant.TIMEOUT);
         return true;
     }
 
@@ -56,11 +56,9 @@ public class ControllerHandlerInterceptor extends Base implements HandlerInterce
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-        logger.info(Constant.printPattern+"postHandle"+Constant.printPattern);
     }
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-        logger.info(Constant.printPattern+"afterCompletion"+Constant.printPattern);
     }
 }
