@@ -16,7 +16,6 @@ public class SigarUtils {
     /**
      * 获取部分服务器信息
      * @return
-     * @throws UnknownHostException
      */
     public static ServerInfo property(){
         ServerInfo serverInfo = new ServerInfo();

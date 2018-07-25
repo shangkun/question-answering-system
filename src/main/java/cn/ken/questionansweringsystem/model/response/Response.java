@@ -29,6 +29,13 @@ public class Response<T> {
         this.data = data;
     }
 
+    public Response(int statusCode, String message, T data,String info) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.data = data;
+        this.info = info;
+    }
+
     public Response(int statusCode, String message,String info) {
         this.statusCode = statusCode;
         this.message = message;
@@ -58,6 +65,11 @@ public class Response<T> {
 
     public static Response SUCCESS(Object data){
         Response response = new Response(200,"请求成功",data);
+        return response;
+    }
+
+    public static Response SUCCESS(Object data,String info){
+        Response response = new Response(200,"请求成功",data,info);
         return response;
     }
 

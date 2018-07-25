@@ -27,7 +27,6 @@
 
     <context:component-scan base-package="cn.ken.questionansweringsystem.*"/>
 
-    <mvc:resources mapping="/swagger/**" location="/swagger/" cache-period="31556926"/>
     <mvc:default-servlet-handler/>
     <bean class="cn.ken.questionansweringsystem.config.SwaggerConfig"/>
 

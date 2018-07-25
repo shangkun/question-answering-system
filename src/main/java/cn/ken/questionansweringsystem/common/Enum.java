@@ -7,4 +7,27 @@ package cn.ken.questionansweringsystem.common;
  */
 public enum Enum {
 
+    businessWord(1,"业务词");
+
+    private int value;
+    private String info;
+
+    public int getValue() {
+        return value;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    Enum(int value, String info) {
+        this.value = value;
+        this.info = info;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
 }

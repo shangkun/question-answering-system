@@ -17,3 +17,33 @@ jQuery.validator.addMethod("isAccountRepeat", function(value, element) {
     },false);
     return this.optional(element) || flag;
 }, "账号已存在");
+
+jQuery.validator.addMethod("isSensitiveWordRepeat", function(value, element) {
+    var request = new Object();
+    request.topic = value;
+    if($("#id").val()){
+        request.id = $("#id").val();
+    }
+    var flag = true;
+    POST(sensitiveWordUrl+"repeat",request,function(data){
+        if(data.statusCode==500){
+            flag = false;
+        }
+    },false);
+    return this.optional(element) || flag;
+}, "敏感词已存在");
+
+jQuery.validator.addMethod("isLexiconRepeat", function(value, element) {
+    var request = new Object();
+    request.topic = value;
+    if($("#id").val()){
+        request.id = $("#id").val();
+    }
+    var flag = true;
+    POST(lexiconUrl+"repeat",request,function(data){
+        if(data.statusCode==500){
+            flag = false;
+        }
+    },false);
+    return this.optional(element) || flag;
+}, "该词已存在");

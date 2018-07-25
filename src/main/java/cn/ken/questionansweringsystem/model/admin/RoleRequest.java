@@ -1,7 +1,5 @@
 package cn.ken.questionansweringsystem.model.admin;
 
-import cn.ken.questionansweringsystem.model.admin.Role;
-
 import java.util.List;
 
 /**

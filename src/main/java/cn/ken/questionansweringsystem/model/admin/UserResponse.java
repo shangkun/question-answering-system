@@ -1,8 +1,5 @@
 package cn.ken.questionansweringsystem.model.admin;
 
-import cn.ken.questionansweringsystem.model.admin.Role;
-import cn.ken.questionansweringsystem.model.admin.User;
-
 /**
  * author: shangkun <br/>
  * date: 2018/7/13 <br/>

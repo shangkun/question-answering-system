@@ -6,7 +6,7 @@ import cn.ken.questionansweringsystem.mapper.admin.RoleMapper;
 import cn.ken.questionansweringsystem.mapper.admin.RoleMenuMapper;
 import cn.ken.questionansweringsystem.mapper.admin.UserMapper;
 import cn.ken.questionansweringsystem.model.admin.Menu;
-import cn.ken.questionansweringsystem.model.PageData;
+import cn.ken.questionansweringsystem.model.response.PageData;
 import cn.ken.questionansweringsystem.model.admin.Role;
 import cn.ken.questionansweringsystem.model.admin.RoleMenu;
 import cn.ken.questionansweringsystem.model.admin.RoleRequest;

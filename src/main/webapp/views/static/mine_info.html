@@ -31,29 +31,29 @@
 </head>
 <body>
 <article class="page-container">
-	<form action="" method="post" class="form form-horizontal" id="user-form">
+	<form action="" method="post" class="form form-horizontal">
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>账号：</label>
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>账号：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="" class="input-text" value="" placeholder="" id="account" name="account" disabled>
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>姓名：</label>
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>姓名：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+				<input type="text" class="input-text" value="" placeholder="" id="name" name="name" disabled>
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机号：</label>
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>手机号：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="phone" name="phone">
+				<input type="text" class="input-text" value="" placeholder="" id="phone" name="phone" disabled>
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>邮箱：</label>
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>邮箱：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="email" name="email">
+				<input type="text" class="input-text" value="" placeholder="" id="email" name="email" disabled>
 			</div>
 		</div>
 	</form>
@@ -72,7 +72,15 @@
 <script type="text/javascript" src="../static/js/utils.js"></script>
 <script type="text/javascript">
 $(function(){
-	
+	GET(userUrl2+"get/"+getUserId(),null,function(data){
+		if(data.statusCode==200){
+			var user = data.data;
+			$("#account").val(user.account);
+			$("#name").val(user.name);
+			$("#phone").val(user.phone);
+			$("#email").val(user.email);
+		}
+	},true);
 });
 </script>
 </body>

@@ -2,7 +2,8 @@ package cn.ken.questionansweringsystem.service.admin;
 
 import cn.ken.questionansweringsystem.common.Constant;
 import cn.ken.questionansweringsystem.mapper.admin.UserMapper;
-import cn.ken.questionansweringsystem.model.PageData;
+import cn.ken.questionansweringsystem.model.admin.Role;
+import cn.ken.questionansweringsystem.model.response.PageData;
 import cn.ken.questionansweringsystem.model.admin.User;
 import cn.ken.questionansweringsystem.model.admin.UserRequest;
 import cn.ken.questionansweringsystem.model.admin.UserResponse;
@@ -132,7 +133,10 @@ public class UserServiceImpl extends Base implements UserService{
 
     @Override
     public User getById(String id) {
-        return userMapper.selectById(id);
+        User user = userMapper.selectById(id);
+        Role role = roleService.getRole(user.getRoleId());
+        user.setRole(role);
+        return user;
     }
 
     @Override

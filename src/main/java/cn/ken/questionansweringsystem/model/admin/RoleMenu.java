@@ -6,6 +6,7 @@ package cn.ken.questionansweringsystem.model.admin;
  * what: 角色菜单关联 <br/>
  */
 public class RoleMenu {
+
     private String id;
 
     private String roleId;
@@ -26,7 +27,7 @@ public class RoleMenu {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id == null ? null : id;
     }
 
     public String getRoleId() {
@@ -34,7 +35,7 @@ public class RoleMenu {
     }
 
     public void setRoleId(String roleId) {
-        this.roleId = roleId == null ? null : roleId.trim();
+        this.roleId = roleId == null ? null : roleId;
     }
 
     public String getMenuId() {
@@ -42,6 +43,6 @@ public class RoleMenu {
     }
 
     public void setMenuId(String menuId) {
-        this.menuId = menuId == null ? null : menuId.trim();
+        this.menuId = menuId == null ? null : menuId;
     }
 }

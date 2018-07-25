@@ -1,6 +1,6 @@
 package cn.ken.questionansweringsystem.service.admin;
 
-import cn.ken.questionansweringsystem.model.PageData;
+import cn.ken.questionansweringsystem.model.response.PageData;
 import cn.ken.questionansweringsystem.model.admin.User;
 import cn.ken.questionansweringsystem.model.admin.UserRequest;
 import cn.ken.questionansweringsystem.model.admin.UserResponse;

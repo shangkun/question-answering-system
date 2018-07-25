@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ken.questionansweringsystem.mapper.knowledge.AnswerMapper">
+  <resultMap id="ResultMap" type="cn.ken.questionansweringsystem.model.knowledge.Answer">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="channel_id" jdbcType="INTEGER" property="channelId" />
+  </resultMap>
+</mapper>

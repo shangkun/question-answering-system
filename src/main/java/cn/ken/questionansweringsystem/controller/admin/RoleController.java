@@ -1,7 +1,7 @@
 package cn.ken.questionansweringsystem.controller.admin;
 
 import cn.ken.questionansweringsystem.model.admin.Menu;
-import cn.ken.questionansweringsystem.model.PageData;
+import cn.ken.questionansweringsystem.model.response.PageData;
 import cn.ken.questionansweringsystem.model.response.Response;
 import cn.ken.questionansweringsystem.model.admin.RoleRequest;
 import cn.ken.questionansweringsystem.service.admin.RoleService;

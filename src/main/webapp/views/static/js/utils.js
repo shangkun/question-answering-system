@@ -104,6 +104,25 @@ var status_trans = function(val){
         return "可用";
     }
 }
+var lexicon_trans = function(val){
+    var type = "";
+    switch (val){
+        case 1:type="业务词";break;
+    }
+    return type;
+}
+var words_spliter = function(val){
+    var html = "";
+    var terms = val.split(";");
+    for(var i=0;i<terms.length;i++){
+        if(i%2==0){
+            html+="<span class='c_green'>"+terms[i]+"</span> ";
+        }else{
+            html+="<span class='c_red'>"+terms[i]+"</span> ";
+        }
+    }
+    return html;
+}
 Date.prototype.format = function (format) {
     var date = {
         "M+": this.getMonth() + 1,
@@ -151,4 +170,9 @@ var getCookie = function(key){
 }
 var delCookie = function(key){
     $.cookie(key,null,{path: '/'});
+}
+var getUserId = function(){
+    var userJson = getCookie("user");
+    var user = JSON.parse(userJson);
+    return user.id;
 }
