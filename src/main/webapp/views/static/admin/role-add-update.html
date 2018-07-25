@@ -158,6 +158,9 @@ $(function(){
 		success:"valid",
 		submitHandler:function(form){
 			$(form).ajaxSubmit({
+				headers: {
+					'access_token': access_token
+				},
 				beforeSubmit:function(){
 					var menuList = $("input[name='menuList']");
 					if(menuList.length==0){

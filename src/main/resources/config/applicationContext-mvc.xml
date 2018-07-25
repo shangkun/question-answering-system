@@ -49,7 +49,7 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/apitest"/>
+            <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/view/"/>
             <bean class="cn.ken.questionansweringsystem.config.ControllerHandlerInterceptor"/>
         </mvc:interceptor>

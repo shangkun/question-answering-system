@@ -17,7 +17,7 @@ public class Constant {
 
     public static int recommendKnowledgeNumber;
 
-    public static String[] whiteList = {"validate","login","logout","/"};
+    public static String[] whiteList = {"validate","login","logout"};
 
     public static final String printPattern = "=====================";
 
