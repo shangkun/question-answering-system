@@ -4,7 +4,6 @@ import cn.ken.questionansweringsystem.model.configuration.Configuration;
 import cn.ken.questionansweringsystem.model.response.Response;
 import cn.ken.questionansweringsystem.service.configuration.ConfigurationService;
 import cn.ken.questionansweringsystem.utils.Base;
-import cn.ken.questionansweringsystem.utils.SigarUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

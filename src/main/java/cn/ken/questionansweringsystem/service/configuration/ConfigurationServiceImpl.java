@@ -1,6 +1,7 @@
 package cn.ken.questionansweringsystem.service.configuration;
 
 import cn.ken.questionansweringsystem.mapper.configuration.ConfigurationMapper;
+import cn.ken.questionansweringsystem.memorydb.ConfigurationDB;
 import cn.ken.questionansweringsystem.model.configuration.Configuration;
 import cn.ken.questionansweringsystem.utils.Base;
 import cn.ken.questionansweringsystem.utils.StringUtils;
@@ -24,6 +25,7 @@ public class ConfigurationServiceImpl extends Base implements ConfigurationServi
             return result;
         }
         configurationMapper.update(configuration);
+        ConfigurationDB.configuration=configuration;
         return null;
     }
 

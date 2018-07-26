@@ -27,13 +27,23 @@
     </foreach>
   </insert>
 
-  <select id="getByRoleId" resultMap="ResultMap">
+  <select id="getByRoleId" parameterType="java.util.List" resultType="java.lang.String">
+    select
+    id
+    from
+    <include refid="table"/>
+    where
+    role_id in
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="get" resultMap="ResultMap">
     select
     <include refid="column"/>
     from
     <include refid="table"/>
-    where
-    role_id=#{0}
   </select>
 
   <select id="getMenuByRoleId" resultType="java.lang.String">

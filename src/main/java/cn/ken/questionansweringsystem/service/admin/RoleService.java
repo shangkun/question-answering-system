@@ -1,6 +1,7 @@
 package cn.ken.questionansweringsystem.service.admin;
 
 import cn.ken.questionansweringsystem.model.admin.Menu;
+import cn.ken.questionansweringsystem.model.admin.RoleMenu;
 import cn.ken.questionansweringsystem.model.response.PageData;
 import cn.ken.questionansweringsystem.model.admin.Role;
 import cn.ken.questionansweringsystem.model.admin.RoleRequest;
@@ -15,6 +16,8 @@ import java.util.List;
 public interface RoleService {
 
     public List<Menu> getMenu() throws Exception;
+
+    public List<RoleMenu> getRoleMenu() throws Exception;
 
     public List<String> getMenuByRoleId(String roleId) throws Exception;
 

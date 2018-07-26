@@ -1,36 +1,27 @@
-package cn.ken.questionansweringsystem.model.configuration;
+package cn.ken.questionansweringsystem.model.knowledge;
 
 import java.util.Date;
-import java.util.Set;
 
 /**
  * author: shangkun <br/>
- * date: 2018/7/25 <br/>
- * what: 敏感词 <br/>
+ * date: 2018/7/26 <br/>
+ * what: 分类 <br/>
  */
-public class SensitiveWord {
+public class Classification {
 
     private String id;
 
-    private String topic;
+    private String name;
 
-    private String topicSet;
+    private String description;
+
+    private String pId;
 
     private Date modifyTime;
 
     private String modifierId;
 
     private Integer status;
-
-    private Set<String> topicHashSet;
-
-    public Set<String> getTopicHashSet() {
-        return topicHashSet;
-    }
-
-    public void setTopicHashSet(Set<String> topicHashSet) {
-        this.topicHashSet = topicHashSet;
-    }
 
     public String getId() {
         return id;
@@ -40,20 +31,28 @@ public class SensitiveWord {
         this.id = id;
     }
 
-    public String getTopic() {
-        return topic;
+    public String getName() {
+        return name;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getTopicSet() {
-        return topicSet;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTopicSet(String topicSet) {
-        this.topicSet = topicSet;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getpId() {
+        return pId;
+    }
+
+    public void setpId(String pId) {
+        this.pId = pId;
     }
 
     public Date getModifyTime() {

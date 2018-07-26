@@ -23,6 +23,8 @@ public class Constant {
 
     public static final int TIMEOUT = 1800;
 
+    public static final int BATCH_NUMBER = 10000;
+
     public static final String ACCESS_TOKEN = "access_token";
 
     public static final String ACCESS_TOKEN_WITH_PREFIX = "access_token:";
@@ -34,4 +36,8 @@ public class Constant {
     public static final String DEFAULT_USER = "538559372305891328";
 
     public static final String DEFAULT_ROLE = "538945468713926656";
+
+    public static final String TOPIC_SPLITER = ";";
+
+    public static final String ROOT_PID = "0";
 }

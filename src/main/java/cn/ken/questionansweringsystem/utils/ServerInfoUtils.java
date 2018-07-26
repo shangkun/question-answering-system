@@ -10,9 +10,9 @@ import java.util.Properties;
 /**
  * author: shangkun <br/>
  * date: 2018/7/24 <br/>
- * what: SigarUtils <br/>
+ * what: 服务器信息 <br/>
  */
-public class SigarUtils {
+public class ServerInfoUtils {
     /**
      * 获取部分服务器信息
      * @return

@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface RoleMenuMapper {
 
-    List<RoleMenu> getByRoleId(String id);
+    List<String> getByRoleId(List<String> list);
+
+    List<RoleMenu> get();
 
     List<String> getMenuByRoleId(String id);
 

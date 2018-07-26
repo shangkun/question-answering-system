@@ -2,7 +2,7 @@ package cn.ken.questionansweringsystem.controller.common;
 
 import cn.ken.questionansweringsystem.model.response.Response;
 import cn.ken.questionansweringsystem.utils.Base;
-import cn.ken.questionansweringsystem.utils.SigarUtils;
+import cn.ken.questionansweringsystem.utils.ServerInfoUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ public class ServerInfoController extends Base{
     @RequestMapping(value = "/info/get", method = RequestMethod.POST)
     @ResponseBody
     public Response get() throws Exception{
-        return Response.SUCCESS(SigarUtils.property());
+        return Response.SUCCESS(ServerInfoUtils.property());
     }
 
 }

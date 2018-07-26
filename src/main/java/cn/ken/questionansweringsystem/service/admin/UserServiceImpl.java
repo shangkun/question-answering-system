@@ -2,6 +2,7 @@ package cn.ken.questionansweringsystem.service.admin;
 
 import cn.ken.questionansweringsystem.common.Constant;
 import cn.ken.questionansweringsystem.mapper.admin.UserMapper;
+import cn.ken.questionansweringsystem.memorydb.Admin;
 import cn.ken.questionansweringsystem.model.admin.Role;
 import cn.ken.questionansweringsystem.model.response.PageData;
 import cn.ken.questionansweringsystem.model.admin.User;
@@ -41,6 +42,7 @@ public class UserServiceImpl extends Base implements UserService{
             return result;
         }
         userMapper.insert(user);
+        Admin.userMap.put(user.getId(),user);
         return null;
     }
 
@@ -94,6 +96,7 @@ public class UserServiceImpl extends Base implements UserService{
             return "不能删除系统默认管理员";
         }
         userMapper.deleteById(id);
+        Admin.userMap.remove(id);
         return null;
     }
 
@@ -103,6 +106,7 @@ public class UserServiceImpl extends Base implements UserService{
             return "不能删除系统默认管理员";
         }
         userMapper.deleteByIdList(idList);
+        Admin.removeUserMapByList(idList);
         return null;
     }
 
@@ -116,6 +120,7 @@ public class UserServiceImpl extends Base implements UserService{
             return result;
         }
         userMapper.update(user);
+        Admin.userMap.put(user.getId(),user);
         return null;
     }
 

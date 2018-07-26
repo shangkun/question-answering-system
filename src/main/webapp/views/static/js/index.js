@@ -57,7 +57,7 @@ function loadMenu(){
             html2+='<ul class="dropDown-menu menu radius box-shadow">';
             html2+='<li><a href="javascript:;" onclick="layer_show(\'添加词库\',\'knowledge/lexicon-add-update.html\',\'510\',\'400\')">';
             html2+='<i class="Hui-iconfont">&#xe616;</i> 词库</a></li>';
-            html2+='<li><a href="javascript:;" onclick="layer_show(\'添加分类\',\'picture-add.html\',\'510\',\'400\')">';
+            html2+='<li><a href="javascript:;" onclick="layer_show(\'添加分类\',\'knowledge/classification-add.html\',\'510\',\'400\')">';
             html2+='<i class="Hui-iconfont">&#xe681;</i> 分类</a></li>';
             html2+='<li><a href="javascript:;" onclick="layer_show(\'添加知识\',\'product-add.html\',\'510\',\'400\')">';
             html2+='<i class="Hui-iconfont">&#xe620;</i> 知识</a></li>';
@@ -73,7 +73,7 @@ function loadMenu(){
             html += '<dd>';
             html += '<ul>';
             html += '<li><a id="lexicon-quick" data-href="knowledge/lexicon.html" data-title="词库管理" href="javascript:void(0)">词库管理</a></li>';
-            html += '<li><a data-href="product-category.html" data-title="分类管理" href="javascript:void(0)">分类管理</a></li>';
+            html += '<li><a data-href="knowledge/classification.html" data-title="分类管理" href="javascript:void(0)">分类管理</a></li>';
             html += '<li><a data-href="product-list.html" data-title="知识管理" href="javascript:void(0)">知识管理</a></li>';
             html += '<li><a data-href="product-list.html" data-title="寒暄知识管理" href="javascript:void(0)">寒暄知识管理</a></li>';
             html += '<li><a data-href="product-list.html" data-title="问答测试" href="javascript:void(0)">问答测试</a></li>';

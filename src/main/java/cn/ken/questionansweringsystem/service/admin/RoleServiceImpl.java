@@ -5,6 +5,7 @@ import cn.ken.questionansweringsystem.mapper.admin.MenuMapper;
 import cn.ken.questionansweringsystem.mapper.admin.RoleMapper;
 import cn.ken.questionansweringsystem.mapper.admin.RoleMenuMapper;
 import cn.ken.questionansweringsystem.mapper.admin.UserMapper;
+import cn.ken.questionansweringsystem.memorydb.Admin;
 import cn.ken.questionansweringsystem.model.admin.Menu;
 import cn.ken.questionansweringsystem.model.response.PageData;
 import cn.ken.questionansweringsystem.model.admin.Role;
@@ -47,6 +48,11 @@ public class RoleServiceImpl extends Base implements RoleService{
     }
 
     @Override
+    public List<RoleMenu> getRoleMenu() throws Exception {
+        return roleMenuMapper.get();
+    }
+
+    @Override
     public List<String> getMenuByRoleId(String roleId) throws Exception {
         if(!isRoleExists(roleId)){
             return Collections.emptyList();
@@ -77,6 +83,8 @@ public class RoleServiceImpl extends Base implements RoleService{
             return "角色菜单关联数据插入失败";
         }
         roleMapper.insert(role);
+        Admin.putAllRoleMenuMap(roleMenuList);
+        Admin.roleMap.put(role.getId(),role);
         return null;
     }
 
@@ -136,10 +144,15 @@ public class RoleServiceImpl extends Base implements RoleService{
         if(userMapper.checkDeleteRole(id)>0){
             return "该角色正在被使用,请确认该角色没有被用户使用";
         }
+        List<String> list = new ArrayList<>();
+        list.add(id);
+        List<String> roleMenuList = roleMenuMapper.getByRoleId(list);
         if(roleMenuMapper.deleteByRoleId(id)==0){
             return "角色菜单关联数据删除失败";
         }
         roleMapper.deleteById(id);
+        Admin.removeRoleMenuMapByList(roleMenuList);
+        Admin.roleMap.remove(id);
         return null;
     }
 
@@ -157,6 +170,8 @@ public class RoleServiceImpl extends Base implements RoleService{
             return "角色菜单关联数据删除失败";
         }
         roleMapper.deleteByIdList(list);
+        Admin.removeRoleMenuMapByList(list);
+        Admin.removeRoleMapByList(list);
         return null;
     }
 
@@ -171,6 +186,9 @@ public class RoleServiceImpl extends Base implements RoleService{
         if(result!=null){
             return result;
         }
+        List<String> list = new ArrayList<>();
+        list.add(request.getId());
+        List<String> roleMenuIdList = roleMenuMapper.getByRoleId(list);
         if(roleMenuMapper.deleteByRoleId(request.getId())==0){
             return "角色菜单关联数据删除失败";
         }
@@ -178,6 +196,9 @@ public class RoleServiceImpl extends Base implements RoleService{
             return "角色菜单关联数据插入失败";
         }
         roleMapper.update(role);
+        Admin.removeRoleMenuMapByList(roleMenuIdList);
+        Admin.putAllRoleMenuMap(roleMenuList);
+        Admin.roleMap.put(request.getId(),role);
         return null;
     }
 

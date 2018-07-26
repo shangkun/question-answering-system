@@ -1,6 +1,7 @@
 package cn.ken.questionansweringsystem.service.configuration;
 
 import cn.ken.questionansweringsystem.mapper.configuration.SensitiveWordMapper;
+import cn.ken.questionansweringsystem.memorydb.ConfigurationDB;
 import cn.ken.questionansweringsystem.model.response.PageData;
 import cn.ken.questionansweringsystem.model.configuration.SensitiveWord;
 import cn.ken.questionansweringsystem.model.configuration.SensitiveWordRequest;
@@ -33,6 +34,7 @@ public class SensitiveWordServiceImpl extends Base implements SensitiveWordServi
             return result;
         }
         sensitiveWordMapper.insert(request);
+        ConfigurationDB.putOneSensitiveWord(request);
         return null;
     }
 
@@ -83,7 +85,12 @@ public class SensitiveWordServiceImpl extends Base implements SensitiveWordServi
         if(StringUtils.isEmpty(id)){
             return "id不能为空";
         }
+        SensitiveWord sensitiveWord = sensitiveWordMapper.selectById(id);
+        if(sensitiveWord==null){
+            return "不存在该条记录";
+        }
         sensitiveWordMapper.deleteById(id);
+        ConfigurationDB.sensitiveWordMap.remove(sensitiveWord.getTopic());
         return null;
     }
 
@@ -94,6 +101,7 @@ public class SensitiveWordServiceImpl extends Base implements SensitiveWordServi
             return result;
         }
         sensitiveWordMapper.update(request);
+        ConfigurationDB.putOneSensitiveWord(request);
         return null;
     }
 
@@ -122,6 +130,9 @@ public class SensitiveWordServiceImpl extends Base implements SensitiveWordServi
             return "列表不能为空";
         }
         sensitiveWordMapper.batchDelete(list);
+        for(String id:list){
+            return deleteById(id);
+        }
         return null;
     }
 }

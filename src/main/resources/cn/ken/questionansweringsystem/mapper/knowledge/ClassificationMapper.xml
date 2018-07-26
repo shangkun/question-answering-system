@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.ken.questionansweringsystem.mapper.admin.RoleMapper">
-  <resultMap id="ResultMap" type="cn.ken.questionansweringsystem.model.admin.Role">
+<mapper namespace="cn.ken.questionansweringsystem.mapper.knowledge.ClassificationMapper">
+  <resultMap id="ResultMap" type="cn.ken.questionansweringsystem.model.knowledge.Classification">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="p_id" jdbcType="VARCHAR" property="pId" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modifier_id" jdbcType="VARCHAR" property="modifierId" />
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
 
-  <sql id="table">role</sql>
+  <sql id="table">classification</sql>
 
   <sql id="column">
-    id,name,description,modify_time,status
+    id,name,description,p_id,modify_time,modifier_id,status
   </sql>
 
   <sql id="insertColumnValue">
-    #{id},#{name},#{description},#{modifyTime},#{status}
+    #{id},#{name},#{description},#{pId},#{modifyTime},#{modifierId},#{status}
   </sql>
 
   <insert id="insert">
@@ -32,7 +34,7 @@
     where id = #{id}
   </delete>
 
-  <delete id="deleteByIdList">
+  <delete id="deleteByIdList" parameterType="java.util.List">
     delete from
     <include refid="table"/>
     where id in
@@ -50,6 +52,12 @@
       </if>
       <if test="description!=null and description!=''">
         description = #{description},
+      </if>
+      <if test="pId!=null and pId!=''">
+        p_id = #{pId},
+      </if>
+      <if test="modifierId!=null and modifierId!=''">
+        modifier_id = #{modifierId},
       </if>
       <if test="status!=null">
         status = #{status}
@@ -84,6 +92,9 @@
     <if test="status!=null">
       and status = #{status}
     </if>
+    <if test="pId!=null and pId!=''">
+      and p_id = #{pId}
+    </if>
     order by modify_time desc
     <if test="pageSize!=0">
       limit #{index},#{pageSize}
@@ -106,6 +117,9 @@
     <if test="status!=null">
       and status = #{status}
     </if>
+    <if test="pId!=null and pId!=''">
+      and p_id = #{pId}
+    </if>
   </select>
 
   <select id="countByName" resultType="int">
@@ -113,8 +127,8 @@
     count(id)
     from
     <include refid="table"/>
-    where
-    name = #{0}
+    where name = #{0}
+    and p_id = #{1}
   </select>
 
   <select id="countByIdAndName" resultType="int">
@@ -125,5 +139,14 @@
     where
     id != #{0}
     and name = #{1}
+    and p_id = #{2}
+  </select>
+
+  <select id="getByPId" resultType="java.util.List">
+    select
+    id
+    from
+    <include refid="table"/>
+    where p_id = #{pId}
   </select>
 </mapper>

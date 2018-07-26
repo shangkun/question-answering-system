@@ -3,6 +3,7 @@ package cn.ken.questionansweringsystem.config;
 import cn.ken.questionansweringsystem.common.Constant;
 import cn.ken.questionansweringsystem.utils.Base;
 import cn.ken.questionansweringsystem.utils.RedisUtils;
+import cn.ken.questionansweringsystem.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,6 +30,9 @@ public class ControllerHandlerInterceptor extends Base implements HandlerInterce
         //直接放开白名单
         if(isWhiteList(url)){
             return true;
+        }
+        if(StringUtils.isEmpty(accessToken)){
+            logger.info("this request:{} without access_token",url);
         }
         String userString = redisUtils.get(Constant.ACCESS_TOKEN_WITH_PREFIX+accessToken);
         if(userString==null){
