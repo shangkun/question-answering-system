@@ -7,6 +7,10 @@ package cn.ken.questionansweringsystem.common;
  */
 public enum Enum {
 
+    allChannel(100,"所有渠道"),
+    webChannel(101,"网页端"),
+    appChannel(102,"手机端"),
+    wechatChannel(103,"微信端"),
     businessWord(1,"业务词");
 
     private int value;

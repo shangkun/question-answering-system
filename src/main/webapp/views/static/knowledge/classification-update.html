@@ -19,24 +19,26 @@
 <script type="text/javascript" src="../../lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>添加分类</title>
+<title>修改分类</title>
 </head>
 <body>
 <div class="page-container">
-	<form action="" method="post" class="form form-horizontal" id="form-user-add">
+	<form action="" method="post" class="form form-horizontal" id="classification-form">
+		<input type="hidden" id="id" name="id"/>
+		<input type="hidden" id="pId" name="pId"/>
+		<input type="hidden" id="modifierId" name="modifierId"/>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">
 				<span class="c-red">*</span>
 				分类名称：</label>
 			<div class="formControls col-xs-6 col-sm-6">
-				<input type="text" class="input-text" value="" placeholder="" id="user-name" name="product-category-name">
+				<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">分类描述：</label>
 			<div class="formControls col-xs-6 col-sm-6">
-				<textarea name="" cols="" rows="" class="textarea"  placeholder="分类描述" onKeyUp="$.Huitextarealength(this,100)"></textarea>
-				<p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+				<textarea cols="" rows="" class="textarea" id="description" name="description" placeholder="分类描述"></textarea>
 			</div>
 		</div>
 		<div class="row cl">
@@ -54,11 +56,76 @@
 <script type="text/javascript" src="../../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
 <script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate-methods.js"></script>
 <script type="text/javascript" src="../../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="../../lib/jquery-form.js"></script>
+<script type="text/javascript" src="../../lib/json2.js"></script>
 <script type="text/javascript" src="../js/base.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate.expand.js"></script>
 <script type="text/javascript">
 $(function(){
-	
+	var id = get_page_param('id');
+	var name = get_page_param('name');
+	var description = get_page_param('description');
+	var pId = get_page_param('pId');
+	if(pId==""){
+		pId="0";
+	}
+	$("#pId").val(pId);
+	$("#modifierId").val(getUserId());
+	if(id!=""){
+		$("#classification-form").attr("action",classificationUrl+"update");
+		$("#id").val(id);
+		$("#name").val(name);
+		$("#description").val(description);
+	}
+
+	var rules = {
+		id:{
+			required:true
+		},
+		name:{
+			required:true,
+			minlength:1,
+			maxlength:50,
+			isClassificationRepeat:true
+		},
+		description:{
+			required:true,
+			minlength:1,
+			maxlength:500
+		},
+		pId:{
+			required:true
+		}
+	};
+
+	$("#classification-form").validate({
+		rules:rules,
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({
+				headers: {
+					'access_token': access_token
+				},
+				success: function(data){
+					if(data.statusCode==200){
+						layer.msg(data.message,{icon: 1,time:1000});
+					}else{
+						layer.msg(data.info,{icon: 5,time:1000});
+					}
+					if(id!=""){
+						parent.loadTree();
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+					}
+				},
+				resetForm: true,
+				dataType: "json"
+			});
+		}
+	});
 });
 </script>
 </body>

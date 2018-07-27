@@ -47,3 +47,19 @@ jQuery.validator.addMethod("isLexiconRepeat", function(value, element) {
     },false);
     return this.optional(element) || flag;
 }, "该词已存在");
+
+jQuery.validator.addMethod("isClassificationRepeat", function(value, element) {
+    var request = new Object();
+    request.name = value;
+    if($("#id").val()){
+        request.id = $("#id").val();
+    }
+    request.pId=$("#pId").val();
+    var flag = true;
+    POST(classificationUrl+"repeat",request,function(data){
+        if(data.statusCode==500){
+            flag = false;
+        }
+    },false);
+    return this.optional(element) || flag;
+}, "该分类已存在");

@@ -6,7 +6,7 @@ import cn.ken.questionansweringsystem.model.admin.RoleRequest;
 
 import java.util.List;
 
-public interface    RoleMapper extends BaseMapper<Role,String> {
+public interface RoleMapper extends BaseMapper<Role,String> {
 
     List<Role> getByAttribute(RoleRequest request);
 

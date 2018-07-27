@@ -1,6 +1,7 @@
 package cn.ken.questionansweringsystem.model.knowledge;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * author: shangkun <br/>
@@ -19,9 +20,39 @@ public class Knowledge {
 
     private String modifierId;
 
+    private String modifierName;
+
     private String teacherId;
 
     private Integer status;
+
+    private List<ExtensionQuestion> extensionQuestionList;
+
+    private List<Answer> answerList;
+
+    public String getModifierName() {
+        return modifierName;
+    }
+
+    public void setModifierName(String modifierName) {
+        this.modifierName = modifierName;
+    }
+
+    public List<ExtensionQuestion> getExtensionQuestionList() {
+        return extensionQuestionList;
+    }
+
+    public void setExtensionQuestionList(List<ExtensionQuestion> extensionQuestionList) {
+        this.extensionQuestionList = extensionQuestionList;
+    }
+
+    public List<Answer> getAnswerList() {
+        return answerList;
+    }
+
+    public void setAnswerList(List<Answer> answerList) {
+        this.answerList = answerList;
+    }
 
     public String getId() {
         return id;

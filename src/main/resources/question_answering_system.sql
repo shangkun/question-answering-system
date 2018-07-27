@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50549
 File Encoding         : 65001
 
-Date: 2018-07-25 20:45:43
+Date: 2018-07-27 18:26:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,12 +41,14 @@ CREATE TABLE `answer` (
   `id` varchar(20) NOT NULL,
   `content` varchar(2000) DEFAULT NULL COMMENT '答案',
   `channel_id` int(10) DEFAULT NULL COMMENT '渠道id',
+  `knowledge_id` varchar(20) DEFAULT NULL COMMENT '知识id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='答案表';
 
 -- ----------------------------
 -- Records of answer
 -- ----------------------------
+INSERT INTO `answer` VALUES ('540343114095656960', 'fghjidslhfdsoj', '100', '540343110668910592');
 
 -- ----------------------------
 -- Table structure for classification
@@ -66,6 +68,10 @@ CREATE TABLE `classification` (
 -- ----------------------------
 -- Records of classification
 -- ----------------------------
+INSERT INTO `classification` VALUES ('540256092177825792', '银行', '银行', '2018-07-27 13:28:57', '538559372305891328', '0', '1');
+INSERT INTO `classification` VALUES ('540272351078514688', '银行卡', '银行卡', '2018-07-27 13:29:13', '538559372305891328', '540256092177825792', '1');
+INSERT INTO `classification` VALUES ('540294769230741504', '12321', 'dsa', '2018-07-27 13:53:25', '538559372305891328', '0', '1');
+INSERT INTO `classification` VALUES ('540294890043473920', 'dsadsa', 'dsadasdsa', '2018-07-27 13:53:54', '538559372305891328', '540294769230741504', '1');
 
 -- ----------------------------
 -- Table structure for configuration
@@ -103,6 +109,7 @@ CREATE TABLE `extension_question` (
 -- ----------------------------
 -- Records of extension_question
 -- ----------------------------
+INSERT INTO `extension_question` VALUES ('540343110668910592', 'fdsfds', '540343110668910592');
 
 -- ----------------------------
 -- Table structure for greeting
@@ -169,6 +176,7 @@ CREATE TABLE `knowledge` (
 -- ----------------------------
 -- Records of knowledge
 -- ----------------------------
+INSERT INTO `knowledge` VALUES ('540343110668910592', 'fdsfjhudsifhds', '540256092177825792', '2018-07-27 18:20:50', '538559372305891328', null, '1');
 
 -- ----------------------------
 -- Table structure for lexicon
@@ -363,5 +371,5 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('538559372305891328', 'admin', 'admin', 'admin.1234', '538945468713926656', '2018-07-25 16:35:45', '1157317608@qq.com', '15810503656', '0:0:0:0:0:0:0:1', '2018-07-25 16:35:45', '0000000020', '1');
+INSERT INTO `user` VALUES ('538559372305891328', 'admin', 'admin', 'admin.1234', '538945468713926656', '2018-07-27 18:20:16', '1157317608@qq.com', '15810503656', '0:0:0:0:0:0:0:1', '2018-07-27 18:20:16', '0000000026', '1');
 INSERT INTO `user` VALUES ('539229683674251264', 'shangkun', '尚坤', '12345678', '539269705655910400', '2018-07-24 19:38:50', '1157317608@qq.com', '15810503656', '0:0:0:0:0:0:0:1', '2018-07-24 18:09:53', '0000000001', '1');

@@ -18,6 +18,8 @@ public interface ClassificationService {
 
     public String delete(String id) throws Exception;
 
+    public List<String> getAllChild(String id) throws Exception;
+
     public String update(ClassificationRequest request) throws Exception;
 
     public PageData get(ClassificationRequest request) throws Exception;

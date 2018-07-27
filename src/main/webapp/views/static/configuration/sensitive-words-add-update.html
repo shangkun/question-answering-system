@@ -143,8 +143,12 @@ $(function(){
 					'access_token': access_token
 				},
 				success: function(data){
-					layer.msg(data.message,{icon: 1,time:1000});
-					parent.table.ajax.reload();
+					if(data.statusCode==200){
+						layer.msg(data.message,{icon: 1,time:1000});
+						parent.table.ajax.reload();
+					}else{
+						layer.msg(data.info,{icon: 5,time:1000});
+					}
 					var index = parent.layer.getFrameIndex(window.name);
 					parent.layer.close(index);
 				},

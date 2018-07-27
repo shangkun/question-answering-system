@@ -74,7 +74,7 @@ function loadMenu(){
             html += '<ul>';
             html += '<li><a id="lexicon-quick" data-href="knowledge/lexicon.html" data-title="词库管理" href="javascript:void(0)">词库管理</a></li>';
             html += '<li><a data-href="knowledge/classification.html" data-title="分类管理" href="javascript:void(0)">分类管理</a></li>';
-            html += '<li><a data-href="product-list.html" data-title="知识管理" href="javascript:void(0)">知识管理</a></li>';
+            html += '<li><a data-href="knowledge/knowledge.html" data-title="知识管理" href="javascript:void(0)">知识管理</a></li>';
             html += '<li><a data-href="product-list.html" data-title="寒暄知识管理" href="javascript:void(0)">寒暄知识管理</a></li>';
             html += '<li><a data-href="product-list.html" data-title="问答测试" href="javascript:void(0)">问答测试</a></li>';
             html += '</ul>';

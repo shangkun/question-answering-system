@@ -97,6 +97,29 @@ var date_format = function (data_format,timestamp) {
     newDate.setTime(timestamp);
     return newDate.format(data_format);
 }
+var extension_question_parse = function(list){
+    var html = "";
+    $.each(list,function(i,v){
+        html+= v.title+";";
+    });
+    return html;
+}
+var answer_parse = function(list){
+    var html = "";
+    $.each(list,function(i,v){
+        html+= "答案"+(i+1)+" "+v.content+" 渠道:"+channel_switch(v.channelId);
+    });
+    return html;
+}
+var channel_switch = function(code){
+    switch (code){
+        case 100:return "全部渠道";
+        case 101:return "网页";
+        case 102:return "APP";
+        case 103:return "微信";
+        default :return "";
+    }
+}
 var status_trans = function(val){
     if(val=="0"){
         return "禁用";

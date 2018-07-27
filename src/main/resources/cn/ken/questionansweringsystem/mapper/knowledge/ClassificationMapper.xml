@@ -142,11 +142,11 @@
     and p_id = #{2}
   </select>
 
-  <select id="getByPId" resultType="java.util.List">
+  <select id="getByPId" resultType="java.lang.String">
     select
     id
     from
     <include refid="table"/>
-    where p_id = #{pId}
+    where p_id = #{0}
   </select>
 </mapper>

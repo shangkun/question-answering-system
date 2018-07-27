@@ -13,6 +13,16 @@ public class Answer {
 
     private Integer channelId;
 
+    private String knowledgeId;
+
+    public String getKnowledgeId() {
+        return knowledgeId;
+    }
+
+    public void setKnowledgeId(String knowledgeId) {
+        this.knowledgeId = knowledgeId;
+    }
+
     public String getId() {
         return id;
     }

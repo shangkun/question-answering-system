@@ -95,6 +95,17 @@ public class ClassificationServiceImpl extends Base implements ClassificationSer
         return null;
     }
 
+    @Override
+    public List<String> getAllChild(String id) throws Exception {
+        List<String> idList = new ArrayList<>();
+        if(!isClassificationExists(id)){
+            return idList;
+        }
+        idList.add(id);
+        cascadeGetChildId(idList,id);
+        return idList;
+    }
+
     /**
      * 递归获取孩子节点的id
      * @param idList
