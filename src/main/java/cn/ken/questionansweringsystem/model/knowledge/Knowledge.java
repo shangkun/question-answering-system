@@ -16,6 +16,8 @@ public class Knowledge {
 
     private String classificationId;
 
+    private String classificationName;
+
     private Date modifyTime;
 
     private String modifierId;
@@ -29,6 +31,14 @@ public class Knowledge {
     private List<ExtensionQuestion> extensionQuestionList;
 
     private List<Answer> answerList;
+
+    public String getClassificationName() {
+        return classificationName;
+    }
+
+    public void setClassificationName(String classificationName) {
+        this.classificationName = classificationName;
+    }
 
     public String getModifierName() {
         return modifierName;

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50549
 File Encoding         : 65001
 
-Date: 2018-07-27 18:26:03
+Date: 2018-07-28 17:12:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,7 +48,7 @@ CREATE TABLE `answer` (
 -- ----------------------------
 -- Records of answer
 -- ----------------------------
-INSERT INTO `answer` VALUES ('540343114095656960', 'fghjidslhfdsoj', '100', '540343110668910592');
+INSERT INTO `answer` VALUES ('540704690015305729', '请您到我行指定网点办理', '101', '540692483357540352');
 
 -- ----------------------------
 -- Table structure for classification
@@ -109,7 +109,7 @@ CREATE TABLE `extension_question` (
 -- ----------------------------
 -- Records of extension_question
 -- ----------------------------
-INSERT INTO `extension_question` VALUES ('540343110668910592', 'fdsfds', '540343110668910592');
+INSERT INTO `extension_question` VALUES ('540704690015305728', '我想办理银行卡', '540692483357540352');
 
 -- ----------------------------
 -- Table structure for greeting
@@ -176,7 +176,7 @@ CREATE TABLE `knowledge` (
 -- ----------------------------
 -- Records of knowledge
 -- ----------------------------
-INSERT INTO `knowledge` VALUES ('540343110668910592', 'fdsfjhudsifhds', '540256092177825792', '2018-07-27 18:20:50', '538559372305891328', null, '1');
+INSERT INTO `knowledge` VALUES ('540692483357540352', '信用卡办理', '540272351078514688', '2018-07-28 16:43:31', '538559372305891328', null, '1');
 
 -- ----------------------------
 -- Table structure for lexicon
@@ -371,5 +371,5 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('538559372305891328', 'admin', 'admin', 'admin.1234', '538945468713926656', '2018-07-27 18:20:16', '1157317608@qq.com', '15810503656', '0:0:0:0:0:0:0:1', '2018-07-27 18:20:16', '0000000026', '1');
+INSERT INTO `user` VALUES ('538559372305891328', 'admin', 'admin', 'admin.1234', '538945468713926656', '2018-07-28 10:29:49', '1157317608@qq.com', '15810503656', '0:0:0:0:0:0:0:1', '2018-07-28 10:29:49', '0000000027', '1');
 INSERT INTO `user` VALUES ('539229683674251264', 'shangkun', '尚坤', '12345678', '539269705655910400', '2018-07-24 19:38:50', '1157317608@qq.com', '15810503656', '0:0:0:0:0:0:0:1', '2018-07-24 18:09:53', '0000000001', '1');

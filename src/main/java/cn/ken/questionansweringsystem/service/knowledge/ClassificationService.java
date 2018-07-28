@@ -1,5 +1,6 @@
 package cn.ken.questionansweringsystem.service.knowledge;
 
+import cn.ken.questionansweringsystem.model.knowledge.Classification;
 import cn.ken.questionansweringsystem.model.knowledge.ClassificationRequest;
 import cn.ken.questionansweringsystem.model.response.PageData;
 
@@ -25,4 +26,6 @@ public interface ClassificationService {
     public PageData get(ClassificationRequest request) throws Exception;
 
     public boolean isClassificationExists(String id);
+
+    public Classification getById(String id);
 }

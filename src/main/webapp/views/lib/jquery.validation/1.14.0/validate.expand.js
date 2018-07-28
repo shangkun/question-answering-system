@@ -63,3 +63,18 @@ jQuery.validator.addMethod("isClassificationRepeat", function(value, element) {
     },false);
     return this.optional(element) || flag;
 }, "该分类已存在");
+
+jQuery.validator.addMethod("isKnowledgeTitleRepeat", function(value, element) {
+    var request = new Object();
+    request.title = value;
+    if($("#id").val()){
+        request.id = $("#id").val();
+    }
+    var flag = true;
+    POST(knowledgeUrl+"repeat",request,function(data){
+        if(data.statusCode==500){
+            flag = false;
+        }
+    },false);
+    return this.optional(element) || flag;
+}, "该知识标题已存在");

@@ -99,6 +99,9 @@ var date_format = function (data_format,timestamp) {
 }
 var extension_question_parse = function(list){
     var html = "";
+    if(list==null || list.length==0){
+        return html;
+    }
     $.each(list,function(i,v){
         html+= v.title+";";
     });
@@ -106,6 +109,9 @@ var extension_question_parse = function(list){
 }
 var answer_parse = function(list){
     var html = "";
+    if(list==null || list.length==0){
+        return html;
+    }
     $.each(list,function(i,v){
         html+= "答案"+(i+1)+" "+v.content+" 渠道:"+channel_switch(v.channelId);
     });
@@ -198,4 +204,12 @@ var getUserId = function(){
     var userJson = getCookie("user");
     var user = JSON.parse(userJson);
     return user.id;
+}
+var open_full = function(title,url){
+    var index = layer.open({
+        type: 2,
+        title: title,
+        content: url
+    });
+    layer.full(index);
 }

@@ -23,28 +23,52 @@
 	<script type="text/javascript" src="../../lib/DD_belatedPNG_0.0.8a-min.js"></script>
 	<script>DD_belatedPNG.fix('*');</script>
 	<![endif]-->
-<!--/meta 作为公共模版分离出去-->
 
-<title>添加或修改角色</title>
+<title>添加或修改知识</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 </head>
 <body>
 <table class="table">
 	<tr>
-		<td width="500" class="va-t">
-			<form action="" method="post" class="form form-horizontal" id="role-form">
+		<td width="800" class="va-t">
+			<form action="" method="post" class="form form-horizontal" id="knowledge-form">
 				<input type="hidden" id="id" name="id">
+				<input type="hidden" id="modifierId" name="modifierId">
+				<input type="hidden" id="status" name="status" value=1>
 				<div class="row cl">
-					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>知识标题：</label>
 					<div class="formControls col-xs-8 col-sm-9">
-						<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+						<input type="text" class="input-text" style="width:95%;" id="title" name="title">
 					</div>
 				</div>
 				<div class="row cl">
-					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色描述：</label>
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分类：</label>
 					<div class="formControls col-xs-8 col-sm-9">
-						<input type="text" class="input-text" value="" placeholder="" id="description" name="description">
+						<input type="hidden" id="classificationId" name="classificationId">
+						<input type="text" class="input-text" style="width:95%;" placeholder="请选择右侧类目" id="classificationName" name="classificationName">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>扩展问：</label>
+					<div class="formControls col-xs-8 col-sm-9" id="extensionQuestionTitleList">
+						<input type="text" class="input-text" style="margin-top:10px;width:95%;" placeholder="填写完成以后，请点击后面的加号进行添加，本输入框数据不传服务器" id="firstExtensionQuestion" name="firstExtensionQuestion">
+						<i onclick="addExtension()" style="margin-left: 1px;" class="Hui-iconfont">&#xe600;</i>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>答案：</label>
+					<div class="formControls col-xs-8 col-sm-9" id="answerList">
+						<span class="select-box" style="width:95%;">
+							<select id="channelId" name="first.channelId" class="select">
+								<option value=100>全部渠道</option>
+								<option value=101>网页</option>
+								<option value=102>APP</option>
+								<option value=103>微信</option>
+							</select>
+						</span>
+						<textarea class="textarea" style="width:95%;" placeholder="填写完成以后，请点击后面的加号进行添加，本输入框数据不传服务器" id="content" name="first.content"></textarea>
+						<i onclick="addAnswer()" style="margin-left: 1px;" class="Hui-iconfont">&#xe600;</i>
 					</div>
 				</div>
 				<div class="row cl">
@@ -55,7 +79,7 @@
 			</form>
 		</td>
 		<td class="va-t">
-			<ul id="menu" class="ztree"></ul>
+			<ul id="classificationTree" class="ztree"></ul>
 		</td>
 	</tr>
 </table>
@@ -73,134 +97,8 @@
 <script type="text/javascript" src="../../lib/json2.js"></script>
 <script type="text/javascript" src="../js/base.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript">
-$(function(){
-	var menuList = new Array();
-
-	var id = get_page_param('id');
-	var name = get_page_param('name');
-	var description = get_page_param('description');
-	if(id!=""){
-		$("#role-form").attr("action",roleUrl+"update");
-		$("#id").val(id);
-		$("#name").val(name);
-		$("#description").val(description);
-	}else{
-		$("#role-form").attr("action",roleUrl+"add");
-	}
-
-	var setting = {
-		check: {
-			enable: true
-		},
-		data: {
-			simpleData: {
-				enable: true
-			}
-		},
-		callback: {
-			onCheck: onCheck
-		}
-	};
-
-	function onCheck(e, treeId, treeNode) {
-		console.log(treeNode);
-		if(treeNode.checked==true){
-			$("#role-form").append('<input type="hidden" id="'+treeNode.id+'" name="menuList" value="'+treeNode.id+'">');
-		}else{
-			$("#"+treeNode.id).remove();
-		}
-	}
-
-	var zNodes = new Array();
-
-	POST(roleUrl+"menu/get",new Object(),function(data){
-		if(data.statusCode==200){
-			if(id!=""){
-				GET(roleUrl+"get/"+id,null,function(menuListData){
-					if(menuListData.statusCode==200){
-						menuList=menuListData.data;
-						$.each(menuList,function(i,v){
-							$("#role-form").append('<input type="hidden" id="'+v+'" name="menuList" value="'+v+'">');
-						});
-						initTree(data,menuList,zNodes,setting);
-					}
-				},true);
-			}else{
-				initTree(data,menuList,zNodes,setting);
-			}
-		}
-	},true);
-
-	var rules = {
-		name:{
-			required:true,
-			minlength:3,
-			maxlength:50
-		},
-		description:{
-			required:true,
-			minlength:1,
-			maxlength:200
-		}
-	};
-
-	$('.skin-minimal input').iCheck({
-		checkboxClass: 'icheckbox-blue',
-		radioClass: 'iradio-blue',
-		increaseArea: '20%'
-	});
-
-	$("#role-form").validate({
-		rules:rules,
-		onkeyup:false,
-		focusCleanup:true,
-		success:"valid",
-		submitHandler:function(form){
-			$(form).ajaxSubmit({
-				headers: {
-					'access_token': access_token
-				},
-				beforeSubmit:function(){
-					var menuList = $("input[name='menuList']");
-					if(menuList.length==0){
-						layer.msg("请至少选择一个菜单项",{icon: 5,time:1000});
-						return false;
-					}
-					return true;
-				},
-				success: function(data){
-					if(data.statusCode==200){
-						layer.msg(data.message,{icon: 1,time:1000});
-						parent.table.ajax.reload();
-					}else{
-						layer.msg(data.info,{icon: 5,time:1000});
-					}
-					var index = parent.layer.getFrameIndex(window.name);
-					parent.layer.close(index);
-				},
-				resetForm: true,
-				dataType: "json"
-			});
-		}
-	});
-});
-function initTree(data,menuList,zNodes,setting){
-	$.each(data.data,function(i,v){
-		var menu = new Object();
-		menu.id= v.id;
-		menu.pId= -1;
-		menu.name= v.name;
-		if($.inArray(v.id,menuList)>=0){
-			menu.checked= true;
-		}else{
-			menu.checked= false;
-		}
-		zNodes.push(menu);
-	});
-	var menuTree = $.fn.zTree.init($("#menu"), setting, zNodes);
-}
-</script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate.expand.js"></script>
+<script type="text/javascript" src="../js/knowledge-add-update.js"></script>
 <script type="text/javascript" src="../../lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
 </body>
 </html>

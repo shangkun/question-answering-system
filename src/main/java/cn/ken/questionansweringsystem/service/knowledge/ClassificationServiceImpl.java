@@ -155,4 +155,9 @@ public class ClassificationServiceImpl extends Base implements ClassificationSer
         }
         return false;
     }
+
+    @Override
+    public Classification getById(String id) {
+        return classificationMapper.selectById(id);
+    }
 }

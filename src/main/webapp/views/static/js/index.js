@@ -69,7 +69,7 @@ function loadMenu(){
 
             var html = "";
             html += '<dl id="menu-product">';
-            html += '<dt><i class="Hui-iconfont">&#xe620;</i> 知识管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>';
+            html += '<dt><i class="Hui-iconfont">&#xe60c;</i> 知识管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>';
             html += '<dd>';
             html += '<ul>';
             html += '<li><a id="lexicon-quick" data-href="knowledge/lexicon.html" data-title="词库管理" href="javascript:void(0)">词库管理</a></li>';

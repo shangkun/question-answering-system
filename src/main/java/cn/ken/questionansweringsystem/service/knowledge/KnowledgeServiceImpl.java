@@ -4,10 +4,7 @@ import cn.ken.questionansweringsystem.mapper.knowledge.AnswerMapper;
 import cn.ken.questionansweringsystem.mapper.knowledge.ExtensionQuestionMapper;
 import cn.ken.questionansweringsystem.mapper.knowledge.KnowledgeMapper;
 import cn.ken.questionansweringsystem.model.admin.User;
-import cn.ken.questionansweringsystem.model.knowledge.Answer;
-import cn.ken.questionansweringsystem.model.knowledge.ExtensionQuestion;
-import cn.ken.questionansweringsystem.model.knowledge.Knowledge;
-import cn.ken.questionansweringsystem.model.knowledge.KnowledgeRequest;
+import cn.ken.questionansweringsystem.model.knowledge.*;
 import cn.ken.questionansweringsystem.model.response.PageData;
 import cn.ken.questionansweringsystem.service.admin.UserService;
 import cn.ken.questionansweringsystem.utils.Base;
@@ -48,6 +45,10 @@ public class KnowledgeServiceImpl extends Base implements KnowledgeService{
         if(CollectionUtils.isEmpty(answerList)){
             return null;
         }
+        Classification classification = classificationService.getById(knowledge.getClassificationId());
+        if(classification!=null){
+            knowledge.setClassificationName(classification.getName());
+        }
         knowledge.setExtensionQuestionList(extensionQuestionList);
         knowledge.setAnswerList(answerList);
         return knowledge;
@@ -62,7 +63,9 @@ public class KnowledgeServiceImpl extends Base implements KnowledgeService{
             return result;
         }
         knowledgeMapper.insert(knowledge);
-        extensionQuestionMapper.batchInsert(extensionQuestionList);
+        if(!CollectionUtils.isEmpty(extensionQuestionList)){
+            extensionQuestionMapper.batchInsert(extensionQuestionList);
+        }
         answerMapper.batchInsert(request.getAnswerList());
         return null;
     }
@@ -278,6 +281,10 @@ public class KnowledgeServiceImpl extends Base implements KnowledgeService{
             User user = userService.getById(knowledge.getModifierId());
             if(user!=null){
                 knowledge.setModifierName(user.getAccount());
+            }
+            Classification classification = classificationService.getById(knowledge.getClassificationId());
+            if(classification!=null){
+                knowledge.setClassificationName(classification.getName());
             }
         }
         pageData.setTotal(total);
