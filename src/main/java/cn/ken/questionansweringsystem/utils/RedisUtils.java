@@ -1,5 +1,8 @@
 package cn.ken.questionansweringsystem.utils;
 
+import cn.ken.questionansweringsystem.model.qa.QuestionAnswer;
+import cn.ken.questionansweringsystem.model.qa.QuestionAnswerHistory;
+import com.google.gson.JsonSyntaxException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -12,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * what: RedisUtils <br/>
  */
 @Repository
-public class RedisUtils {
+public class RedisUtils extends Base{
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -32,5 +35,19 @@ public class RedisUtils {
     public String get(String key){
         Object o = redisTemplate.opsForValue().get(key);
         return o!=null?o.toString():"";
+    }
+
+    public QuestionAnswerHistory getHistory(String key){
+        String historyJson = get(key);
+        if(StringUtils.isEmpty(historyJson)){
+            return null;
+        }
+        try {
+            QuestionAnswerHistory history = gson.fromJson(historyJson,QuestionAnswerHistory.class);
+            return history;
+        } catch (JsonSyntaxException e) {
+            logger.error(e.getMessage(),e);
+            return null;
+        }
     }
 }

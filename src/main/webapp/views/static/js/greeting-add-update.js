@@ -1,17 +1,15 @@
 $(function(){
     var menuList = new Array();
 
-    loadTree();
-
     var id = get_page_param('id');
 
     $("#modifierId").val(getUserId());
     if(id!=""){
-        $("#knowledge-form").attr("action",knowledgeUrl+"update");
+        $("#greeting-form").attr("action",greetingUrl+"update");
         $("#id").val(id);
         loadKnowledge(id);
     }else{
-        $("#knowledge-form").attr("action",knowledgeUrl+"add");
+        $("#greeting-form").attr("action",greetingUrl+"add");
     }
 
     var rules = {
@@ -21,12 +19,7 @@ $(function(){
             maxlength:300,
             isKnowledgeTitleRepeat: true
         },
-        classificationId:{
-            required:true,
-            minlength:1,
-            maxlength:20
-        },
-        answerList:{
+        greetingAnswerList:{
             required:true
         }
     };
@@ -37,7 +30,7 @@ $(function(){
         increaseArea: '20%'
     });
 
-    $("#knowledge-form").validate({
+    $("#greeting-form").validate({
         rules:rules,
         onkeyup:false,
         focusCleanup:true,
@@ -49,13 +42,9 @@ $(function(){
                 },
                 beforeSubmit:function(){
                     var channelList = $("select[name$='channelId']");
-                    var contentList = $("textarea[name$='content']");
-                    if(channelList.length==1 || contentList.length==1){
+                    var contentList = $("textarea[name$='answer']");
+                    if(channelList.length==1 || greetingAnswerList.length==1){
                         layer.msg("请至少添加一个答案",{icon: 5,time:2000});
-                        return false;
-                    }
-                    if($("#classificationId").val()==""){
-                        layer.msg("请选择一个分类",{icon: 5,time:2000});
                         return false;
                     }
                     return true;
@@ -64,7 +53,7 @@ $(function(){
                     if(data.statusCode==200){
                         layer.msg(data.message,{icon: 1,time:1000});
                         if(parent.table!=undefined){
-                            parent.load_knowledge();
+                            parent.load_greeting();
                         }
                     }else{
                         layer.msg(data.info,{icon: 5,time:1000});
@@ -79,35 +68,35 @@ $(function(){
     });
 });
 function loadKnowledge(id){
-    GET(knowledgeUrl+"get/"+id,null,function(data){
+    GET(greetingUrl+"get/"+id,null,function(data){
         if(data.statusCode==200){
-            var knowledge = data.data;
-            $("#title").val(knowledge.title);
-            $("#classificationId").val(knowledge.classificationId);
+            var greeting = data.data;
+            $("#title").val(greeting.title);
+            $("#classificationId").val(greeting.classificationId);
 
             //使当前节点处于选中状态
-            var node = classificationTree.getNodeByParam("id",knowledge.classificationId);
+            var node = classificationTree.getNodeByParam("id",greeting.classificationId);
             $("#classificationName").val(node.name);
             classificationTree.checkNode(node, true, true);
 
-            var extensionQuestionList = knowledge.extensionQuestionList;
+            var extensionQuestionList = greeting.extensionQuestionList;
             if(extensionQuestionList!=null && extensionQuestionList.length>0){
                 $.each(extensionQuestionList,function(i,v){
-                    $("#extensionQuestionTitleList").append('<input type="text" class="input-text" style="margin-top:10px;width:95%;" value="'+ v.title+'" name="extensionQuestionTitleList" readonly="readonly"><i onclick="removePre(this)" style="margin-left: 5px;" class="Hui-iconfont">&#xe609;</i>');
+                    $("#greetingExtensionQuestionTitleList").append('<input type="text" class="input-text" style="margin-top:10px;width:95%;" value="'+ v.title+'" name="greetingExtensionQuestionTitleList" readonly="readonly"><i onclick="removePre(this)" style="margin-left: 5px;" class="Hui-iconfont">&#xe609;</i>');
                 })
             }
-            var answerList = knowledge.answerList;
-            if(answerList!=null && answerList.length>0){
-                $.each(answerList,function(i,v){
+            var greetingAnswerList = greeting.greetingAnswerList;
+            if(greetingAnswerList!=null && greetingAnswerList.length>0){
+                $.each(greetingAnswerList,function(i,v){
                     var html = "";
                     html+='<span class="select-box" style="margin-top:10px;width:95%;">';
-                    html+='<select name="answerList['+i+'].channelId" class="select" value="'+v.channelId+'">';
+                    html+='<select name="greetingAnswerList['+i+'].channelId" class="select" value="'+v.channelId+'">';
                     html+=channelHtml(v.channelId);
                     html+='</select>';
                     html+='</span>';
-                    html+='<textarea class="textarea" style="width:95%;" name="answerList['+i+'].content">'+ v.content+'</textarea>';
+                    html+='<textarea class="textarea" style="width:95%;" name="greetingAnswerList['+i+'].answer">'+ v.answer+'</textarea>';
                     html+='<i onclick="removePreAndPre(this)" style="margin-left: 5px;" class="Hui-iconfont">&#xe609;</i>';
-                    $("#answerList").append(html);
+                    $("#greetingAnswerList").append(html);
                 })
             }
         }
@@ -139,7 +128,7 @@ function channelHtml(channelId){
 }
 function addExtension(){
     var flag = true;
-    var titleList = $("input[name='extensionQuestionTitleList']");
+    var titleList = $("input[name='greetingExtensionQuestionTitleList']");
     var title = $("#firstExtensionQuestion").val();
     if(title==""){
         layer.msg("扩展问不能为空",{icon: 5,time:1000});
@@ -152,14 +141,14 @@ function addExtension(){
         }
     });
     if(flag){
-        $("#extensionQuestionTitleList").append('<input type="text" class="input-text" style="margin-top:10px;width:95%;" value="'+title+'" name="extensionQuestionTitleList" readonly="readonly"><i onclick="removePre(this)" style="margin-left: 5px;" class="Hui-iconfont">&#xe609;</i>');
+        $("#greetingExtensionQuestionTitleList").append('<input type="text" class="input-text" style="margin-top:10px;width:95%;" value="'+title+'" name="greetingExtensionQuestionTitleList" readonly="readonly"><i onclick="removePre(this)" style="margin-left: 5px;" class="Hui-iconfont">&#xe609;</i>');
         $("#firstExtensionQuestion").val('');
     }
 }
 function addAnswer(){
     var flag = true;
     var channelList = $("select[name$='channelId']");
-    var contentList = $("textarea[name$='content']");
+    var greetingAnswerList = $("textarea[name$='answer']");
     $.each(channelList,function(i,v){
         console.log($(v).val());
         if(i!=0 && $(v).val()==100){
@@ -175,22 +164,22 @@ function addAnswer(){
             flag = false;
         }
     });
-    if($(contentList[0]).val()==""){
+    if($(greetingAnswerList[0]).val()==""){
         layer.msg("答案内容不能为空",{icon: 5,time:1000});
         flag = false;
     }
     var html = "";
     html+='<span class="select-box" style="margin-top:10px;width:95%;">';
-    html+='<select name="answerList['+(channelList.length-1)+'].channelId" class="select" value="'+$(channelList[0]).val()+'">';
+    html+='<select name="greetingAnswerList['+(channelList.length-1)+'].channelId" class="select" value="'+$(channelList[0]).val()+'">';
     html+=channelHtml($(channelList[0]).val());
     html+='</select>';
     html+='</span>';
-    html+='<textarea class="textarea" style="width:95%;" name="answerList['+(contentList.length-1)+'].content">'+$(contentList[0]).val()+'</textarea>';
+    html+='<textarea class="textarea" style="width:95%;" name="greetingAnswerList['+(greetingAnswerList.length-1)+'].answer">'+$(greetingAnswerList[0]).val()+'</textarea>';
     html+='<i onclick="removePreAndPre(this)" style="margin-left: 5px;" class="Hui-iconfont">&#xe609;</i>';
     if(flag){
-        $("#answerList").append(html);
+        $("#greetingAnswerList").append(html);
         $("#channelId").val(100);
-        $("#content").val('');
+        $("#answer").val('');
     }
 }
 function removePre(obj){
@@ -201,40 +190,4 @@ function removePreAndPre(obj){
     $(obj).prev().prev().remove();
     $(obj).prev().remove();
     $(obj).remove();
-}
-var setting = {
-    check: {
-        enable: true,
-        chkStyle: "radio",
-        radioType: "all"
-    },
-    data: {
-        simpleData: {
-            enable: true
-        }
-    },
-    callback: {
-        onCheck: onCheck
-    }
-};
-
-function onCheck(e, treeId, treeNode) {
-    if(treeNode.checked){
-        $("#classificationId").val(treeNode.id);
-        $("#classificationName").val(treeNode.name);
-    }else{
-        $("#classificationId").val('');
-        $("#classificationName").val('');
-    }
-}
-function loadTree(){
-    var request = new Object();
-    POST(classificationUrl+"get",request,function(data){
-        if(data.statusCode==200){
-            var classificationArray = data.data.data;
-            classificationTree = $.fn.zTree.init($("#classificationTree"), setting, classificationArray);
-        }else{
-            layer.msg(data.info,{icon: 5,time:1000});
-        }
-    },true);
 }

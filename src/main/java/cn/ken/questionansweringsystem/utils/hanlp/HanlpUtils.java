@@ -1,29 +1,17 @@
 package cn.ken.questionansweringsystem.utils.hanlp;
 
 import cn.ken.questionansweringsystem.common.Constant;
-import cn.ken.questionansweringsystem.common.PartOfSpeech;
+import cn.ken.questionansweringsystem.model.qa.Retrieval;
 import cn.ken.questionansweringsystem.utils.StringUtils;
 import cn.ken.questionansweringsystem.utils.excel.ExcelReader;
 import com.hankcs.hanlp.HanLP;
-import com.hankcs.hanlp.collection.AhoCorasick.AhoCorasickDoubleArrayTrie;
-import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLSentence;
-import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLWord;
 import com.hankcs.hanlp.corpus.synonym.Synonym;
-import com.hankcs.hanlp.dictionary.CoreDictionary;
 import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import com.hankcs.hanlp.dictionary.CustomDictionary;
 import com.hankcs.hanlp.dictionary.common.CommonSynonymDictionary;
 import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
-import com.hankcs.hanlp.seg.CRF.CRFSegment;
-import com.hankcs.hanlp.seg.DictionaryBasedSegment;
-import com.hankcs.hanlp.seg.Dijkstra.DijkstraSegment;
-import com.hankcs.hanlp.seg.NShort.NShortSegment;
-import com.hankcs.hanlp.seg.Segment;
 import com.hankcs.hanlp.seg.common.Term;
-import com.hankcs.hanlp.suggest.Suggester;
-import com.hankcs.hanlp.tokenizer.IndexTokenizer;
 import com.hankcs.hanlp.tokenizer.NLPTokenizer;
-import com.hankcs.hanlp.tokenizer.SpeedTokenizer;
 
 import java.util.*;
 
@@ -49,53 +37,53 @@ public class HanlpUtils {
 //        String string11 = "公司新来了一个牛逼且妖娆的会计张，我望向事务所一直自诩的一姐，问道：你等会儿会会会会计张吗？";
 //        String string12 = "雨天骑自行车，车轮打滑，还好我反应快，一把把把把住了";
 
-        String question = "银行卡是什么?";
+        String question = "1";
         List<Term> terms = NLPTokenizer.segment(question);
         CoreStopWordDictionary.apply(terms);
         System.out.println(terms);
-        Map<String,String> map = knowledgeMap();
-        double thresholdUpper = 0.8;
-        double thresholdLower = 0.6;
-        String answer = "我不知道";
-        List<Retrieval> retrievalList = new ArrayList<>();
-        for(String key:map.keySet()){
-            List<Term> termList = NLPTokenizer.segment(key);
-            CoreStopWordDictionary.apply(termList);
-            //分词并过滤停用词 再进行距离计算
-            double similarity = org.apache.commons.lang3.StringUtils.getJaroWinklerDistance(terms.toString(),termList.toString());
-            System.out.println(termList+":"+key+":"+similarity);
-            if(similarity<thresholdLower){
-                continue;
-            }
-            Retrieval retrieval = new Retrieval(key,similarity);
-            retrievalList.add(retrieval);
-        }
-
-        if(retrievalList.size()>0){
-            CompareUtils compareUtils = new CompareUtils();
-            Collections.sort(retrievalList,compareUtils);
-            if(retrievalList.get(0).getSimilarity()>thresholdUpper){
-                answer = map.get(retrievalList.get(0).getKnowledge());
-                retrievalList.remove(0);
-            }
-        }
-
-        System.out.println(Constant.printPattern);
-        System.out.println(answer);
-        System.out.println(Constant.printPattern);
-        if(!answer.equals("我不知道")){
-            if(retrievalList.size()>0){
-                System.out.println("您也可能对以下问题感兴趣!");
-                for(Retrieval retrieval:retrievalList){
-                    System.out.println(retrieval.getKnowledge()+":"+retrieval.getSimilarity());
-                }
-            }
-        } else if(retrievalList.size()>0){
-            System.out.println("您是不是要问以下问题?");
-            for(Retrieval retrieval:retrievalList){
-                System.out.println(retrieval.getKnowledge()+":"+retrieval.getSimilarity());
-            }
-        }
+//        Map<String,String> map = knowledgeMap();
+//        double thresholdUpper = 0.8;
+//        double thresholdLower = 0.6;
+//        String answer = "我不知道";
+//        List<Retrieval> retrievalList = new ArrayList<>();
+//        for(String key:map.keySet()){
+//            List<Term> termList = NLPTokenizer.segment(key);
+//            CoreStopWordDictionary.apply(termList);
+//            //分词并过滤停用词 再进行距离计算
+//            double similarity = org.apache.commons.lang3.StringUtils.getJaroWinklerDistance(terms.toString(),termList.toString());
+//            System.out.println(termList+":"+key+":"+similarity);
+//            if(similarity<thresholdLower){
+//                continue;
+//            }
+//            Retrieval retrieval = new Retrieval(key,similarity);
+//            retrievalList.add(retrieval);
+//        }
+//
+//        if(retrievalList.size()>0){
+//            CompareUtils compareUtils = new CompareUtils();
+//            Collections.sort(retrievalList,compareUtils);
+//            if(retrievalList.get(0).getSimilarity()>thresholdUpper){
+//                answer = map.get(retrievalList.get(0).getKnowledge());
+//                retrievalList.remove(0);
+//            }
+//        }
+//
+//        System.out.println(Constant.printPattern);
+//        System.out.println(answer);
+//        System.out.println(Constant.printPattern);
+//        if(!answer.equals("我不知道")){
+//            if(retrievalList.size()>0){
+//                System.out.println("您也可能对以下问题感兴趣!");
+//                for(Retrieval retrieval:retrievalList){
+//                    System.out.println(retrieval.getKnowledge()+":"+retrieval.getSimilarity());
+//                }
+//            }
+//        } else if(retrievalList.size()>0){
+//            System.out.println("您是不是要问以下问题?");
+//            for(Retrieval retrieval:retrievalList){
+//                System.out.println(retrieval.getKnowledge()+":"+retrieval.getSimilarity());
+//            }
+//        }
 
 //        List<Term> termList = NLPTokenizer.segment(string12);
 //        for (Term term:termList){

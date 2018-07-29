@@ -8,17 +8,17 @@
           content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="../lib/html5shiv.js"></script>
-    <script type="text/javascript" src="../lib/respond.min.js"></script>
+    <script type="text/javascript" src="../../lib/html5shiv.js"></script>
+    <script type="text/javascript" src="../../lib/respond.min.js"></script>
     <![endif]-->
-    <link rel="stylesheet" type="text/css" href="../static/h-ui/css/H-ui.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/H-ui.admin.css"/>
-    <link rel="stylesheet" type="text/css" href="../lib/Hui-iconfont/1.0.8/iconfont.css"/>
-    <link rel="stylesheet" type="text/css" href="../static/h-ui.admin/skin/default/skin.css" id="skin"/>
-    <link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="css/chat.css"/>
+    <link rel="stylesheet" type="text/css" href="../h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="../h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="../h-ui.admin/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/chat.css"/>
     <!--[if IE 6]>
-    <script type="text/javascript" src="../lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script type="text/javascript" src="../../lib/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>DD_belatedPNG.fix('*');</script>
     <![endif]-->
     <title>聊天页面</title>
@@ -55,7 +55,11 @@
                     </div>
                     <div class="abs top pnl-warn" id="pnlWarn">
                         <div class="fl btns rel pnl-warn-free">
-                            <i class="Hui-iconfont Hui-iconfont-face2"></i>
+                            <select id="channelId" class="select" style="font-size: 9px;">
+                                <option value=101>网页</option>
+                                <option value=102>APP</option>
+                                <option value=103>微信</option>
+                            </select>
                         </div>
                         <div class="fl right pnl-warn-right">
                             <span class="sess-status" id="sessStatus"></span>
@@ -84,27 +88,23 @@
             <div class="abs right pnl-right">
                 <div class="pnl-right-content">
                     <div class="pnl-tabs">
-                        <div class="tab-btn active" id="hot-tab" style="width: 90%;">常见问题</div>
+                        <div class="tab-btn active" id="hot-tab" style="width: 90%;">问答处理流程</div>
                     </div>
-                    <div class="pnl-hot">
-                        <ul class="rel-list unselect" id="hots">
-                            <li class="rel-item" title="点击发送问题">功能介绍</li>
-                        </ul>
-                    </div>
+                    <div class="pnl-hot" id="process" style="overflow-y: auto;"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
-<script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script>
-<script type="text/javascript" src="../static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="../../lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../h-ui.admin/js/H-ui.admin.js"></script>
 
-<script type="text/javascript" src="../lib/My97DatePicker/4.8/WdatePicker.js"></script>
-<script type="text/javascript" src="../lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="js/base.js"></script>
-<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="../../lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="../../lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript">
     $(function(){
         sessionId = "";
@@ -141,10 +141,11 @@
         $("#messages").append(requestHtml);
         var question_answer = new Object();
         question_answer.userId = getUserId();
-        question_answer.channelId = 101;
+        question_answer.channelId = $("#channelId").val();
         question_answer.question = question;
         question_answer.sessionId = sessionId;
-        POST(qaUrl2+"request",question_answer,function(data){
+        question_answer.debugMode = true;
+        POST(qaUrl+"request",question_answer,function(data){
             var answerContent = '';
             if(data.statusCode==200){
                 var response = data.data;
@@ -175,12 +176,98 @@
             html+='</div>';
             html+='</div>';
             $("#messages").append(html);
-            console.log($('#messages')[0].scrollHeight);
+            loadProcess(response);
             ($('#messages').children("div:last-child")[0]).scrollIntoView();
         },true);
     }
+    function loadProcess(response){
+        $("#process").empty();
+        var html = "";
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>用户问题</br>'+response.question+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>分词结果</br>'+response.segmentResultToString+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>去除停用词结果</br>'+response.deleteStopWordsResultToString+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>依存句法分析</br>'+response.dependencyParserResult+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>中文人名识别</br>'+response.chineseNameRecognitionResult+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>机构名识别</br>'+response.organizationRecognitionResult+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>地名识别</br>'+response.placeRecognitionResult+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>关键词</br>'+response.keyWords+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>新词发现</br>'+response.newWordDiscover+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>拼音转汉字</br>'+response.pinYinResult+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        html+='<div class="msg process" name="process">';
+        html+='<div class="msg-left">';
+        html+='<div class="process-ball" title=""><span>URL识别</br>'+response.urlrecognitionResult+'</span></div>';
+        html+='</div>';
+        html+='</div>';
+
+        var retrieval = "";
+        var retrievalList = response.retrievalList;
+        if(retrievalList!=null && retrievalList.length>0){
+            $.each(retrievalList,function(i,v){
+                retrieval+='['+ v.knowledgeTitle+','+ v.similarity+']</br>';
+            });
+
+            html+='<div class="msg process" name="process">';
+            html+='<div class="msg-left">';
+            html+='<div class="process-ball" title=""><span>候选问题</br>'+retrieval+'</span></div>';
+            html+='</div>';
+            html+='</div>';
+        }
+
+        $("#process").append(html);
+        ($('#process').children("div:first-child")[0]).scrollIntoView();
+    }
     function loadConfig(){
-        GET(qaUrl2+"config/get",null,function(data){
+        GET(qaUrl+"config/get",null,function(data){
             if(data.statusCode==200){
                 var configuration = data.data;
                 var html = "";

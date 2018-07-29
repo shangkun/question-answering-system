@@ -1,5 +1,9 @@
 package cn.ken.questionansweringsystem.model.knowledge;
 
+import com.hankcs.hanlp.seg.common.Term;
+
+import java.util.List;
+
 /**
  * author: shangkun <br/>
  * date: 2018/7/25 <br/>
@@ -12,6 +16,16 @@ public class ExtensionQuestion {
     private String title;
 
     private String knowledgeId;
+
+    private List<Term> termList;
+
+    public List<Term> getTermList() {
+        return termList;
+    }
+
+    public void setTermList(List<Term> termList) {
+        this.termList = termList;
+    }
 
     public String getId() {
         return id;

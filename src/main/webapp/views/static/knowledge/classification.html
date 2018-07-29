@@ -182,8 +182,7 @@ function loadTree(){
 		if(data.statusCode==200){
 			layer.msg(data.message,{icon: 1,time:1000});
 			classificationArray = data.data.data;
-			console.log(classificationArray);
-			var classificationTree = $.fn.zTree.init($("#classificationTree"), setting, classificationArray);
+			classificationTree = $.fn.zTree.init($("#classificationTree"), setting, classificationArray);
 		}else{
 			layer.msg(data.info,{icon: 5,time:1000});
 		}

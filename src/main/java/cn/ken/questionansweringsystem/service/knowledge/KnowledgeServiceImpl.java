@@ -3,6 +3,8 @@ package cn.ken.questionansweringsystem.service.knowledge;
 import cn.ken.questionansweringsystem.mapper.knowledge.AnswerMapper;
 import cn.ken.questionansweringsystem.mapper.knowledge.ExtensionQuestionMapper;
 import cn.ken.questionansweringsystem.mapper.knowledge.KnowledgeMapper;
+import cn.ken.questionansweringsystem.memorydb.ConfigurationDB;
+import cn.ken.questionansweringsystem.memorydb.KnowledgeDB;
 import cn.ken.questionansweringsystem.model.admin.User;
 import cn.ken.questionansweringsystem.model.knowledge.*;
 import cn.ken.questionansweringsystem.model.response.PageData;
@@ -67,6 +69,14 @@ public class KnowledgeServiceImpl extends Base implements KnowledgeService{
             extensionQuestionMapper.batchInsert(extensionQuestionList);
         }
         answerMapper.batchInsert(request.getAnswerList());
+
+        Classification classification = classificationService.getById(knowledge.getClassificationId());
+        if(classification!=null){
+            knowledge.setClassificationName(classification.getName());
+        }
+        knowledge.setExtensionQuestionList(extensionQuestionList);
+        knowledge.setAnswerList(request.getAnswerList());
+        KnowledgeDB.initSingleKnowledge(knowledge);
         return null;
     }
 
@@ -156,6 +166,10 @@ public class KnowledgeServiceImpl extends Base implements KnowledgeService{
             if(!StringUtils.lengthCheck(answer.getContent(),0,2000) || answer.getChannelId()==null){
                 return "答案不能为空或长度超过2000,渠道不能为空";
             }
+//            String result = ConfigurationDB.isSensitiveWord(answer.getContent());
+//            if(result!=null){
+//                return "答案中含有敏感词";
+//            }
             answer.setId(IdWorker.getInstance().nextId());
             answer.setKnowledgeId(knowledge.getId());
         }
@@ -216,6 +230,7 @@ public class KnowledgeServiceImpl extends Base implements KnowledgeService{
         knowledgeMapper.deleteById(id);
         extensionQuestionMapper.deleteByKnowledgeId(id);
         answerMapper.deleteByKnowledgeId(id);
+        KnowledgeDB.knowledgeMap.remove(id);
         return null;
     }
 
@@ -227,6 +242,9 @@ public class KnowledgeServiceImpl extends Base implements KnowledgeService{
         knowledgeMapper.deleteByIdList(list);
         extensionQuestionMapper.deleteByKnowledgeIdList(list);
         answerMapper.deleteByKnowledgeIdList(list);
+        for(String id:list){
+            KnowledgeDB.knowledgeMap.remove(id);
+        }
         return null;
     }
 
@@ -243,6 +261,14 @@ public class KnowledgeServiceImpl extends Base implements KnowledgeService{
         extensionQuestionMapper.batchInsert(extensionQuestionList);
         answerMapper.deleteByKnowledgeId(knowledge.getId());
         answerMapper.batchInsert(request.getAnswerList());
+
+        Classification classification = classificationService.getById(knowledge.getClassificationId());
+        if(classification!=null){
+            knowledge.setClassificationName(classification.getName());
+        }
+        knowledge.setExtensionQuestionList(extensionQuestionList);
+        knowledge.setAnswerList(request.getAnswerList());
+        KnowledgeDB.initSingleKnowledge(knowledge);
         return null;
     }
 

@@ -1,5 +1,7 @@
 package cn.ken.questionansweringsystem.utils.hanlp;
 
+import cn.ken.questionansweringsystem.model.qa.Retrieval;
+
 import java.util.Comparator;
 
 /**

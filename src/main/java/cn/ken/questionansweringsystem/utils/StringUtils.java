@@ -1,6 +1,7 @@
 package cn.ken.questionansweringsystem.utils;
 
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * author: shangkun <br/>
@@ -8,6 +9,9 @@ import java.util.Locale;
  * what: StringUtils <br/>
  */
 public class StringUtils {
+
+    public static final String INT_REGULAR = "^-?[1-9]\\d*$";
+
     /**
      * 为空判断
      * @param string
@@ -46,4 +50,25 @@ public class StringUtils {
             return null;
         }
     }
+
+    /**
+     * 获取Jaro-Winkler编辑距离
+     * @param str1
+     * @param str2
+     * @return
+     */
+    public static double getJaroWinklerDistance(String str1,String str2){
+        return org.apache.commons.lang3.StringUtils.getJaroWinklerDistance(str1,str2);
+    }
+
+    /**
+     * 判断是否符合传入的正则
+     * @param regular
+     * @param str
+     * @return
+     */
+    public static boolean regular(String regular,String str) {
+        return Pattern.compile(regular).matcher(str).find();
+    }
+
 }

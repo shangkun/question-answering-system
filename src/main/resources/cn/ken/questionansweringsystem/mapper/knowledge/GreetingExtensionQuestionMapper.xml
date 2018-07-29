@@ -6,4 +6,117 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="greeting_id" jdbcType="VARCHAR" property="greetingId" />
   </resultMap>
+
+  <sql id="table">greeting_extension_question</sql>
+
+  <sql id="column">
+    id,title,greeting_id
+  </sql>
+
+  <sql id="insertColumnValue">
+    #{id},#{title},#{greetingId}
+  </sql>
+
+  <insert id="insert">
+    replace into
+    <include refid="table"/>
+    (<include refid="column"/>)
+    values (<include refid="insertColumnValue"/>)
+  </insert>
+
+  <insert id="batchInsert">
+    replace into
+    <include refid="table"/>
+    (<include refid="column"/>)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id},#{item.title},#{item.greetingId})
+    </foreach>
+  </insert>
+
+  <delete id="deleteById">
+    delete from
+    <include refid="table"/>
+    where id = #{id}
+  </delete>
+
+  <delete id="deleteByGreetingId">
+    delete from
+    <include refid="table"/>
+    where greeting_id = #{id}
+  </delete>
+
+  <delete id="deleteByGreetingIdList">
+    delete from
+    <include refid="table"/>
+    where greeting_id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <update id="update">
+    update
+    <include refid="table"/>
+    <set>
+      <if test="title!=null and title!=''">
+        title = #{title},
+      </if>
+      <if test="greetingId!=null and greetingId!=''">
+        greeting_id = #{greetingId}
+      </if>
+    </set>
+    <where>
+      id = #{id}
+    </where>
+  </update>
+
+  <select id="selectById" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+    where id = #{id}
+  </select>
+
+  <select id="getByGreetingId" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+    where greeting_id = #{0}
+  </select>
+
+  <select id="getByAttribute" resultType="java.lang.String">
+    select
+    distinct(greeting_id)
+    from
+    <include refid="table"/>
+    where title like concat('%',#{0},'%')
+  </select>
+
+  <select id="countByTitle" parameterType="java.util.List" resultType="int">
+    select
+    count(id)
+    from
+    <include refid="table"/>
+    where
+    title in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="countByGreetingIdAndTitle" parameterType="java.util.Map" resultType="int">
+    select
+    count(id)
+    from
+    <include refid="table"/>
+    where
+    greeting_id != #{greetingId}
+    and title in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
 </mapper>

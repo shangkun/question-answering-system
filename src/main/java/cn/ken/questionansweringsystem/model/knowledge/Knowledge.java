@@ -1,5 +1,7 @@
 package cn.ken.questionansweringsystem.model.knowledge;
 
+import com.hankcs.hanlp.seg.common.Term;
+
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +33,16 @@ public class Knowledge {
     private List<ExtensionQuestion> extensionQuestionList;
 
     private List<Answer> answerList;
+
+    private List<Term> termList;
+
+    public List<Term> getTermList() {
+        return termList;
+    }
+
+    public void setTermList(List<Term> termList) {
+        this.termList = termList;
+    }
 
     public String getClassificationName() {
         return classificationName;

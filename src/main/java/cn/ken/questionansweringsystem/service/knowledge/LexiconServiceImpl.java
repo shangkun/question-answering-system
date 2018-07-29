@@ -1,5 +1,7 @@
 package cn.ken.questionansweringsystem.service.knowledge;
 
+import cn.ken.questionansweringsystem.common.*;
+import cn.ken.questionansweringsystem.common.Enum;
 import cn.ken.questionansweringsystem.mapper.knowledge.LexiconMapper;
 import cn.ken.questionansweringsystem.model.knowledge.Lexicon;
 import cn.ken.questionansweringsystem.model.knowledge.LexiconRequest;
@@ -7,6 +9,8 @@ import cn.ken.questionansweringsystem.model.response.PageData;
 import cn.ken.questionansweringsystem.utils.Base;
 import cn.ken.questionansweringsystem.utils.IdWorker;
 import cn.ken.questionansweringsystem.utils.StringUtils;
+import com.hankcs.hanlp.corpus.tag.Nature;
+import com.hankcs.hanlp.dictionary.CustomDictionary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -25,6 +29,15 @@ import java.util.List;
 public class LexiconServiceImpl extends Base implements LexiconService{
     @Autowired
     private LexiconMapper lexiconMapper;
+
+    @Override
+    public void initCustomNature() {
+        Nature pcNature = Nature.fromString(Enum.businessWord.getInfo());
+        if(pcNature==null){
+            Nature.create(Enum.businessWord.getInfo());
+        }
+    }
+
     @Override
     public String add(Lexicon request) {
         String result = assemble(request);
@@ -32,6 +45,10 @@ public class LexiconServiceImpl extends Base implements LexiconService{
             return result;
         }
         lexiconMapper.insert(request);
+        String[] topicSet = request.getTopicSet().split(Constant.TOPIC_SPLITER);
+        for(String topic:topicSet){
+            CustomDictionary.add(topic, Enum.businessWord.getInfo());
+        }
         return null;
     }
 
@@ -81,9 +98,14 @@ public class LexiconServiceImpl extends Base implements LexiconService{
     }
 
     @Override
-    public String deleteById(String id) {
+    public String deleteById(String id) throws Exception{
         if(StringUtils.isEmpty(id)){
             return "id不能为空";
+        }
+        Lexicon lexicon = get(id);
+        String[] topicSet = lexicon.getTopicSet().split(Constant.TOPIC_SPLITER);
+        for(String topic:topicSet){
+            CustomDictionary.remove(topic);
         }
         lexiconMapper.deleteById(id);
         return null;
@@ -96,6 +118,11 @@ public class LexiconServiceImpl extends Base implements LexiconService{
             return result;
         }
         lexiconMapper.update(request);
+        lexiconMapper.insert(request);
+        String[] topicSet = request.getTopicSet().split(Constant.TOPIC_SPLITER);
+        for(String topic:topicSet){
+            CustomDictionary.add(topic, Enum.businessWord.getInfo());
+        }
         return null;
     }
 
@@ -119,9 +146,16 @@ public class LexiconServiceImpl extends Base implements LexiconService{
     }
 
     @Override
-    public String batchDelete(List<String> list) {
+    public String batchDelete(List<String> list) throws Exception{
         if(CollectionUtils.isEmpty(list)){
             return "列表不能为空";
+        }
+        for(String id:list){
+            Lexicon lexicon = get(id);
+            String[] topicSet = lexicon.getTopicSet().split(Constant.TOPIC_SPLITER);
+            for(String topic:topicSet){
+                CustomDictionary.remove(topic);
+            }
         }
         lexiconMapper.batchDelete(list);
         return null;

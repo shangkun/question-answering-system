@@ -59,9 +59,9 @@ function loadMenu(){
             html2+='<i class="Hui-iconfont">&#xe616;</i> 词库</a></li>';
             html2+='<li><a href="javascript:;" onclick="layer_show(\'添加分类\',\'knowledge/classification-add.html\',\'510\',\'400\')">';
             html2+='<i class="Hui-iconfont">&#xe681;</i> 分类</a></li>';
-            html2+='<li><a href="javascript:;" onclick="layer_show(\'添加知识\',\'product-add.html\',\'510\',\'400\')">';
+            html2+='<li><a href="javascript:;" onclick="layer_show(\'添加知识\',\'knowledge/knowledge-add-update.html\')">';
             html2+='<i class="Hui-iconfont">&#xe620;</i> 知识</a></li>';
-            html2+='<li><a href="javascript:;" onclick="layer_show(\'添加寒暄知识\',\'member-add.html\',\'510\',\'400\')">';
+            html2+='<li><a href="javascript:;" onclick="layer_show(\'添加寒暄知识\',\'knowledge/greeting-add-update.html\')">';
             html2+='<i class="Hui-iconfont">&#xe60d;</i> 寒暄知识</a></li>';
             html2+='</ul>';
             html2+='</li>';
@@ -75,8 +75,8 @@ function loadMenu(){
             html += '<li><a id="lexicon-quick" data-href="knowledge/lexicon.html" data-title="词库管理" href="javascript:void(0)">词库管理</a></li>';
             html += '<li><a data-href="knowledge/classification.html" data-title="分类管理" href="javascript:void(0)">分类管理</a></li>';
             html += '<li><a data-href="knowledge/knowledge.html" data-title="知识管理" href="javascript:void(0)">知识管理</a></li>';
-            html += '<li><a data-href="product-list.html" data-title="寒暄知识管理" href="javascript:void(0)">寒暄知识管理</a></li>';
-            html += '<li><a data-href="product-list.html" data-title="问答测试" href="javascript:void(0)">问答测试</a></li>';
+            html += '<li><a data-href="knowledge/greeting.html" data-title="寒暄知识管理" href="javascript:void(0)">寒暄知识管理</a></li>';
+            html += '<li><a data-href="knowledge/chat_test.html" data-title="问答测试" href="javascript:void(0)">问答测试</a></li>';
             html += '</ul>';
             html += '</dd>';
             html += '</dl>';

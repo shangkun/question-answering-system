@@ -60,6 +60,41 @@ public class ExcelReader {
     }
 
     @SuppressWarnings({ "resource", "unused" })
+    public static ArrayList<ArrayList<String>> xlsxReaderBySheet(String excelUrl,int numSheet, int... args) throws IOException {
+
+        XSSFWorkbook xssfWorkbook = null;
+
+        File excelFile = new File(excelUrl);
+        InputStream is = new FileInputStream(excelFile);
+        xssfWorkbook = new XSSFWorkbook(is);
+
+        if(xssfWorkbook==null){
+            System.out.println("未读取到内容,请检查路径！");
+            return null;
+        }
+
+        ArrayList<ArrayList<String>> ans=new ArrayList<>();
+
+        XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(numSheet);
+        if (xssfSheet == null) {
+            return null;
+        }
+        // 对于每个sheet，读取其中的每一行
+        for (int rowNum = 0; rowNum <= xssfSheet.getLastRowNum(); rowNum++) {
+            XSSFRow xssfRow = xssfSheet.getRow(rowNum);
+            if (xssfRow == null) continue;
+            ArrayList<String> curarr=new ArrayList<>();
+            for(int columnNum = 0 ; columnNum<args.length ; columnNum++){
+                XSSFCell cell = xssfRow.getCell(args[columnNum]);
+
+                curarr.add( Trim_str( getValue(cell) ) );
+            }
+            ans.add(curarr);
+        }
+        return ans;
+    }
+
+    @SuppressWarnings({ "resource", "unused" })
     public static ArrayList<ArrayList<String>> xlsReader(String excel_url, int... args) throws IOException {
 
         HSSFWorkbook hssfWorkbook = null;

@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * author: shangkun <br/>
  * date: 2018/7/26 <br/>
- * what: custom <br/>
+ * what: ConfigurationDB <br/>
  */
 public class ConfigurationDB extends Base{
 
@@ -47,7 +47,7 @@ public class ConfigurationDB extends Base{
             Set<String> topicSet = entry.getValue();
             for(String topic:topicSet){
                 if(content.contains(topic)){
-                    return entry.getKey();
+                    return topic;
                 }
             }
         }

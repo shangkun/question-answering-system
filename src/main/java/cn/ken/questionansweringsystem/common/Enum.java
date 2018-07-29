@@ -11,6 +11,14 @@ public enum Enum {
     webChannel(101,"网页端"),
     appChannel(102,"手机端"),
     wechatChannel(103,"微信端"),
+
+    hasAnswerAndRecommendResponse(104,"即有答案又有推荐问的回复"),
+    hasAnswerResponse(105,"只有答案的回复"),
+    hasRecommendResponse(106,"只有推荐问的回复"),
+    greetingResponse(107,"寒暄回复"),
+    unknowResponse(108,"未知回复"),
+    othersResponse(109,"其他类型回复"),
+
     businessWord(1,"业务词");
 
     private int value;

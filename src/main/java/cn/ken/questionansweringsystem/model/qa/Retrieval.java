@@ -1,4 +1,4 @@
-package cn.ken.questionansweringsystem.utils.hanlp;
+package cn.ken.questionansweringsystem.model.qa;
 
 /**
  * author: shangkun <br/>
@@ -7,11 +7,26 @@ package cn.ken.questionansweringsystem.utils.hanlp;
  */
 public class Retrieval {
     private String knowledge;
+    private String knowledgeTitle;
     private double similarity;
 
     public Retrieval(String knowledge, double similarity) {
         this.knowledge = knowledge;
         this.similarity = similarity;
+    }
+
+    public Retrieval(String knowledge, String knowledgeTitle, double similarity) {
+        this.knowledge = knowledge;
+        this.knowledgeTitle = knowledgeTitle;
+        this.similarity = similarity;
+    }
+
+    public String getKnowledgeTitle() {
+        return knowledgeTitle;
+    }
+
+    public void setKnowledgeTitle(String knowledgeTitle) {
+        this.knowledgeTitle = knowledgeTitle;
     }
 
     public String getKnowledge() {

@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface LexiconService {
 
+    public void initCustomNature();
+
     public String add(Lexicon request) throws Exception;
 
     public Lexicon get(String id) throws Exception;

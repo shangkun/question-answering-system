@@ -1,6 +1,9 @@
 package cn.ken.questionansweringsystem.model.knowledge;
 
+import com.hankcs.hanlp.seg.common.Term;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * author: shangkun <br/>
@@ -16,6 +19,30 @@ public class Greeting {
     private Date modifyTime;
 
     private String modifierId;
+
+    private String modifierName;
+
+    private List<Term> termList;
+
+    private List<GreetingExtensionQuestion> greetingExtensionQuestionList;
+
+    private List<GreetingAnswer> greetingAnswerList;
+
+    public List<Term> getTermList() {
+        return termList;
+    }
+
+    public void setTermList(List<Term> termList) {
+        this.termList = termList;
+    }
+
+    public String getModifierName() {
+        return modifierName;
+    }
+
+    public void setModifierName(String modifierName) {
+        this.modifierName = modifierName;
+    }
 
     public String getId() {
         return id;
@@ -47,5 +74,21 @@ public class Greeting {
 
     public void setModifierId(String modifierId) {
         this.modifierId = modifierId;
+    }
+
+    public List<GreetingExtensionQuestion> getGreetingExtensionQuestionList() {
+        return greetingExtensionQuestionList;
+    }
+
+    public void setGreetingExtensionQuestionList(List<GreetingExtensionQuestion> greetingExtensionQuestionList) {
+        this.greetingExtensionQuestionList = greetingExtensionQuestionList;
+    }
+
+    public List<GreetingAnswer> getGreetingAnswerList() {
+        return greetingAnswerList;
+    }
+
+    public void setGreetingAnswerList(List<GreetingAnswer> greetingAnswerList) {
+        this.greetingAnswerList = greetingAnswerList;
     }
 }

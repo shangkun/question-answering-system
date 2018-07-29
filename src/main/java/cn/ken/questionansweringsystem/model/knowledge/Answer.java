@@ -1,5 +1,7 @@
 package cn.ken.questionansweringsystem.model.knowledge;
 
+import java.util.List;
+
 /**
  * author: shangkun <br/>
  * date: 2018/7/25 <br/>
@@ -14,6 +16,16 @@ public class Answer {
     private Integer channelId;
 
     private String knowledgeId;
+
+    private List<String> summaryList;
+
+    public List<String> getSummaryList() {
+        return summaryList;
+    }
+
+    public void setSummaryList(List<String> summaryList) {
+        this.summaryList = summaryList;
+    }
 
     public String getKnowledgeId() {
         return knowledgeId;

@@ -25,6 +25,14 @@ public class Constant {
 
     public static final int BATCH_NUMBER = 10000;
 
+    public static final int MAX_RETRIEVAL_NUMBER = 10;
+
+    public static final int MAX_SUMMARY_NUMBER = 3;
+
+    public static final int MAX_KEYWORDS_NUMBER = 3;
+
+    public static final int MAX_NEW_WORD_NUMBER = 3;
+
     public static final String ACCESS_TOKEN = "access_token";
 
     public static final String ACCESS_TOKEN_WITH_PREFIX = "access_token:";
@@ -32,6 +40,8 @@ public class Constant {
     public static final String ERROR_INFO = "异常";
 
     public static final String SESSION_ID = "session_id:";
+
+    public static final String QA_CONTEXT = "qa_context:";
 
     public static final String DEFAULT_USER = "538559372305891328";
 

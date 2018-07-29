@@ -3,6 +3,7 @@ package cn.ken.questionansweringsystem.model;
 import java.util.Date;
 
 public class LogQa {
+
     private String id;
 
     private String question;

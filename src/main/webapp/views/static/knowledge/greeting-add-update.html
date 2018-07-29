@@ -1,0 +1,89 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="/favicon.ico" >
+<link rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+	<script type="text/javascript" src="../../lib/html5shiv.js"></script>
+	<script type="text/javascript" src="../../lib/respond.min.js"></script>
+	<![endif]-->
+<link rel="stylesheet" type="text/css" href="../h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/css/style.css" />
+	<link rel="stylesheet" href="../../lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<!--[if IE 6]>
+	<script type="text/javascript" src="../../lib/DD_belatedPNG_0.0.8a-min.js"></script>
+	<script>DD_belatedPNG.fix('*');</script>
+	<![endif]-->
+
+<title>添加或修改知识</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+</head>
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="greeting-form">
+		<input type="hidden" id="id" name="id">
+		<input type="hidden" id="modifierId" name="modifierId">
+		<input type="hidden" id="status" name="status" value=1>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>知识标题：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" style="width:95%;" id="title" name="title">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>扩展问：</label>
+			<div class="formControls col-xs-8 col-sm-9" id="extensionQuestionTitleList">
+				<input type="text" class="input-text" style="margin-top:10px;width:95%;" placeholder="填写完成以后，请点击后面的加号进行添加，本输入框数据不传服务器" id="firstExtensionQuestion" name="firstExtensionQuestion">
+				<i onclick="addExtension()" style="margin-left: 1px;" class="Hui-iconfont">&#xe600;</i>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>答案：</label>
+			<div class="formControls col-xs-8 col-sm-9" id="answerList">
+							<span class="select-box" style="width:95%;">
+								<select id="channelId" name="first.channelId" class="select">
+									<option value=100>全部渠道</option>
+									<option value=101>网页</option>
+									<option value=102>APP</option>
+									<option value=103>微信</option>
+								</select>
+							</span>
+				<textarea class="textarea" style="width:95%;" placeholder="填写完成以后，请点击后面的加号进行添加，本输入框数据不传服务器" id="content" name="first.content"></textarea>
+				<i onclick="addAnswer()" style="margin-left: 1px;" class="Hui-iconfont">&#xe600;</i>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+<script type="text/javascript" src="../../lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<script type="text/javascript" src="../../lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="../../lib/jquery-form.js"></script>
+<script type="text/javascript" src="../../lib/json2.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate.expand.js"></script>
+<script type="text/javascript" src="../js/greeting-add-update.js"></script>
+<script type="text/javascript" src="../../lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
+</body>
+</html>
