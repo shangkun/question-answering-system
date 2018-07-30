@@ -9,6 +9,8 @@ public interface AnswerMapper extends BaseMapper<Answer,String>{
 
     List<Answer> getByKnowledgeId(String knowledgeId);
 
+    List<Answer> getAll();
+
     int deleteByKnowledgeId(String knowledgeId);
 
     int deleteByKnowledgeIdList(List<String> list);

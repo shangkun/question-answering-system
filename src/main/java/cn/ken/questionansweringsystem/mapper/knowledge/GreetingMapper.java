@@ -17,4 +17,6 @@ public interface GreetingMapper extends BaseMapper<Greeting,String>{
     int countByIdAndTitle(String id,String title);
 
     int deleteByIdList(List<String> list);
+
+    int batchInsert(List<Greeting> list);
 }

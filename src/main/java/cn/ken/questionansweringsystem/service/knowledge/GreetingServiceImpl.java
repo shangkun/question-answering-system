@@ -10,6 +10,7 @@ import cn.ken.questionansweringsystem.model.knowledge.GreetingAnswer;
 import cn.ken.questionansweringsystem.model.knowledge.GreetingExtensionQuestion;
 import cn.ken.questionansweringsystem.model.knowledge.GreetingRequest;
 import cn.ken.questionansweringsystem.model.response.PageData;
+import cn.ken.questionansweringsystem.service.BaseService;
 import cn.ken.questionansweringsystem.service.admin.UserService;
 import cn.ken.questionansweringsystem.utils.Base;
 import cn.ken.questionansweringsystem.utils.IdWorker;
@@ -35,6 +36,8 @@ public class GreetingServiceImpl extends Base implements GreetingService {
     private GreetingAnswerMapper answerMapper;
     @Autowired
     private UserService userService;
+    @Autowired
+    private BaseService baseService;
 
     @Override
     public Greeting getGreeting(String greetingId) {
@@ -69,6 +72,30 @@ public class GreetingServiceImpl extends Base implements GreetingService {
         greeting.setGreetingExtensionQuestionList(extensionQuestionList);
         greeting.setGreetingAnswerList(request.getGreetingAnswerList());
         KnowledgeDB.initSingleGreeting(greeting);
+        return null;
+    }
+
+    @Override
+    public String batchAdd(List<GreetingRequest> greetingRequestList) throws Exception {
+        List<GreetingExtensionQuestion> extensionQuestionList = new ArrayList<>();
+        List<GreetingAnswer> greetingAnswerList = new ArrayList<>();
+        List<Greeting> greetingList = new ArrayList<>();
+        for(GreetingRequest request:greetingRequestList){
+            Greeting greeting = new Greeting();
+            String result = assemble(request,greeting,extensionQuestionList);
+            if(result!=null){
+                continue;
+            }
+            greetingList.add(greeting);
+            greetingAnswerList.addAll(request.getGreetingAnswerList());
+        }
+        if(baseService.batchAddGreetingAnswer(greetingAnswerList)==0){
+            return "批量导入寒暄答案失败";
+        }
+        if(baseService.batchAddGreeting(greetingList)==0){
+            return "批量导入寒暄知识失败";
+        }
+        baseService.batchAddGreetingExtensionQuestion(extensionQuestionList);
         return null;
     }
 
@@ -283,5 +310,20 @@ public class GreetingServiceImpl extends Base implements GreetingService {
         pageData.setTotal(total);
         pageData.setData(greetingList);
         return pageData;
+    }
+
+    @Override
+    public List<Greeting> getGreeting(GreetingRequest request) {
+        return greetingMapper.getByAttribute(request);
+    }
+
+    @Override
+    public List<GreetingExtensionQuestion> getGreetingExtensionQuestion() {
+        return extensionQuestionMapper.getAll();
+    }
+
+    @Override
+    public List<GreetingAnswer> getGreetingAnswer() {
+        return answerMapper.getAll();
     }
 }

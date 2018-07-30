@@ -54,15 +54,15 @@ function load_greeting(){
             },
             {"data":"title"},
             {
-                "data":"extensionQuestionList",
+                "data":"greetingExtensionQuestionList",
                 "render" : function(data,type,row) {
                     return extension_question_parse(data);
                 }
             },
             {
-                "data":"answerList",
+                "data":"greetingAnswerList",
                 "render" : function(data,type,row) {
-                    return answer_parse(data);
+                    return greeting_answer_parse(data);
                 }
             },
             {

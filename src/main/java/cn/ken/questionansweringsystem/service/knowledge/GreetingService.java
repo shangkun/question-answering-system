@@ -1,6 +1,8 @@
 package cn.ken.questionansweringsystem.service.knowledge;
 
 import cn.ken.questionansweringsystem.model.knowledge.Greeting;
+import cn.ken.questionansweringsystem.model.knowledge.GreetingAnswer;
+import cn.ken.questionansweringsystem.model.knowledge.GreetingExtensionQuestion;
 import cn.ken.questionansweringsystem.model.knowledge.GreetingRequest;
 import cn.ken.questionansweringsystem.model.response.PageData;
 
@@ -17,6 +19,8 @@ public interface GreetingService {
 
     public String add(GreetingRequest request) throws Exception;
 
+    public String batchAdd(List<GreetingRequest> greetingRequestList) throws Exception;
+
     public boolean isRepeat(GreetingRequest request) throws Exception;
 
     public boolean isGreetingExtensionQuestionRepeat(GreetingRequest request) throws Exception;
@@ -28,4 +32,10 @@ public interface GreetingService {
     public String update(GreetingRequest request) throws Exception;
 
     public PageData get(GreetingRequest request) throws Exception;
+
+    public List<Greeting> getGreeting(GreetingRequest request) throws Exception;
+
+    public List<GreetingExtensionQuestion> getGreetingExtensionQuestion() throws Exception;
+
+    public List<GreetingAnswer> getGreetingAnswer() throws Exception;
 }

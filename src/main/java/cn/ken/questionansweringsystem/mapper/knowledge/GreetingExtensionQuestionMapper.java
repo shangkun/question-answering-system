@@ -21,4 +21,6 @@ public interface GreetingExtensionQuestionMapper extends BaseMapper<GreetingExte
     int batchInsert(List<GreetingExtensionQuestion> list);
 
     List<String> getByAttribute(String title);
+
+    List<GreetingExtensionQuestion> getAll();
 }

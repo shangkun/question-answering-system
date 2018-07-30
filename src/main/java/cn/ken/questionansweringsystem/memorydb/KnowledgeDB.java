@@ -65,56 +65,85 @@ public class KnowledgeDB extends Base{
      * 初始化知识
      * @param knowledgeList
      */
-    public static void initKnowledge(List<Knowledge> knowledgeList){
+    public static void initKnowledge(List<Knowledge> knowledgeList,List<ExtensionQuestion> extensionQuestionList,List<Answer> answerList){
+        //清理所有推荐文本
+        suggester.removeAllSentences();
+
         for(Knowledge knowledge:knowledgeList){
             try {
-                if(CollectionUtils.isEmpty(knowledge.getAnswerList())){
-                    continue;
-                }
                 List<Term> termList = HanLP.segment(knowledge.getTitle());
                 CoreStopWordDictionary.apply(termList);
                 knowledge.setTermList(termList);
                 suggester.addSentence(knowledge.getTitle());
-                if(CollectionUtils.isEmpty(knowledge.getExtensionQuestionList())){
-                    for(ExtensionQuestion extensionQuestion:knowledge.getExtensionQuestionList()){
-                        List<Term> termList1 = HanLP.segment(knowledge.getTitle());
-                        CoreStopWordDictionary.apply(termList1);
-                        extensionQuestion.setTermList(termList1);
-                        suggester.addSentence(extensionQuestion.getTitle());
-                    }
-                }
-                List<Answer> answerList = knowledge.getAnswerList();
-                for(Answer answer:answerList){
-                    List<String> summary = HanLP.extractSummary(answer.getContent(), Constant.MAX_SUMMARY_NUMBER);
-                    answer.setSummaryList(summary);
-                }
+                knowledge.setExtensionQuestionList(new ArrayList<ExtensionQuestion>());
+                knowledge.setAnswerList(new ArrayList<Answer>());
+
                 knowledgeMap.put(knowledge.getId(),knowledge);
             } catch (Exception e) {
                 continue;
             }
         }
+        for(ExtensionQuestion extensionQuestion:extensionQuestionList){
+            try {
+                Knowledge knowledge = knowledgeMap.get(extensionQuestion.getKnowledgeId());
+                List<Term> termList1 = HanLP.segment(extensionQuestion.getTitle());
+                CoreStopWordDictionary.apply(termList1);
+                extensionQuestion.setTermList(termList1);
+                suggester.addSentence(extensionQuestion.getTitle());
+                knowledge.getExtensionQuestionList().add(extensionQuestion);
+            }catch (Exception e){
+                continue;
+            }
+        }
+        for(Answer answer:answerList){
+            try {
+                Knowledge knowledge = knowledgeMap.get(answer.getKnowledgeId());
+                List<String> summary = HanLP.extractSummary(answer.getContent(), Constant.MAX_SUMMARY_NUMBER);
+                answer.setSummaryList(summary);
+                knowledge.getAnswerList().add(answer);
+            }catch (Exception e){
+                knowledgeMap.remove(answer.getKnowledgeId());
+                continue;
+            }
+        }
     }
 
-    public static void initGreeting(List<Greeting> greetingList){
+    /**
+     * 初始化寒暄知识
+     * @param greetingList
+     * @param greetingExtensionQuestionList
+     * @param greetingAnswerList
+     */
+    public static void initGreeting(List<Greeting> greetingList,List<GreetingExtensionQuestion> greetingExtensionQuestionList,List<GreetingAnswer> greetingAnswerList){
         for(Greeting greeting:greetingList){
             try {
-                if(CollectionUtils.isEmpty(greeting.getGreetingAnswerList())){
-                    continue;
-                }
                 List<Term> termList = HanLP.segment(greeting.getTitle());
                 CoreStopWordDictionary.apply(termList);
                 greeting.setTermList(termList);
-                suggester.addSentence(greeting.getTitle());
-                if(CollectionUtils.isEmpty(greeting.getGreetingExtensionQuestionList())){
-                    for(GreetingExtensionQuestion extensionQuestion:greeting.getGreetingExtensionQuestionList()){
-                        List<Term> termList1 = HanLP.segment(greeting.getTitle());
-                        CoreStopWordDictionary.apply(termList1);
-                        extensionQuestion.setTermList(termList1);
-                        suggester.addSentence(extensionQuestion.getTitle());
-                    }
-                }
+                greeting.setGreetingExtensionQuestionList(new ArrayList<GreetingExtensionQuestion>());
+                greeting.setGreetingAnswerList(new ArrayList<GreetingAnswer>());
                 greetingMap.put(greeting.getId(),greeting);
             } catch (Exception e) {
+                continue;
+            }
+        }
+        for(GreetingExtensionQuestion extensionQuestion:greetingExtensionQuestionList){
+            try {
+                Greeting greeting = greetingMap.get(extensionQuestion.getGreetingId());
+                List<Term> termList1 = HanLP.segment(extensionQuestion.getTitle());
+                CoreStopWordDictionary.apply(termList1);
+                extensionQuestion.setTermList(termList1);
+                greeting.getGreetingExtensionQuestionList().add(extensionQuestion);
+            }catch (Exception e){
+                continue;
+            }
+        }
+        for(GreetingAnswer greetingAnswer:greetingAnswerList){
+            try {
+                Greeting greeting = greetingMap.get(greetingAnswer.getGreetingId());
+                greeting.getGreetingAnswerList().add(greetingAnswer);
+            }catch (Exception e){
+                greetingMap.remove(greetingAnswer.getGreetingId());
                 continue;
             }
         }
@@ -156,13 +185,11 @@ public class KnowledgeDB extends Base{
             List<Term> termList = HanLP.segment(greeting.getTitle());
             CoreStopWordDictionary.apply(termList);
             greeting.setTermList(termList);
-            suggester.addSentence(greeting.getTitle());
             if(CollectionUtils.isEmpty(greeting.getGreetingExtensionQuestionList())){
                 for(GreetingExtensionQuestion extensionQuestion:greeting.getGreetingExtensionQuestionList()){
                     List<Term> termList1 = HanLP.segment(greeting.getTitle());
                     CoreStopWordDictionary.apply(termList1);
                     extensionQuestion.setTermList(termList1);
-                    suggester.addSentence(extensionQuestion.getTitle());
                 }
             }
             greetingMap.put(greeting.getId(),greeting);

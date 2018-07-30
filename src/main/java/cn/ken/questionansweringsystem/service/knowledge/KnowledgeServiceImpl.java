@@ -3,7 +3,6 @@ package cn.ken.questionansweringsystem.service.knowledge;
 import cn.ken.questionansweringsystem.mapper.knowledge.AnswerMapper;
 import cn.ken.questionansweringsystem.mapper.knowledge.ExtensionQuestionMapper;
 import cn.ken.questionansweringsystem.mapper.knowledge.KnowledgeMapper;
-import cn.ken.questionansweringsystem.memorydb.ConfigurationDB;
 import cn.ken.questionansweringsystem.memorydb.KnowledgeDB;
 import cn.ken.questionansweringsystem.model.admin.User;
 import cn.ken.questionansweringsystem.model.knowledge.*;
@@ -316,5 +315,20 @@ public class KnowledgeServiceImpl extends Base implements KnowledgeService{
         pageData.setTotal(total);
         pageData.setData(knowledgeList);
         return pageData;
+    }
+
+    @Override
+    public List<Knowledge> getKnowledge(KnowledgeRequest request) throws Exception {
+        return knowledgeMapper.getByAttribute(request);
+    }
+
+    @Override
+    public List<ExtensionQuestion> getExtensionQuestion() throws Exception {
+        return extensionQuestionMapper.getAll();
+    }
+
+    @Override
+    public List<Answer> getAnswer() throws Exception {
+        return answerMapper.getAll();
     }
 }

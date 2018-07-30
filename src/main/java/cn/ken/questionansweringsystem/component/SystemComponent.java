@@ -134,14 +134,18 @@ public class SystemComponent extends Base{
             KnowledgeRequest request = new KnowledgeRequest();
             request.setIndex(0);
             request.setPageSize(Integer.MAX_VALUE);
-            PageData<List<Knowledge>> pageData = knowledgeService.get(request);
-            KnowledgeDB.initKnowledge(pageData.getData());
+            List<Knowledge> knowledgeList = knowledgeService.getKnowledge(request);
+            List<ExtensionQuestion> extensionQuestionList = knowledgeService.getExtensionQuestion();
+            List<Answer> answerList = knowledgeService.getAnswer();
+            KnowledgeDB.initKnowledge(knowledgeList,extensionQuestionList,answerList);
 
             GreetingRequest greetingRequest = new GreetingRequest();
             greetingRequest.setIndex(0);
             greetingRequest.setPageSize(Integer.MAX_VALUE);
-            PageData<List<Greeting>> pageData1 = greetingService.get(greetingRequest);
-            KnowledgeDB.initGreeting(pageData1.getData());
+            List<Greeting> greetingList = greetingService.getGreeting(greetingRequest);
+            List<GreetingExtensionQuestion> greetingExtensionQuestionList = greetingService.getGreetingExtensionQuestion();
+            List<GreetingAnswer> greetingAnswerList = greetingService.getGreetingAnswer();
+            KnowledgeDB.initGreeting(greetingList,greetingExtensionQuestionList,greetingAnswerList);
 
             KnowledgeDB.initPinYinMap();
         } catch (Exception e) {

@@ -25,14 +25,14 @@ public class QuestionAnswerHistory extends LogQa{
 
     private Integer sequence;
     //问答主题
-    private String topic;
+    private List<String> topicList;
 
-    public String getTopic() {
-        return topic;
+    public List<String> getTopicList() {
+        return topicList;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public void setTopicList(List<String> topicList) {
+        this.topicList = topicList;
     }
 
     public Integer getSequence() {

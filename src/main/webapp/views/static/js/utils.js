@@ -117,6 +117,16 @@ var answer_parse = function(list){
     });
     return html;
 }
+var greeting_answer_parse = function(list){
+    var html = "";
+    if(list==null || list.length==0){
+        return html;
+    }
+    $.each(list,function(i,v){
+        html+= "答案"+(i+1)+" "+v.answer+" 渠道:"+channel_switch(v.channelId);
+    });
+    return html;
+}
 var channel_switch = function(code){
     switch (code){
         case 100:return "全部渠道";

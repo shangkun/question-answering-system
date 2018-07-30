@@ -1,6 +1,7 @@
 package cn.ken.questionansweringsystem.utils.hanlp;
 
 import cn.ken.questionansweringsystem.common.Constant;
+import cn.ken.questionansweringsystem.common.PartOfSpeech;
 import cn.ken.questionansweringsystem.model.qa.Retrieval;
 import cn.ken.questionansweringsystem.utils.StringUtils;
 import cn.ken.questionansweringsystem.utils.excel.ExcelReader;
@@ -256,5 +257,20 @@ public class HanlpUtils {
             }
         }
         return false;
+    }
+
+    public static String transNatureToString(List<Term> termList){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i=0;i<termList.size();i++){
+            Term term = termList.get(i);
+            if(i==0){
+                stringBuilder.append("[" + term.word + "/" + PartOfSpeech.getValue(term.nature.toString()) + ",");
+            }else if(i==termList.size()-1){
+                stringBuilder.append(term.word + "/" + PartOfSpeech.getValue(term.nature.toString()) + "]");
+            }else{
+                stringBuilder.append(term.word + "/" + PartOfSpeech.getValue(term.nature.toString()) + ",");
+            }
+        }
+        return stringBuilder.toString();
     }
 }

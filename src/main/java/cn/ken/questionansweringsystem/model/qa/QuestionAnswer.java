@@ -2,6 +2,7 @@ package cn.ken.questionansweringsystem.model.qa;
 
 import cn.ken.questionansweringsystem.model.LogQa;
 import cn.ken.questionansweringsystem.model.LogQaRecommend;
+import cn.ken.questionansweringsystem.utils.hanlp.HanlpUtils;
 import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLSentence;
 import com.hankcs.hanlp.mining.word.WordInfo;
 import com.hankcs.hanlp.seg.common.ResultTerm;
@@ -193,7 +194,7 @@ public class QuestionAnswer extends LogQa{
     public void setSegmentResult(List<Term> segmentResult) {
         this.segmentResult = segmentResult;
         if(segmentResult!=null){
-            this.segmentResultToString = segmentResult.toString();
+            this.segmentResultToString = HanlpUtils.transNatureToString(segmentResult);
         }
     }
 
@@ -204,7 +205,7 @@ public class QuestionAnswer extends LogQa{
     public void setDeleteStopWordsResult(List<Term> deleteStopWordsResult) {
         this.deleteStopWordsResult = deleteStopWordsResult;
         if(deleteStopWordsResult!=null){
-            this.deleteStopWordsResultToString = deleteStopWordsResult.toString();
+            this.deleteStopWordsResultToString = HanlpUtils.transNatureToString(deleteStopWordsResult);
         }
     }
 

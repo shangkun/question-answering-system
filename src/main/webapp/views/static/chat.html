@@ -177,6 +177,7 @@
             $("#messages").append(html);
             console.log($('#messages')[0].scrollHeight);
             ($('#messages').children("div:last-child")[0]).scrollIntoView();
+            $("#question").val('');
         },true);
     }
     function loadConfig(){

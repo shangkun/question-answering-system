@@ -25,6 +25,16 @@
     values (<include refid="insertColumnValue"/>)
   </insert>
 
+  <insert id="batchInsert">
+    replace into
+    <include refid="table"/>
+    (<include refid="column"/>)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id},#{item.title},#{item.modifyTime},#{item.modifierId})
+    </foreach>
+  </insert>
+
   <delete id="deleteById">
     delete from
     <include refid="table"/>

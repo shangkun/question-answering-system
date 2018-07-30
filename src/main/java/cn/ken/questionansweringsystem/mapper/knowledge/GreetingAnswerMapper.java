@@ -16,4 +16,6 @@ public interface GreetingAnswerMapper extends BaseMapper<GreetingAnswer,String>{
     int batchInsert(List<GreetingAnswer> list);
 
     List<String> getByAttribute(String title);
+
+    List<GreetingAnswer> getAll();
 }

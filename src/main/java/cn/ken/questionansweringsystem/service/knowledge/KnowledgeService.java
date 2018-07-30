@@ -1,5 +1,7 @@
 package cn.ken.questionansweringsystem.service.knowledge;
 
+import cn.ken.questionansweringsystem.model.knowledge.Answer;
+import cn.ken.questionansweringsystem.model.knowledge.ExtensionQuestion;
 import cn.ken.questionansweringsystem.model.knowledge.Knowledge;
 import cn.ken.questionansweringsystem.model.knowledge.KnowledgeRequest;
 import cn.ken.questionansweringsystem.model.response.PageData;
@@ -28,4 +30,10 @@ public interface KnowledgeService {
     public String update(KnowledgeRequest request) throws Exception;
 
     public PageData get(KnowledgeRequest request) throws Exception;
+
+    public List<Knowledge> getKnowledge(KnowledgeRequest request) throws Exception;
+
+    public List<ExtensionQuestion> getExtensionQuestion() throws Exception;
+
+    public List<Answer> getAnswer() throws Exception;
 }

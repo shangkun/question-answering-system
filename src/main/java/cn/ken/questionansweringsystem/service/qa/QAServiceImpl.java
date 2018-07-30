@@ -6,9 +6,7 @@ import cn.ken.questionansweringsystem.memorydb.ConfigurationDB;
 import cn.ken.questionansweringsystem.memorydb.KnowledgeDB;
 import cn.ken.questionansweringsystem.model.LogQaRecommend;
 import cn.ken.questionansweringsystem.model.configuration.Configuration;
-import cn.ken.questionansweringsystem.model.knowledge.Answer;
-import cn.ken.questionansweringsystem.model.knowledge.ExtensionQuestion;
-import cn.ken.questionansweringsystem.model.knowledge.Knowledge;
+import cn.ken.questionansweringsystem.model.knowledge.*;
 import cn.ken.questionansweringsystem.model.qa.QuestionAnswer;
 import cn.ken.questionansweringsystem.model.qa.QuestionAnswerHistory;
 import cn.ken.questionansweringsystem.model.qa.Retrieval;
@@ -17,6 +15,7 @@ import cn.ken.questionansweringsystem.utils.IdWorker;
 import cn.ken.questionansweringsystem.utils.RedisUtils;
 import cn.ken.questionansweringsystem.utils.StringUtils;
 import cn.ken.questionansweringsystem.utils.hanlp.CompareUtils;
+import cn.ken.questionansweringsystem.utils.hanlp.HanlpUtils;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLSentence;
 import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
@@ -132,7 +131,10 @@ public class QAServiceImpl extends Base implements QAService{
         //分词
         List<Term> termList = HanLP.segment(questionAnswer.getQuestion());
         questionAnswer.setSegmentResult(termList);
-        history.setSegmentResult(termList.toString());
+        history.setSegmentResult(HanlpUtils.transNatureToString(termList));
+        //关键词提取
+        List<String> keyWords = HanLP.extractKeyword(questionAnswer.getQuestion(),Constant.MAX_KEYWORDS_NUMBER);
+        history.setTopicList(keyWords);
         //问题分类(指句法上的分类 例:疑问句 以后可以扩展情感识别)
 
         if(questionAnswer.isDebugMode()){
@@ -142,24 +144,23 @@ public class QAServiceImpl extends Base implements QAService{
             //人名识别
             Segment segment = HanLP.newSegment().enableNameRecognize(true);
             List<Term> chineseNameRecognition = segment.seg(questionAnswer.getQuestion());
-            questionAnswer.setChineseNameRecognitionResult(chineseNameRecognition.toString());
+            questionAnswer.setChineseNameRecognitionResult(HanlpUtils.transNatureToString(chineseNameRecognition));
             //机构名识别
             segment = HanLP.newSegment().enableOrganizationRecognize(true);
             List<Term> organizationRecognition = segment.seg(questionAnswer.getQuestion());
-            questionAnswer.setOrganizationRecognitionResult(organizationRecognition.toString());
+            questionAnswer.setOrganizationRecognitionResult(HanlpUtils.transNatureToString(organizationRecognition));
             //地名识别
             segment = HanLP.newSegment().enablePlaceRecognize(true);
             List<Term> placeRecognition = segment.seg(questionAnswer.getQuestion());
-            questionAnswer.setPlaceRecognitionResult(placeRecognition.toString());
+            questionAnswer.setPlaceRecognitionResult(HanlpUtils.transNatureToString(placeRecognition));
             //URL识别
             List<Term> uRLRecognition = URLTokenizer.segment(questionAnswer.getQuestion());
-            questionAnswer.setURLRecognitionResult(uRLRecognition.toString());
-            //关键词提取
-            List<String> keyWords = HanLP.extractKeyword(questionAnswer.getQuestion(),Constant.MAX_KEYWORDS_NUMBER);
-            questionAnswer.setKeyWords(keyWords.toString());
+            questionAnswer.setURLRecognitionResult(HanlpUtils.transNatureToString(uRLRecognition));
             //新词发现
             List<WordInfo> newWordDiscover = HanLP.extractWords(questionAnswer.getQuestion(),Constant.MAX_NEW_WORD_NUMBER);
             questionAnswer.setNewWordDiscover(newWordDiscover.toString());
+            //关键词提取
+            questionAnswer.setKeyWords(keyWords.toString());
             //拼音转汉字
             LinkedList<ResultTerm<Set<String>>> pinYinResult = KnowledgeDB.pinYinSegment.segment(questionAnswer.getQuestion());
             questionAnswer.setPinYinResult(pinYinResult.toString());
@@ -175,6 +176,73 @@ public class QAServiceImpl extends Base implements QAService{
     public void informationRetrieval(QuestionAnswer questionAnswer) throws Exception {
         List<Retrieval> retrievalList = new ArrayList<>();
         //知识库信息检索
+        knowledgeReporsityRetrieval(questionAnswer, retrievalList);
+
+        if(!CollectionUtils.isEmpty(retrievalList)){
+            return;
+        }
+        //寒暄库信息检索
+        greetingReporsitoryRetrieval(questionAnswer, retrievalList);
+    }
+
+    /**
+     * 寒暄库信息检索
+     * @param questionAnswer
+     * @param retrievalList
+     */
+    private void greetingReporsitoryRetrieval(QuestionAnswer questionAnswer, List<Retrieval> retrievalList) {
+        for(Map.Entry<String,Greeting> entry: KnowledgeDB.greetingMap.entrySet()){
+            String knowledgeTitle = entry.getValue().getTitle();
+            double similarity = 0.00d;
+            //完全匹配相似度直接设置为1
+            if(questionAnswer.getQuestion().equals(entry.getValue().getTitle())){
+                similarity = 1.00d;
+                Retrieval retrieval = new Retrieval(entry.getKey(),knowledgeTitle,similarity);
+                questionAnswer.setGreetingRetrieval(retrieval);
+                return;
+            }
+            //在匹配单个知识的标题与扩展问时,只取最高的那个相似度
+            similarity = StringUtils.getJaroWinklerDistance(questionAnswer.getDeleteStopWordsResult().toString(), entry.getValue().getTermList().toString());
+            if(!CollectionUtils.isEmpty(entry.getValue().getGreetingExtensionQuestionList())){
+                for(GreetingExtensionQuestion extensionQuestion:entry.getValue().getGreetingExtensionQuestionList()){
+                    double temp = 0.00d;
+                    //完全匹配相似度直接设置为1
+                    if(questionAnswer.getQuestion().equals(extensionQuestion.getTitle())){
+                        similarity = 1.00d;
+                        break;
+                    }
+                    if(CollectionUtils.isEmpty(extensionQuestion.getTermList())){
+                        temp = StringUtils.getJaroWinklerDistance(questionAnswer.getDeleteStopWordsResult().toString(), extensionQuestion.getTitle());
+                    }else{
+                        temp = StringUtils.getJaroWinklerDistance(questionAnswer.getDeleteStopWordsResult().toString(), extensionQuestion.getTermList().toString());
+                    }
+                    if(temp>similarity){
+                        knowledgeTitle = extensionQuestion.getTitle();
+                        similarity=temp;
+                    }
+                }
+            }
+            //过滤小于系统设置阈值的寒暄知识
+            if(similarity < ConfigurationDB.configuration.getGreetingThresholdUpperLimit()){
+                continue;
+            }
+            Retrieval retrieval = new Retrieval(entry.getKey(),knowledgeTitle,similarity);
+            retrievalList.add(retrieval);
+        }
+        //排序后,取top1
+        if(!CollectionUtils.isEmpty(retrievalList)){
+            Collections.sort(retrievalList, COMPARE_UTILS);
+            questionAnswer.setGreetingRetrieval(retrievalList.get(0));
+        }
+    }
+
+    /**
+     * 知识库信息检索
+     * @param questionAnswer
+     * @param retrievalList
+     */
+    private void knowledgeReporsityRetrieval(QuestionAnswer questionAnswer, List<Retrieval> retrievalList) {
+        //知识库信息检索
         for(Map.Entry<String,Knowledge> entry: KnowledgeDB.knowledgeMap.entrySet()){
             String knowledgeTitle = entry.getValue().getTitle();
             double similarity = 0.00d;
@@ -183,7 +251,7 @@ public class QAServiceImpl extends Base implements QAService{
                 similarity = 1.00d;
                 Retrieval retrieval = new Retrieval(entry.getKey(),knowledgeTitle,similarity);
                 retrievalList.add(retrieval);
-                continue;
+                break;
             }
             //在匹配单个知识的标题与扩展问时,只取最高的那个相似度
             similarity = StringUtils.getJaroWinklerDistance(questionAnswer.getDeleteStopWordsResult().toString(), entry.getValue().getTermList().toString());
@@ -213,12 +281,10 @@ public class QAServiceImpl extends Base implements QAService{
             Retrieval retrieval = new Retrieval(entry.getKey(),knowledgeTitle,similarity);
             retrievalList.add(retrieval);
         }
-        //寒暄库信息检索
-
         //排序后,取top
         if(!CollectionUtils.isEmpty(retrievalList)){
             Collections.sort(retrievalList, COMPARE_UTILS);
-            questionAnswer.setRetrievalList(retrievalList.subList(0,retrievalList.size()>=Constant.MAX_RETRIEVAL_NUMBER?Constant.MAX_RETRIEVAL_NUMBER:retrievalList.size()));
+            questionAnswer.setRetrievalList(retrievalList.subList(0,retrievalList.size()>= Constant.MAX_RETRIEVAL_NUMBER?Constant.MAX_RETRIEVAL_NUMBER:retrievalList.size()));
         }
     }
 
@@ -235,6 +301,17 @@ public class QAServiceImpl extends Base implements QAService{
             hasRecommend(questionAnswer, history, sequence, retrievalList);
         }else if(questionAnswer.getGreetingRetrieval()!=null){
             //处理寒暄回答
+            Greeting greeting = KnowledgeDB.greetingMap.get(questionAnswer.getGreetingRetrieval().getKnowledge());
+            List<GreetingAnswer> greetingAnswerList = greeting.getGreetingAnswerList();
+            for(GreetingAnswer answer:greetingAnswerList){
+                if(answer.getChannelId()!= Enum.allChannel.getValue() && answer.getChannelId()!=questionAnswer.getChannelId()){
+                    continue;
+                }
+                questionAnswer.setAnswer(answer.getAnswer());
+                history.setAnswer(answer.getAnswer());
+                questionAnswer.setKnowledgeId(greeting.getId());
+                history.setKnowledgeId(greeting.getId());
+            }
             questionAnswer.setResponseType(Enum.greetingResponse.getValue());
             history.setResponseType(Enum.greetingResponse.getValue());
         }else{

@@ -10,6 +10,8 @@ public interface ExtensionQuestionMapper extends BaseMapper<ExtensionQuestion,St
 
     List<ExtensionQuestion> getByKnowledgeId(String knowledgeId);
 
+    List<ExtensionQuestion> getAll();
+
     int countByTitle(List<String> list);
 
     int countByKnowledgeIdAndTitle(Map map);

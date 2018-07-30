@@ -178,6 +178,7 @@
             $("#messages").append(html);
             loadProcess(response);
             ($('#messages').children("div:last-child")[0]).scrollIntoView();
+            $("#question").val('');
         },true);
     }
     function loadProcess(response){

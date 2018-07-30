@@ -32,13 +32,15 @@ public class TestGreetingService extends JUnit4BaseConfig {
     public void test() throws Exception{
         Map<String,String> map = new HashMap<>();
 
-        String excelUrl = "D:\\work\\毕业设计资料\\机器人知识库.xlsx";
+        String excelUrl = "E:\\download1\\1616.xlsx";
 
         int[] arr = {0,1};
         ArrayList<ArrayList<String>> arrayLists = ExcelReader.xlsxReader(excelUrl, arr);
         for(ArrayList<String> arrayList:arrayLists){
             map.put(arrayList.get(0),arrayList.get(1));
         }
+
+        List<GreetingRequest> greetingRequestList = new ArrayList<>();
 
         for (Map.Entry<String,String> entry:map.entrySet()){
             GreetingRequest request = new GreetingRequest();
@@ -50,8 +52,11 @@ public class TestGreetingService extends JUnit4BaseConfig {
             answer.setChannelId(Enum.allChannel.getValue());
             answerList.add(answer);
             request.setGreetingAnswerList(answerList);
-            greetingService.add(request);
+            greetingRequestList.add(request);
         }
+
+        String result = greetingService.batchAdd(greetingRequestList);
+
         GreetingRequest greetingRequest = new GreetingRequest();
         greetingRequest.setIndex(0);
         greetingRequest.setPageSize(10);

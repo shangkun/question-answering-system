@@ -95,6 +95,13 @@
     where title like concat('%',#{0},'%')
   </select>
 
+  <select id="getAll" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+  </select>
+
   <select id="countByTitle" parameterType="java.util.List" resultType="int">
     select
     count(id)

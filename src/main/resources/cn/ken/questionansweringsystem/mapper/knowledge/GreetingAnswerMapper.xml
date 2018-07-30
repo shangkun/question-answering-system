@@ -83,6 +83,13 @@
     where id = #{id}
   </select>
 
+  <select id="getAll" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+  </select>
+
   <select id="getByGreetingId" resultMap="ResultMap">
     select
     <include refid="column"/>
