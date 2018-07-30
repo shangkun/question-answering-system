@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ken.question.answering.system.mapper.knowledge.GreetingMapper">
+  <resultMap id="ResultMap" type="cn.ken.question.answering.system.model.knowledge.Greeting">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modifier_id" jdbcType="VARCHAR" property="modifierId" />
+  </resultMap>
+
+  <sql id="table">greeting</sql>
+
+  <sql id="column">
+    id,title,modify_time,modifier_id
+  </sql>
+
+  <sql id="insertColumnValue">
+    #{id},#{title},#{modifyTime},#{modifierId}
+  </sql>
+
+  <insert id="insert">
+    replace into
+    <include refid="table"/>
+    (<include refid="column"/>)
+    values (<include refid="insertColumnValue"/>)
+  </insert>
+
+  <insert id="batchInsert">
+    replace into
+    <include refid="table"/>
+    (<include refid="column"/>)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id},#{item.title},#{item.modifyTime},#{item.modifierId})
+    </foreach>
+  </insert>
+
+  <delete id="deleteById">
+    delete from
+    <include refid="table"/>
+    where id = #{id}
+  </delete>
+
+  <delete id="deleteByIdList">
+    delete from
+    <include refid="table"/>
+    where id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <update id="update">
+    update
+    <include refid="table"/>
+    <set>
+      <if test="title!=null and title!=''">
+        title = #{title},
+      </if>
+      <if test="modifierId!=null and modifierId!=''">
+        modifier_id = #{modifierId}
+      </if>
+    </set>
+    <where>
+      id = #{id}
+    </where>
+  </update>
+
+  <select id="selectById" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+    where id = #{id}
+  </select>
+
+  <select id="getByAttribute" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+    where 1=1
+    <if test="title!=null and title!=''">
+      and title like concat('%',#{title},'%')
+    </if>
+    <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+      and modify_time &gt;= #{startTime} and modify_time &lt; #{endTime}
+    </if>
+    <if test="idList!=null">
+      and id in
+      <foreach collection="idList" item="item1" open="(" separator="," close=")">
+        #{item1}
+      </foreach>
+    </if>
+    order by modify_time desc
+    <if test="pageSize!=0">
+      limit #{index},#{pageSize}
+    </if>
+  </select>
+
+  <select id="countByAttribute" resultType="int">
+    select
+    count(id)
+    from
+    <include refid="table"/>
+    where 1=1
+    <if test="title!=null and title!=''">
+      and title like concat('%',#{title},'%')
+    </if>
+    <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+      and modify_time &gt;= #{startTime} and modify_time &lt; #{endTime}
+    </if>
+    <if test="idList!=null">
+      and id in
+      <foreach collection="idList" item="item1" open="(" separator="," close=")">
+        #{item1}
+      </foreach>
+    </if>
+  </select>
+
+  <select id="countByTitle" resultType="int">
+    select
+    count(id)
+    from
+    <include refid="table"/>
+    where
+    title = #{0}
+  </select>
+
+  <select id="countByIdAndTitle" resultType="int">
+    select
+    count(id)
+    from
+    <include refid="table"/>
+    where
+    id != #{0}
+    and title = #{1}
+  </select>
+</mapper>

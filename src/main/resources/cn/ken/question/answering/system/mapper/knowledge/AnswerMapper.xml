@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ken.question.answering.system.mapper.knowledge.AnswerMapper">
+  <resultMap id="ResultMap" type="cn.ken.question.answering.system.model.knowledge.Answer">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="knowledge_id" jdbcType="VARCHAR" property="knowledgeId" />
+    <result column="channel_id" jdbcType="INTEGER" property="channelId" />
+  </resultMap>
+
+  <sql id="table">answer</sql>
+
+  <sql id="column">
+    id,content,channel_id,knowledge_id
+  </sql>
+
+  <sql id="insertColumnValue">
+    #{id},#{content},#{channelId},#{knowledgeId}
+  </sql>
+
+  <insert id="insert">
+    replace into
+    <include refid="table"/>
+    (<include refid="column"/>)
+    values (<include refid="insertColumnValue"/>)
+  </insert>
+
+  <insert id="batchInsert">
+    replace into
+    <include refid="table"/>
+    (<include refid="column"/>)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id},#{item.content},#{item.channelId},#{item.knowledgeId})
+    </foreach>
+  </insert>
+
+  <delete id="deleteById">
+    delete from
+    <include refid="table"/>
+    where id = #{id}
+  </delete>
+
+  <delete id="deleteByKnowledgeId">
+    delete from
+    <include refid="table"/>
+    where knowledge_id = #{id}
+  </delete>
+
+  <delete id="deleteByKnowledgeIdList">
+    delete from
+    <include refid="table"/>
+    where knowledge_id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <update id="update">
+    update
+    <include refid="table"/>
+    <set>
+      <if test="content!=null and content!=''">
+        content = #{content},
+      </if>
+      <if test="channelId!=null">
+        channel_id = #{channelId},
+      </if>
+      <if test="knowledgeId!=null and knowledgeId!=''">
+        knowledge_id = #{knowledgeId}
+      </if>
+    </set>
+    <where>
+      id = #{id}
+    </where>
+  </update>
+
+  <select id="selectById" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+    where id = #{id}
+  </select>
+
+  <select id="getAll" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+  </select>
+
+  <select id="getByKnowledgeId" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+    where knowledge_id = #{0}
+  </select>
+
+  <select id="getByAttribute" resultType="java.lang.String">
+    select
+    distinct(knowledge_id)
+    from
+    <include refid="table"/>
+    where content like concat('%',#{0},'%')
+  </select>
+</mapper>

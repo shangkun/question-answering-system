@@ -22,6 +22,7 @@
 <title>我的桌面</title>
 </head>
 <body>
+<nav class="breadcrumb"><a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
 	<p class="f-20 text-success">欢迎使用后台管理系统！</p>
 	<p>登录次数：<span id="loginCount"></span> </p>
@@ -40,48 +41,7 @@
 				<th>问答数</th>
 			</tr>
 		</thead>
-		<tbody>
-			<tr class="text-c">
-				<td>总数</td>
-				<td>92</td>
-				<td>9</td>
-				<td>0</td>
-				<td>8</td>
-				<td>20</td>
-			</tr>
-			<tr class="text-c">
-				<td>今日</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-			</tr>
-			<tr class="text-c">
-				<td>昨日</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-			</tr>
-			<tr class="text-c">
-				<td>本周</td>
-				<td>2</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-			</tr>
-			<tr class="text-c">
-				<td>本月</td>
-				<td>2</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-				<td>0</td>
-			</tr>
-		</tbody>
+		<tbody id="info_statistics"></tbody>
 	</table>
 	<table class="table table-border table-bordered table-bg mt-20">
 		<thead>
@@ -149,6 +109,7 @@
 	$(function(){
 		loadMainPage();
 		loadServerInfo();
+		loadInfoStatisticsTable();
 	});
 	function loadMainPage(){
 		var userJson = getCookie("user");
@@ -158,7 +119,7 @@
 		$("#lastLoginTime").html(date_format(second_format,user.lastLoginTime));
 	}
 	function loadServerInfo(){
-		POST(serverInfoUrl+"/get",new Object(),function(data){
+		POST(serverInfoUrl+"info/get",new Object(),function(data){
 			if(data.statusCode==200){
 				var serverInfo = data.data;
 				$("#computerName").html(serverInfo.computerName);
@@ -173,7 +134,36 @@
 				$("#osArch").html(serverInfo.osArch);
 				$("#osVersion").html(serverInfo.osVersion);
 			}
-		},false);
+		},true);
+	}
+	function loadInfoStatisticsTable(){
+		POST(serverInfoUrl+"info/statistics",new Object(),function(data){
+			if(data.statusCode==200){
+				var statisticsList = data.data;
+				$("#info_statistics").empty();
+				$.each(statisticsList,function(i,v){
+					var title = "";
+					var html = "";
+					switch (v.type){
+						case 1:title="总数";break;
+						case 2:title="今日";break
+						case 3:title="昨日";break
+						case 4:title="本周";break
+						case 5:title="本月";break
+					}
+					html+='<tr class="text-c">';
+					html+='<td>'+title+'</td>';
+					html+='<td>'+v.lexicon+'</td>';
+					html+='<td>'+v.knowledge+'</td>';
+					html+='<td>'+v.classification+'</td>';
+					html+='<td>'+v.greeting+'</td>';
+					html+='<td>'+v.qa+'</td>';
+					html+='</tr>';
+					$("#info_statistics").append(html);
+				});
+			}
+		},true);
+
 	}
 </script>
 </body>

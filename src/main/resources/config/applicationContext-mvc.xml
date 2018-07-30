@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task.xsd
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context-4.0.xsd
             http://www.springframework.org/schema/mvc
@@ -19,9 +22,9 @@
 
     <mvc:annotation-driven/>
 
-    <context:component-scan base-package="cn.ken.questionansweringsystem.*"/>
+    <context:component-scan base-package="cn.ken.question.answering.system.*"/>
 
-    <bean class="cn.ken.questionansweringsystem.config.SwaggerConfig"/>
+    <bean class="cn.ken.question.answering.system.config.SwaggerConfig"/>
 
     <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/views/"/>
@@ -43,7 +46,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/api/**"/>
-            <bean class="cn.ken.questionansweringsystem.config.ControllerHandlerInterceptor"/>
+            <bean class="cn.ken.question.answering.system.config.ControllerHandlerInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 
@@ -53,4 +56,6 @@
     <import resource="applicationContext-redis.xml"/>
 
     <mvc:default-servlet-handler/>
+    <!--启动异步-->
+    <task:annotation-driven />
 </beans>

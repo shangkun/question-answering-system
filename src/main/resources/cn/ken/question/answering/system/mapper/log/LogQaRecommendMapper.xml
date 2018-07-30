@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ken.question.answering.system.mapper.log.LogQaRecommendMapper">
+  <resultMap id="ResultMap" type="cn.ken.question.answering.system.model.log.LogQaRecommend">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="qa_id" jdbcType="VARCHAR" property="qaId" />
+    <result column="session_id" jdbcType="VARCHAR" property="sessionId" />
+    <result column="knowledge_id" jdbcType="VARCHAR" property="knowledgeId" />
+    <result column="knowledge_title" jdbcType="VARCHAR" property="knowledgeTitle" />
+    <result column="sequence" jdbcType="INTEGER" property="sequence" />
+  </resultMap>
+
+  <sql id="table">log_qa_recommend</sql>
+
+  <sql id="column">
+    id,qa_id,session_id,knowledge_id,knowledge_title,sequence
+  </sql>
+
+  <sql id="insertColumnValue">
+    #{id},#{qaId},#{sessionId},#{knowledgeId},#{knowledgeTitle},#{sequence}
+  </sql>
+
+  <insert id="batchInsert">
+    replace into
+    <include refid="table"/>
+    (<include refid="column"/>)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id},#{item.qaId},#{item.sessionId},#{item.knowledgeId},#{item.knowledgeTitle},#{item.sequence}
+    </foreach>
+  </insert>
+
+  <select id="selectByLogId" resultMap="ResultMap">
+    select
+    <include refid="column"/>
+    from
+    <include refid="table"/>
+    where qa_id = #{logId}
+  </select>
+</mapper>

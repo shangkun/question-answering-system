@@ -18,6 +18,6 @@ var classificationArray = new Array();
 var hour_start = " 00:00:00";
 var hour_end = " 24:00:00";
 var baseUrl2 = "./../../api/";
-var serverInfoUrl = baseUrl2+"common/server/info";
+var serverInfoUrl = baseUrl2+"common/server/";
 var userUrl2 = baseUrl2+"admin/user/";
 var qaUrl2 = baseUrl2+"qa/";

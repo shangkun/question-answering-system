@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- enable component scanning (beware that this does not enable mapper scanning!) -->
-    <context:component-scan base-package="cn.ken.questionansweringsystem" />
+    <context:component-scan base-package="cn.ken.question.answering.system" />
 
     <!-- enable autowire -->
     <context:annotation-config />
@@ -47,7 +47,7 @@
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="cn.ken.questionansweringsystem.model" />
+        <property name="typeAliasesPackage" value="cn.ken.question.answering.system.model" />
     </bean>
 
     <!-- 事务管理器 -->
@@ -60,7 +60,7 @@
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
-        <property name="basePackage" value="cn.ken.questionansweringsystem.mapper"/>
+        <property name="basePackage" value="cn.ken.question.answering.system.mapper"/>
     </bean>
 
 </beans>

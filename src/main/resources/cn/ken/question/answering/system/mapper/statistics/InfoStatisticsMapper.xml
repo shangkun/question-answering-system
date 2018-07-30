@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ken.question.answering.system.mapper.statistics.InfoStatisticsMapper">
+    <resultMap id="ResultMap" type="cn.ken.question.answering.system.model.statistics.InfoStatistics">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="knowledge" jdbcType="INTEGER" property="knowledge"/>
+        <result column="lexicon" jdbcType="INTEGER" property="lexicon"/>
+        <result column="classification" jdbcType="INTEGER" property="classification"/>
+        <result column="greeting" jdbcType="INTEGER" property="greeting"/>
+        <result column="qa" jdbcType="INTEGER" property="qa"/>
+    </resultMap>
+
+    <sql id="table">info_statistics</sql>
+
+    <sql id="column">
+        id,time,knowledge,lexicon,classification,greeting,qa
+    </sql>
+
+    <sql id="insertColumnValue">
+        #{id},#{time},#{knowledge},#{lexicon},#{classification},#{greeting},#{qa}
+    </sql>
+
+    <insert id="insert">
+        replace into
+        <include refid="table"/>
+        (<include refid="column"/>)
+        values (<include refid="insertColumnValue"/>)
+    </insert>
+
+    <update id="update">
+        update
+        <include refid="table"/>
+        <set>
+            <if test="knowledge!=null">
+                knowledge = #{knowledge},
+            </if>
+            <if test="lexicon!=null">
+                lexicon = #{lexicon},
+            </if>
+            <if test="classification!=null">
+                classification = #{classification},
+            </if>
+            <if test="greeting!=null">
+                greeting = #{greeting},
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone = #{phone},
+            </if>
+            <if test="qa!=null">
+                qa = #{qa}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <select id="selectByTime" resultMap="ResultMap">
+        select
+        sum(knowledge) as knowledge,sum(lexicon) as lexicon,sum(classification) as classification,sum(greeting) as greeting,sum(qa) as qa
+        from
+        <include refid="table"/>
+        where
+        time &gt;= #{0} and time &lt; #{1}
+    </select>
+</mapper>
