@@ -26,7 +26,7 @@
     (<include refid="column"/>)
     values
     <foreach collection="list" item="item" separator=",">
-      (#{item.id},#{item.qaId},#{item.sessionId},#{item.knowledgeId},#{item.knowledgeTitle},#{item.sequence}
+      (#{item.id},#{item.qaId},#{item.sessionId},#{item.knowledgeId},#{item.knowledgeTitle},#{item.sequence})
     </foreach>
   </insert>
 

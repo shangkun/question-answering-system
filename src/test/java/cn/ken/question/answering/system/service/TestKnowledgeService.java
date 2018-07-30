@@ -33,7 +33,7 @@ public class TestKnowledgeService extends JUnit4BaseConfig {
             KnowledgeRequest knowledgeRequest = new KnowledgeRequest();
             knowledgeRequest.setTitle(entry.getKey());
             knowledgeRequest.setModifierId("538559372305891328");
-            knowledgeRequest.setClassificationId("540294769230741504");
+            knowledgeRequest.setClassificationId("540256092177825792");
             knowledgeRequest.setStatus(1);
             List<Answer> answerList = new ArrayList<>();
             Answer answer = new Answer();
