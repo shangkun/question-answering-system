@@ -1,7 +1,11 @@
 package cn.ken.question.answering.system.model.log;
 
 import java.util.Date;
-
+/**
+ * author: shangkun <br/>
+ * date: 2018/7/30 <br/>
+ * what: LogQaEvaluate <br/>
+ */
 public class LogQaEvaluate {
     private String id;
 

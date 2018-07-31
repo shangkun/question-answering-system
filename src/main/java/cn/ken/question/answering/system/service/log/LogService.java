@@ -1,5 +1,7 @@
 package cn.ken.question.answering.system.service.log;
 
+import cn.ken.question.answering.system.model.log.LogQa;
+import cn.ken.question.answering.system.model.log.LogQaRequest;
 import cn.ken.question.answering.system.model.qa.QuestionAnswer;
 
 import java.util.List;
@@ -25,6 +27,22 @@ public interface LogService {
      * @throws Exception
      */
     int count(String startTime,String endTime) throws Exception;
+
+    /**
+     * 根据属性值计数
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    int countByAttribute(LogQaRequest request) throws Exception;
+
+    /**
+     * 获取知识点排名数据
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    List<LogQa> getKnowledegRanking(LogQaRequest request) throws Exception;
 
     /**
      * 批量添加

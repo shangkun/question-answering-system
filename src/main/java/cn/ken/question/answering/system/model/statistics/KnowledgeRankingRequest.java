@@ -7,9 +7,53 @@ package cn.ken.question.answering.system.model.statistics;
  */
 public class KnowledgeRankingRequest extends KnowledgeRanking{
 
+    private Integer index;
+
+    private Integer pageSize;
+
+    private Integer channelId;
+
     private String startTime;
 
     private String endTime;
+
+    public KnowledgeRankingRequest() {
+    }
+
+    public KnowledgeRankingRequest(String startTime, String endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public KnowledgeRankingRequest(String knowledgeId, String time, Integer accessNumber, String startTime, String endTime) {
+        super(knowledgeId, time, accessNumber);
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Integer channelId) {
+        this.channelId = channelId;
+    }
 
     public String getStartTime() {
         return startTime;

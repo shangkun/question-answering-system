@@ -1,4 +1,4 @@
-package cn.ken.question.answering.system.service;
+package cn.ken.question.answering.system.service.admin;
 
 import cn.ken.question.answering.system.JUnit4BaseConfig;
 import cn.ken.question.answering.system.model.response.PageData;

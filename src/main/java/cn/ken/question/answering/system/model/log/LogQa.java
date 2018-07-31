@@ -1,7 +1,11 @@
 package cn.ken.question.answering.system.model.log;
 
 import java.util.Date;
-
+/**
+ * author: shangkun <br/>
+ * date: 2018/7/30 <br/>
+ * what: LogQa <br/>
+ */
 public class LogQa {
 
     private String id;
@@ -29,6 +33,16 @@ public class LogQa {
     private Date createTime;
 
     private String accessToken;
+
+    private Integer accessNumber;
+
+    public Integer getAccessNumber() {
+        return accessNumber;
+    }
+
+    public void setAccessNumber(Integer accessNumber) {
+        this.accessNumber = accessNumber;
+    }
 
     public String getUserId() {
         return userId;

@@ -1,11 +1,10 @@
-package cn.ken.question.answering.system.service;
+package cn.ken.question.answering.system.service.knowledge;
 
 import cn.ken.question.answering.system.JUnit4BaseConfig;
 import cn.ken.question.answering.system.model.knowledge.Answer;
 import cn.ken.question.answering.system.model.response.PageData;
 import cn.ken.question.answering.system.utils.TextFileReader;
 import cn.ken.question.answering.system.model.knowledge.KnowledgeRequest;
-import cn.ken.question.answering.system.service.knowledge.KnowledgeService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

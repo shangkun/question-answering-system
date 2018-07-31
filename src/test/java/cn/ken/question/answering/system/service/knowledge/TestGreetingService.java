@@ -1,9 +1,8 @@
-package cn.ken.question.answering.system.service;
+package cn.ken.question.answering.system.service.knowledge;
 
 import cn.ken.question.answering.system.JUnit4BaseConfig;
 import cn.ken.question.answering.system.model.knowledge.GreetingAnswer;
 import cn.ken.question.answering.system.model.response.PageData;
-import cn.ken.question.answering.system.service.knowledge.GreetingService;
 import cn.ken.question.answering.system.utils.excel.ExcelReader;
 import cn.ken.question.answering.system.common.Enum;
 import cn.ken.question.answering.system.model.knowledge.GreetingRequest;

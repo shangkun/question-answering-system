@@ -102,7 +102,7 @@
       </foreach>
     </if>
     order by modify_time desc,id desc
-    <if test="pageSize!=0">
+    <if test="index!=null and pageSize!=null and pageSize>0">
       limit #{index},#{pageSize}
     </if>
   </select>

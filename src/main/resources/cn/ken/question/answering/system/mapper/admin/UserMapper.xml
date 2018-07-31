@@ -120,7 +120,7 @@
             and status = #{status}
         </if>
         order by modify_time desc
-        <if test="pageSize!=0">
+        <if test="index!=null and pageSize!=null and pageSize>0">
             limit #{index},#{pageSize}
         </if>
     </select>

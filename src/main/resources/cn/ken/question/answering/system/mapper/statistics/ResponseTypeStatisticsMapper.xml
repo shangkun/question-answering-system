@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ken.question.answering.system.mapper.statistics.ResponseTypeStatisticsMapper">
+    <resultMap id="ResultMap" type="cn.ken.question.answering.system.model.statistics.ResponseTypeStatistics">
+        <id column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="has_answer_and_recommend" jdbcType="INTEGER" property="hasAnswerAndRecommend"/>
+        <result column="has_answer" jdbcType="INTEGER" property="hasAnswer"/>
+        <result column="has_recommend" jdbcType="INTEGER" property="hasRecommend"/>
+        <result column="greeting" jdbcType="INTEGER" property="greeting"/>
+        <result column="unknown" jdbcType="INTEGER" property="unknown"/>
+        <result column="others" jdbcType="INTEGER" property="others"/>
+    </resultMap>
+
+    <sql id="table">response_type_statistics</sql>
+
+    <sql id="column">
+        time,has_answer_and_recommend,has_answer,has_recommend,greeting,unknown,others
+    </sql>
+
+    <sql id="insertColumnValue">
+        #{time},#{hasAnswerAndRecommend},#{hasAnswer},#{hasRecommend},#{greeting},#{unknown},#{others}
+    </sql>
+
+    <insert id="insert">
+        replace into
+        <include refid="table"/>
+        (<include refid="column"/>)
+        values (<include refid="insertColumnValue"/>)
+    </insert>
+
+    <update id="update">
+        update
+        <include refid="table"/>
+        <set>
+            <if test="hasAnswerAndRecommend!=null">
+                has_answer_and_recommend = #{hasAnswerAndRecommend},
+            </if>
+            <if test="hasAnswer!=null">
+                has_answer = #{hasAnswer},
+            </if>
+            <if test="hasRecommend!=null">
+                has_recommend = #{hasRecommend},
+            </if>
+            <if test="greeting!=null">
+                greeting = #{greeting},
+            </if>
+            <if test="unknown!=null">
+                unknown = #{unknown},
+            </if>
+            <if test="others!=null">
+                others = #{others}
+            </if>
+        </set>
+        <where>
+            time = #{time}
+        </where>
+    </update>
+
+    <select id="selectByTime" resultMap="ResultMap">
+        select
+        sum(has_answer_and_recommend) as hasAnswerAndRecommend,sum(has_answer) as hasAnswer,
+        sum(has_recommend) as hasRecommend,sum(greeting) as greeting,sum(unknown) as unknown,
+        sum(others) as others
+        from
+        <include refid="table"/>
+        where
+        time &gt;= #{0} and time &lt;= #{1}
+    </select>
+
+    <select id="selectByTime" resultMap="ResultMap">
+        select
+        <include refid="column"/>
+        from
+        <include refid="table"/>
+        where
+        time = #{0}
+    </select>
+</mapper>

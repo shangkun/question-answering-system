@@ -1,5 +1,9 @@
 package cn.ken.question.answering.system.model.log;
-
+/**
+ * author: shangkun <br/>
+ * date: 2018/7/30 <br/>
+ * what: LogQaRecommend <br/>
+ */
 public class LogQaRecommend {
 
     private String id;

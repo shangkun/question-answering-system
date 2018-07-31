@@ -1,8 +1,7 @@
-package cn.ken.question.answering.system.service;
+package cn.ken.question.answering.system.service.qa;
 
 import cn.ken.question.answering.system.JUnit4BaseConfig;
 import cn.ken.question.answering.system.model.qa.QuestionAnswer;
-import cn.ken.question.answering.system.service.qa.QAService;
 import cn.ken.question.answering.system.utils.IdWorker;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

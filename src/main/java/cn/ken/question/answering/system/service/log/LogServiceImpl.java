@@ -2,7 +2,9 @@ package cn.ken.question.answering.system.service.log;
 
 import cn.ken.question.answering.system.mapper.log.LogQaMapper;
 import cn.ken.question.answering.system.mapper.log.LogQaRecommendMapper;
+import cn.ken.question.answering.system.model.log.LogQa;
 import cn.ken.question.answering.system.model.log.LogQaRecommend;
+import cn.ken.question.answering.system.model.log.LogQaRequest;
 import cn.ken.question.answering.system.model.qa.QuestionAnswer;
 import cn.ken.question.answering.system.service.BaseService;
 import cn.ken.question.answering.system.utils.Base;
@@ -43,6 +45,16 @@ public class LogServiceImpl extends Base implements LogService{
     @Override
     public int count(String startTime, String endTime) throws Exception {
         return logQaMapper.count(startTime,endTime);
+    }
+
+    @Override
+    public int countByAttribute(LogQaRequest request) throws Exception {
+        return logQaMapper.countByAttribute(request);
+    }
+
+    @Override
+    public List<LogQa> getKnowledegRanking(LogQaRequest request) throws Exception {
+        return logQaMapper.getKnowledgeRanking(request);
     }
 
     @Async

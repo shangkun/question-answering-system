@@ -13,7 +13,6 @@ import cn.ken.question.answering.system.service.knowledge.KnowledgeService;
 import cn.ken.question.answering.system.service.knowledge.LexiconService;
 import cn.ken.question.answering.system.service.log.LogService;
 import cn.ken.question.answering.system.utils.Base;
-import cn.ken.question.answering.system.utils.IdWorker;
 import cn.ken.question.answering.system.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -48,15 +47,20 @@ public class InfoStatisticsServiceImpl extends Base implements InfoStatisticsSer
         List<InfoStatistics> infoStatisticsList = new ArrayList<>();
         for(int i=1;i<=5;i++){
             InfoStatistics infoStatistics = null;
-            Map<String,String> map = TimeUtils.timeCondition(i);
-            String startTime = map.get(TimeUtils.START_TIME);
-            String endTime = map.get(TimeUtils.END_TIME);
-            InfoStatisticsRequest request = new InfoStatisticsRequest(startTime,endTime);
+            String startTime = null;
+            String endTime = null;
             if(i==2){
+                Map<String,String> map = TimeUtils.timeCondition(i,true);
+                startTime = map.get(TimeUtils.START_TIME);
+                endTime = map.get(TimeUtils.END_TIME);
+                InfoStatisticsRequest request = new InfoStatisticsRequest(startTime,endTime);
                 request.setTime(map.get(TimeUtils.TIME));
                 infoStatistics = statistics(request);
                 today = infoStatistics;
             }else{
+                Map<String,String> map = TimeUtils.timeCondition(i,false);
+                startTime = map.get(TimeUtils.START_TIME);
+                endTime = map.get(TimeUtils.END_TIME);
                 infoStatistics = infoStatisticsMapper.selectByTime(startTime,endTime);
                 if(infoStatistics==null){
                     infoStatistics = new InfoStatistics(0,0,0,0,0);
@@ -81,7 +85,7 @@ public class InfoStatisticsServiceImpl extends Base implements InfoStatisticsSer
 
     @Scheduled(cron="0 0 1 * * ?")
     public void statisticTask() throws Exception{
-        Map<String,String> map = TimeUtils.timeCondition(3);
+        Map<String,String> map = TimeUtils.timeCondition(3,true);
         String startTime = map.get(TimeUtils.START_TIME);
         String endTime = map.get(TimeUtils.END_TIME);
         InfoStatisticsRequest request = new InfoStatisticsRequest(startTime,endTime);
@@ -93,7 +97,6 @@ public class InfoStatisticsServiceImpl extends Base implements InfoStatisticsSer
     @Override
     public InfoStatistics statistics(InfoStatisticsRequest request) throws Exception {
         InfoStatistics infoStatistics = new InfoStatistics();
-        infoStatistics.setId(IdWorker.getInstance().nextId());
         String startTime = request.getStartTime();
         String endTime = request.getEndTime();
         infoStatistics.setTime(request.getTime());

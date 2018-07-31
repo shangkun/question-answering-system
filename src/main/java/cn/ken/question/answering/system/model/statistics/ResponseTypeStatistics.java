@@ -7,8 +7,6 @@ package cn.ken.question.answering.system.model.statistics;
  */
 public class ResponseTypeStatistics {
 
-    private String id;
-
     private Integer hasAnswerAndRecommend;
 
     private Integer hasAnswer;
@@ -22,14 +20,6 @@ public class ResponseTypeStatistics {
     private Integer others;
 
     private String time;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Integer getHasAnswerAndRecommend() {
         return hasAnswerAndRecommend;

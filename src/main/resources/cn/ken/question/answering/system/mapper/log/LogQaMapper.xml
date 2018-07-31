@@ -15,6 +15,7 @@
     <result column="response_time" jdbcType="TIMESTAMP" property="responseTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="access_token" jdbcType="VARCHAR" property="accessToken" />
+    <result column="access_number" jdbcType="INTEGER" property="accessNumber" />
   </resultMap>
 
   <sql id="table">log_qa</sql>
@@ -65,5 +66,44 @@
     <include refid="table"/>
     where
     create_time &gt;= #{0} and create_time &lt; #{1}
+  </select>
+
+  <select id="countByAttribute" resultType="int">
+    select
+    count(id)
+    from
+    <include refid="table"/>
+    where 1=1
+    <if test="question!=null and question!=''">
+      and question like concat('%',#{question},'%')
+    </if>
+    <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+      and create_time &gt;= #{startTime} and create_time &lt; #{endTime}
+    </if>
+    <if test="responseType!=null">
+      and response_type = #{responseType}
+    </if>
+  </select>
+
+  <select id="getKnowledgeRanking" resultMap="ResultMap">
+    select
+    max(knowledge_id) as knowledgeId,count(knowledge_id) as accessNumber
+    from
+    <include refid="table"/>
+    where knowledge_id != '' and knowledge_id is not null
+    <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+      and create_time &gt;= #{startTime} and create_time &lt; #{endTime}
+    </if>
+    <if test="channelId!=null">
+      and channel_id = #{channelId}
+    </if>
+    <if test="responseTypeList!=null">
+      and response_type in
+      <foreach collection="responseTypeList" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    group by knowledge_id
+    order by accessNumber desc
   </select>
 </mapper>

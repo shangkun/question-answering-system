@@ -1,22 +1,34 @@
-package cn.ken.question.answering.system.model.statistics;
+package cn.ken.question.answering.system.model.log;
+
+import java.util.List;
 
 /**
  * author: shangkun <br/>
  * date: 2018/7/30 <br/>
- * what: KnowledgeRankingRequest <br/>
+ * what: LogQaRecommend <br/>
  */
-public class ResponseTypeStatisticsRequest extends ResponseTypeStatistics{
+public class LogQaRequest extends LogQa{
+
+    private List<Integer> responseTypeList;
 
     private String startTime;
 
     private String endTime;
 
-    public ResponseTypeStatisticsRequest() {
+    public LogQaRequest() {
     }
 
-    public ResponseTypeStatisticsRequest(String startTime, String endTime) {
+    public LogQaRequest(String startTime, String endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public List<Integer> getResponseTypeList() {
+        return responseTypeList;
+    }
+
+    public void setResponseTypeList(List<Integer> responseTypeList) {
+        this.responseTypeList = responseTypeList;
     }
 
     public String getStartTime() {

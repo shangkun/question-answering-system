@@ -7,20 +7,29 @@ package cn.ken.question.answering.system.model.statistics;
  */
 public class KnowledgeRanking {
 
-    private String id;
-
     private String knowledgeId;
+
+    private String knowledgeTitle;
 
     private String time;
 
     private Integer accessNumber;
 
-    public String getId() {
-        return id;
+    public KnowledgeRanking() {
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public KnowledgeRanking(String knowledgeId, String time, Integer accessNumber) {
+        this.knowledgeId = knowledgeId;
+        this.time = time;
+        this.accessNumber = accessNumber;
+    }
+
+    public String getKnowledgeTitle() {
+        return knowledgeTitle;
+    }
+
+    public void setKnowledgeTitle(String knowledgeTitle) {
+        this.knowledgeTitle = knowledgeTitle;
     }
 
     public String getKnowledgeId() {

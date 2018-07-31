@@ -1,6 +1,7 @@
 package cn.ken.question.answering.system.utils;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -25,12 +26,15 @@ public class TimeUtils {
 
     public static final String END_TIME = "endTime";
 
+    public static final long DAY_TIME_LENGTH = 1000*60*60*24;
+
     /**
      * 时间条件处理
      * @param type
+     * @param isHour
      * @return
      */
-    public static Map timeCondition(int type){
+    public static Map timeCondition(int type,boolean isHour){
         Map map = new HashMap();
         String today = DATE_FORMAT.format(getDayTime(0));
         String yesterday = DATE_FORMAT.format(getDayTime(-1));
@@ -60,10 +64,41 @@ public class TimeUtils {
                 endTime = today;
                 break;
         }
-        map.put(START_TIME,startTime+START_HOUR);
-        map.put(END_TIME,endTime+END_HOUR);
+        if(isHour){
+            map.put(START_TIME,startTime+START_HOUR);
+            map.put(END_TIME,endTime+END_HOUR);
+        }else{
+            map.put(START_TIME,startTime);
+            map.put(END_TIME,endTime);
+        }
         map.put(TIME,time);
         return map;
+    }
+
+    public static Set<String> getTimeSlot(String startTime,String endTime){
+        Set<String> timeSlotList = new HashSet<>();
+        Calendar calendar = Calendar.getInstance();
+        try {
+            Date start = DATE_FORMAT.parse(startTime);
+            Date end = DATE_FORMAT.parse(endTime);
+            if(start.before(end)){
+                if(end.getTime()-start.getTime()>= DAY_TIME_LENGTH){
+                    calendar.setTime(start);
+                    calendar.add(Calendar.DAY_OF_MONTH,1);
+                    for(long i=start.getTime();i<end.getTime();i+= DAY_TIME_LENGTH){
+                        timeSlotList.add(DATE_FORMAT.format(i));
+                    }
+                }else{
+                    timeSlotList.add(startTime);
+                    timeSlotList.add(endTime);
+                }
+            }else{
+                timeSlotList.add(startTime);
+            }
+        } catch (Exception e) {
+            return timeSlotList;
+        }
+        return timeSlotList;
     }
 
     //获取某个日期的开始时间
