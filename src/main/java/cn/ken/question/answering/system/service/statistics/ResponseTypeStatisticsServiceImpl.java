@@ -7,6 +7,7 @@ import cn.ken.question.answering.system.model.statistics.ResponseTypeStatistics;
 import cn.ken.question.answering.system.model.statistics.ResponseTypeStatisticsRequest;
 import cn.ken.question.answering.system.service.log.LogService;
 import cn.ken.question.answering.system.utils.Base;
+import cn.ken.question.answering.system.utils.StringUtils;
 import cn.ken.question.answering.system.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,23 +34,36 @@ public class ResponseTypeStatisticsServiceImpl extends Base implements ResponseT
     @Override
     public List<ResponseTypeStatistics> get(ResponseTypeStatisticsRequest request) throws Exception {
         List<ResponseTypeStatistics> responseTypeStatisticsList = new ArrayList<>();
-        Set<String> stringSet = TimeUtils.getTimeSlot(request.getStartTime(),request.getEndTime());
-        if(CollectionUtils.isEmpty(stringSet)){
+        timeCondition(request);
+        List<String> timeSlot = TimeUtils.getTimeSlot(request.getStartTime(),request.getEndTime());
+        if(CollectionUtils.isEmpty(timeSlot)){
             return responseTypeStatisticsList;
         }
-        for(String time:stringSet){
-            ResponseTypeStatistics responseTypeStatistics = responseTypeStatisticsMapper.getByTime(time);
-            if(responseTypeStatistics==null){
-                continue;
-            }
-            responseTypeStatisticsList.add(responseTypeStatistics);
+        return responseTypeStatisticsMapper.getByTimeList(timeSlot);
+    }
+
+    /**
+     * 时间前置条件
+     * @param request
+     */
+    public void timeCondition(ResponseTypeStatisticsRequest request){
+        if(StringUtils.isEmpty(request.getStartTime()) || StringUtils.isEmpty(request.getEndTime())){
+            Map<String,String> map = TimeUtils.timeCondition(5,false);
+            String startTime = map.get(TimeUtils.START_TIME);
+            String endTime = map.get(TimeUtils.END_TIME);
+            request.setStartTime(startTime);
+            request.setEndTime(endTime);
         }
-        return responseTypeStatisticsList;
     }
 
     @Override
     public ResponseTypeStatistics sum(ResponseTypeStatisticsRequest request) throws Exception {
-        return responseTypeStatisticsMapper.sumByTime(request.getStartTime(),request.getEndTime());
+        timeCondition(request);
+        ResponseTypeStatistics responseTypeStatistics = responseTypeStatisticsMapper.sumByTime(request.getStartTime(),request.getEndTime());
+        if(responseTypeStatistics==null){
+            return new ResponseTypeStatistics(0,0,0,0,0,0);
+        }
+        return responseTypeStatistics;
     }
 
     @Scheduled(cron="0 0 3 * * ?")

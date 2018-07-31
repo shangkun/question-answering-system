@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="../../lib/html5shiv.js"></script>
+<script type="text/javascript" src="../../lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="../h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="../h-ui.admin/css/style.css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="../../lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>问答回复类型趋势图</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 统计分析 <span class="c-gray en">&gt;</span> 问答回复类型趋势图 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="text-c"> 日期范围：
+        <input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin" class="input-text Wdate" style="width:120px;">
+        -
+        <input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax" class="input-text Wdate" style="width:120px;">
+        <button type="submit" class="btn btn-success radius" onclick="load_response_type_trend();"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+    </div>
+	<div id="container" style="min-width:700px;height:400px"></div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../../lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../h-ui/js/H-ui.min.js"></script> 
+<script type="text/javascript" src="../h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="../../lib/hcharts/Highcharts/5.0.6/js/highcharts.js"></script>
+<script type="text/javascript" src="../../lib/hcharts/Highcharts/5.0.6/js/modules/exporting.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript">
+$(function () {
+    load_response_type_trend();
+});
+function load_response_type_trend(){
+    var request = new Object();
+    if($("#datemin").val() && $("#datemax").val()){
+        request.startTime=$("#datemin").val()+hour_start;
+        request.endTime=$("#datemax").val()+hour_end;
+    }else{
+        request.startTime=null;
+        request.endTime=null;
+    }
+    var categories = new Array();
+    var series = new Array();
+    var hasAnswerAndRecommendArray = new Array();
+    var hasAnswerArray = new Array();
+    var hasRecommendArray = new Array();
+    var greetingArray = new Array();
+    var unknownArray = new Array();
+    var othersArray = new Array();
+    POST(responseTypeStatisticsUrl+"get",request,function(data){
+        $('#container').empty();
+        if(data.statusCode==200){
+            $.each(data.data,function(i,v){
+                categories.push(v.time);
+                hasAnswerAndRecommendArray.push(v.hasAnswerAndRecommend);
+                hasAnswerArray.push(v.hasAnswer);
+                hasRecommendArray.push(v.hasRecommend);
+                greetingArray.push(v.greeting);
+                unknownArray.push(v.unknown);
+                othersArray.push(v.others);
+            });
+            var hasAnswerAndRecommend = new Object();
+            hasAnswerAndRecommend.name=hasAnswerAndRecommendName;
+            hasAnswerAndRecommend.data=hasAnswerAndRecommendArray;
+            series.push(hasAnswerAndRecommend);
+
+            var hasAnswer = new Object();
+            hasAnswer.name=hasAnswerName;
+            hasAnswer.data=hasAnswerArray;
+            series.push(hasAnswer);
+
+            var hasRecommend = new Object();
+            hasRecommend.name=hasRecommendName;
+            hasRecommend.data=hasRecommendArray;
+            series.push(hasRecommend);
+
+            var greeting = new Object();
+            greeting.name=greetingName;
+            greeting.data=greetingArray;
+            series.push(greeting);
+
+            var unknown = new Object();
+            unknown.name=unknownName;
+            unknown.data=unknownArray;
+            series.push(unknown);
+
+            var others = new Object();
+            others.name=othersName;
+            others.data=othersArray;
+            series.push(others);
+        }
+        Highcharts.chart('container', {
+            title: {
+                text: '问答回复类型趋势图',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '默认为本月的数据',
+                x: -20
+            },
+            xAxis: {
+                categories: categories
+            },
+            yAxis: {
+                title: {
+                    text: '问答数 (个)'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: '个'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: series
+        });
+    },true);
+}
+</script>
+</body>
+</html>

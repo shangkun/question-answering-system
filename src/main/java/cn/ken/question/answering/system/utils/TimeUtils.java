@@ -75,8 +75,8 @@ public class TimeUtils {
         return map;
     }
 
-    public static Set<String> getTimeSlot(String startTime,String endTime){
-        Set<String> timeSlotList = new HashSet<>();
+    public static List<String> getTimeSlot(String startTime,String endTime){
+        List<String> timeSlotList = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         try {
             Date start = DATE_FORMAT.parse(startTime);

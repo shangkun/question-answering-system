@@ -2,6 +2,8 @@ package cn.ken.question.answering.system.controller.qa;
 
 import cn.ken.question.answering.system.model.configuration.Configuration;
 import cn.ken.question.answering.system.model.qa.QuestionAnswer;
+import cn.ken.question.answering.system.model.statistics.KnowledgeRanking;
+import cn.ken.question.answering.system.service.statistics.KnowledgeRankingService;
 import cn.ken.question.answering.system.utils.Base;
 import cn.ken.question.answering.system.utils.StringUtils;
 import cn.ken.question.answering.system.model.response.Response;
@@ -25,6 +27,8 @@ import java.util.List;
 public class QAController extends Base {
     @Autowired
     private QAService qaService;
+    @Autowired
+    private KnowledgeRankingService knowledgeRankingService;
 
     @ApiOperation(value = "获取问答配置", notes = "获取问答配置")
     @RequestMapping(value = "/config/get", method = RequestMethod.GET)
@@ -49,7 +53,7 @@ public class QAController extends Base {
     }
 
     @ApiOperation(value = "问题推荐", notes = "问题推荐")
-    @RequestMapping(value = "/suggest", method = RequestMethod.GET)
+    @RequestMapping(value = "/suggest", method = RequestMethod.POST)
     @ResponseBody
     public Response suggest(@RequestBody QuestionAnswer questionAnswer) throws Exception{
         List<String> result= qaService.suggest(questionAnswer);
@@ -57,5 +61,16 @@ public class QAController extends Base {
             return Response.SUCCESS("查询为空");
         }
         return Response.SUCCESS(result);
+    }
+
+    @ApiOperation(value = "获取当前热点问题", notes = "获取当前热点问题")
+    @RequestMapping(value = "/hot/question/get", method = RequestMethod.POST)
+    @ResponseBody
+    public Response getHotQuestion(@RequestBody QuestionAnswer questionAnswer) throws Exception{
+        List<KnowledgeRanking> knowledgeRankingList = knowledgeRankingService.getHotKnowledge(questionAnswer.getChannelId());
+        if(CollectionUtils.isEmpty(knowledgeRankingList)){
+            return Response.SUCCESS("查询为空");
+        }
+        return Response.SUCCESS(knowledgeRankingList);
     }
 }

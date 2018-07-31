@@ -75,4 +75,17 @@
         where
         time = #{0}
     </select>
+
+    <select id="getByTimeList" resultMap="ResultMap">
+        select
+        <include refid="column"/>
+        from
+        <include refid="table"/>
+        where
+        time in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by time asc
+    </select>
 </mapper>

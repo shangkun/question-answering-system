@@ -21,6 +21,18 @@ public class ResponseTypeStatistics {
 
     private String time;
 
+    public ResponseTypeStatistics() {
+    }
+
+    public ResponseTypeStatistics(Integer hasAnswerAndRecommend, Integer hasAnswer, Integer hasRecommend, Integer greeting, Integer unknown, Integer others) {
+        this.hasAnswerAndRecommend = hasAnswerAndRecommend;
+        this.hasAnswer = hasAnswer;
+        this.hasRecommend = hasRecommend;
+        this.greeting = greeting;
+        this.unknown = unknown;
+        this.others = others;
+    }
+
     public Integer getHasAnswerAndRecommend() {
         return hasAnswerAndRecommend;
     }

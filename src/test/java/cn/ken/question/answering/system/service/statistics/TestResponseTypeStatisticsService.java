@@ -36,7 +36,7 @@ public class TestResponseTypeStatisticsService extends JUnit4BaseConfig {
         startTime = map.get(TimeUtils.START_TIME);
         endTime = map.get(TimeUtils.END_TIME);
         request = new ResponseTypeStatisticsRequest(startTime,endTime);
-        ResponseTypeStatistics responseTypeStatistics = responseTypeStatisticsService.get(request);
+        ResponseTypeStatistics responseTypeStatistics = responseTypeStatisticsService.sum(request);
         responseTypeStatistics.getGreeting();
     }
 }

@@ -54,7 +54,8 @@
                         </div>
                     </div>
                     <div class="abs cover pnl-input">
-                        <textarea class="scroll" id="question" placeholder="在此输入..." wrap="hard"></textarea>
+                        <div class="suggest"></div>
+                        <textarea onclick="hiddenSuggest()" class="scroll" id="question" placeholder="在此输入..." wrap="hard"></textarea>
                         <div class="abs atcom-pnl scroll hide" id="atcomPnl">
                             <ul class="atcom" id="atcom">
                             </ul>
@@ -77,9 +78,7 @@
                         <div class="tab-btn active" id="hot-tab" style="width: 90%;">常见问题</div>
                     </div>
                     <div class="pnl-hot">
-                        <ul class="rel-list unselect" id="hots">
-                            <li class="rel-item" title="点击发送问题">功能介绍</li>
-                        </ul>
+                        <ul class="rel-list unselect" id="hots"></ul>
                     </div>
                 </div>
             </div>
@@ -97,9 +96,11 @@
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript">
     $(function(){
+        hiddenSuggest();
         sessionId = "";
         var value = null;
         loadConfig();
+        loadHotQuestion();
         $("#submit").click(function(){
             request(value);
         });
@@ -109,51 +110,73 @@
             }else if(e.keyCode == 13){
                 e.preventDefault();
                 request(value);
+            }else if(e.keyCode == 27){
+                hiddenSuggest();
             }
         }
     });
+
+    function loadHotQuestion(){
+        var html="";
+        var request = new Object();
+        request.channelId = web_channel_id;
+        request.userId = getUserId();
+
+        POST(qaUrl2+"hot/question/get", request, function (data){
+            if (data.statusCode == 200) {
+                $("#hots").empty();
+                $.each(data.data, function (i, v) {
+                    html += "<li class='rel-item' title='点击发送问题' onclick='suggestRequest(this)'>"+ v.knowledgeTitle+"</li>";
+                });
+                $("#hots").append(html);
+            }
+        },true);
+    }
 
     var current_question = "";
 
     function getSuggest() {
         var suggest = "";
         var request = new Object();
-        request.content = $.trim(cur_search_val);
+        request.question = $.trim(current_question);
         request.userId = getUserId();
 
-        POST(qaUrl2+"/suggest", request, function (data){
+        POST(qaUrl2+"suggest", request, function (data){
             if (data.statusCode == 200) {
-                var html = "";
                 $.each(data.data, function (i, v) {
-                    html += "<p><a href='javascript:;' onclick='request("+v+")'>" + v + "</a></p>";
+                    suggest += "<p><a href='javascript:;' onclick='suggestRequest(this)'>" + v + "</a></p>";
                 });
-                suggest = html;
+                $(".suggest").append(suggest);
+                $(".suggest").css("display", "block");
+                ($(".suggest").children("p:first-child")[0]).scrollIntoView();
             }
-        });
-        return suggest;
+        },true);
+    }
+
+    function suggestRequest(object){
+        request($(object).html());
     }
 
     function suggest() {
         var question = $("#question").val();
 
-        if (question="") {
-            $(".suggest *").remove();
-            $(".suggest").css("display", "none");
+        if (question=="") {
+            hiddenSuggest();
             return;
         }
         if (current_question == question) {
             return;
         }
-        current_question = text;
+        current_question = question;
 
+        hiddenSuggest();
+
+        getSuggest();
+    }
+
+    function hiddenSuggest(){
         $(".suggest *").remove();
         $(".suggest").css("display", "none");
-
-        var result = getSuggest();
-        if (result != "") {
-            $(".suggest").append(result);
-            $(".suggest").css("display", "block");
-        }
     }
 
     setInterval("suggest()", 2000);
@@ -177,7 +200,7 @@
         $("#messages").append(requestHtml);
         var question_answer = new Object();
         question_answer.userId = getUserId();
-        question_answer.channelId = 101;
+        question_answer.channelId = web_channel_id;
         question_answer.question = question;
         question_answer.sessionId = sessionId;
         POST(qaUrl2+"request",question_answer,function(data){
@@ -211,10 +234,10 @@
             html+='</div>';
             html+='</div>';
             $("#messages").append(html);
-            console.log($('#messages')[0].scrollHeight);
             ($('#messages').children("div:last-child")[0]).scrollIntoView();
             $("#question").val('');
         },true);
+        hiddenSuggest();
     }
     function loadConfig(){
         GET(qaUrl2+"config/get",null,function(data){

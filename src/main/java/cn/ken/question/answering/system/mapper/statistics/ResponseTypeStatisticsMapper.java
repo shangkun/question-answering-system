@@ -2,6 +2,8 @@ package cn.ken.question.answering.system.mapper.statistics;
 
 import cn.ken.question.answering.system.model.statistics.ResponseTypeStatistics;
 
+import java.util.List;
+
 public interface ResponseTypeStatisticsMapper {
     /**
      * 添加一条数据
@@ -31,4 +33,11 @@ public interface ResponseTypeStatisticsMapper {
      * @return
      */
     ResponseTypeStatistics getByTime(String time);
+
+    /**
+     * 通过多个时间获取
+     * @param list
+     * @return
+     */
+    List<ResponseTypeStatistics> getByTimeList(List<String> list);
 }
