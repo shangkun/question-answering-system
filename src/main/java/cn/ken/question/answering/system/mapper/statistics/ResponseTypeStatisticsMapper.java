@@ -23,7 +23,7 @@ public interface ResponseTypeStatisticsMapper {
      * @param endTime
      * @return
      */
-    ResponseTypeStatistics selectByTime(String startTime, String endTime);
+    ResponseTypeStatistics sumByTime(String startTime, String endTime);
 
     /**
      * 通过单个时间获取

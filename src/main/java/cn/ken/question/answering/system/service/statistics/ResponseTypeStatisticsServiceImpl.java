@@ -47,6 +47,11 @@ public class ResponseTypeStatisticsServiceImpl extends Base implements ResponseT
         return responseTypeStatisticsList;
     }
 
+    @Override
+    public ResponseTypeStatistics sum(ResponseTypeStatisticsRequest request) throws Exception {
+        return responseTypeStatisticsMapper.sumByTime(request.getStartTime(),request.getEndTime());
+    }
+
     @Scheduled(cron="0 0 3 * * ?")
     public void statisticsTask() throws Exception{
         Map<String,String> map = TimeUtils.timeCondition(3,true);

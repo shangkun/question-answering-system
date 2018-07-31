@@ -19,6 +19,14 @@ public interface ResponseTypeStatisticsService {
      * @throws Exception
      */
     List<ResponseTypeStatistics> get(ResponseTypeStatisticsRequest request) throws Exception;
+
+    /**
+     * 历史数据汇总
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    ResponseTypeStatistics sum(ResponseTypeStatisticsRequest request) throws Exception;
     /**
      * 统计
      * @param request

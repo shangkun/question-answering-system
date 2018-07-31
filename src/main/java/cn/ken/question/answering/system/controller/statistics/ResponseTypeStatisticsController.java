@@ -31,4 +31,12 @@ public class ResponseTypeStatisticsController extends Base {
         List<ResponseTypeStatistics> responseTypeStatisticsList = responseTypeStatisticsService.get(request);
         return Response.SUCCESS(responseTypeStatisticsList);
     }
+
+    @ApiOperation(value = "获取回复类型统计数据总数", notes = "获取回复类型统计数据总数")
+    @RequestMapping(value = "/sum", method = RequestMethod.POST)
+    @ResponseBody
+    public Response sum(@RequestBody ResponseTypeStatisticsRequest request) throws Exception{
+        ResponseTypeStatistics responseTypeStatistics = responseTypeStatisticsService.sum(request);
+        return Response.SUCCESS(responseTypeStatistics);
+    }
 }

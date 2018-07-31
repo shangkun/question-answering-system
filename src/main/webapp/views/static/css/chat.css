@@ -5207,3 +5207,17 @@ body[lang='en'] #humanBtn::after {
 body[lang='tw'] #humanBtn::after {
     content: '轉人工' !important
 }
+
+.suggest {
+    min-width: 10px;
+    background: #fff;
+    padding: 5px 8px;
+    position: absolute;
+    top: -85px;
+    left: 5px;
+    z-index: 999;
+}
+
+.suggest a {
+    color: #3e91e7;
+}

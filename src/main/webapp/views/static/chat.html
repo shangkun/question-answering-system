@@ -112,6 +112,52 @@
             }
         }
     });
+
+    var current_question = "";
+
+    function getSuggest() {
+        var suggest = "";
+        var request = new Object();
+        request.content = $.trim(cur_search_val);
+        request.userId = getUserId();
+
+        POST(qaUrl2+"/suggest", request, function (data){
+            if (data.statusCode == 200) {
+                var html = "";
+                $.each(data.data, function (i, v) {
+                    html += "<p><a href='javascript:;' onclick='request("+v+")'>" + v + "</a></p>";
+                });
+                suggest = html;
+            }
+        });
+        return suggest;
+    }
+
+    function suggest() {
+        var question = $("#question").val();
+
+        if (question="") {
+            $(".suggest *").remove();
+            $(".suggest").css("display", "none");
+            return;
+        }
+        if (current_question == question) {
+            return;
+        }
+        current_question = text;
+
+        $(".suggest *").remove();
+        $(".suggest").css("display", "none");
+
+        var result = getSuggest();
+        if (result != "") {
+            $(".suggest").append(result);
+            $(".suggest").css("display", "block");
+        }
+    }
+
+    setInterval("suggest()", 2000);
+
     function request(value){
         if(value!=null){
             $("#question").val(value);

@@ -56,7 +56,7 @@
         </where>
     </update>
 
-    <select id="selectByTime" resultMap="ResultMap">
+    <select id="sumByTime" resultMap="ResultMap">
         select
         sum(has_answer_and_recommend) as hasAnswerAndRecommend,sum(has_answer) as hasAnswer,
         sum(has_recommend) as hasRecommend,sum(greeting) as greeting,sum(unknown) as unknown,
@@ -67,7 +67,7 @@
         time &gt;= #{0} and time &lt;= #{1}
     </select>
 
-    <select id="selectByTime" resultMap="ResultMap">
+    <select id="getByTime" resultMap="ResultMap">
         select
         <include refid="column"/>
         from
