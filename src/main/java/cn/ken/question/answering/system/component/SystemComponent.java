@@ -23,7 +23,7 @@ import cn.ken.question.answering.system.service.knowledge.LexiconService;
 import com.hankcs.hanlp.dictionary.CustomDictionary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -33,7 +33,7 @@ import java.util.List;
  * date: 2018/7/18 <br/>
  * what: SystemComponent <br/>
  */
-@Component
+@Service
 public class SystemComponent extends Base {
     @Value("${config.idWorkerNumber}")
     private int idWorkerNumber;

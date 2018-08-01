@@ -2,8 +2,8 @@ package cn.ken.question.answering.system.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * author: shangkun <br/>
@@ -11,6 +11,6 @@ import org.slf4j.LoggerFactory;
  * what: 基础类 <br/>
  */
 public class Base {
-    protected Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+    public Logger logger = LogManager.getLogger(this.getClass());
+    public Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 }

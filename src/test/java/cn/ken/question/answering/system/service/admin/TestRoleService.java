@@ -2,7 +2,6 @@ package cn.ken.question.answering.system.service.admin;
 
 import cn.ken.question.answering.system.JUnit4BaseConfig;
 import cn.ken.question.answering.system.model.response.PageData;
-import cn.ken.question.answering.system.service.admin.RoleService;
 import cn.ken.question.answering.system.model.admin.Role;
 import cn.ken.question.answering.system.model.admin.RoleRequest;
 import org.junit.Test;

@@ -90,7 +90,7 @@ function loadMenu(){
             html += '<ul>';
             html += '<li><a data-href="statistics/response_type_trend.html" data-title="问答回复类型趋势图" href="javascript:void(0)">问答回复类型趋势图</a></li>';
             html += '<li><a data-href="statistics/response_type.html" data-title="问答回复类型占比" href="javascript:void(0)">问答回复类型占比</a></li>';
-            html += '<li><a data-href="statistics/charts-2.html" data-title="时间轴折线图" href="javascript:void(0)">时间轴折线图</a></li>';
+            html += '<li><a data-href="charts-2.html" data-title="时间轴折线图" href="javascript:void(0)">时间轴折线图</a></li>';
             html += '<li><a data-href="statistics/charts-3.html" data-title="区域图" href="javascript:void(0)">区域图</a></li>';
             html += '<li><a data-href="statistics/charts-4.html" data-title="柱状图" href="javascript:void(0)">柱状图</a></li>';
             html += '<li><a data-href="statistics/charts-5.html" data-title="饼状图" href="javascript:void(0)">饼状图</a></li>';

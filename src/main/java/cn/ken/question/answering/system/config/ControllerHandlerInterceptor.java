@@ -32,11 +32,11 @@ public class ControllerHandlerInterceptor extends Base implements HandlerInterce
             return true;
         }
         if(StringUtils.isEmpty(accessToken)){
-            logger.info("this request:{} without access_token",url);
+            logger.error("this request:{} without access_token",url);
         }
         String userString = redisUtils.get(Constant.ACCESS_TOKEN_WITH_PREFIX+accessToken);
         if(userString==null){
-            logger.info("illegal access url:{}",url);
+            logger.error("illegal access url:{}",url);
             return false;
         }
         //访问令牌续期

@@ -20,7 +20,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
  */
 @Configuration
 @EnableSwagger2
-@ComponentScan(basePackages = {"cn.ken.questionansweringsystem.controller"})
+@ComponentScan(basePackages = {"cn.ken.question.answering.system.controller"})
 @EnableWebMvc
 public class SwaggerConfig extends WebMvcConfigurationSupport {
 

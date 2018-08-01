@@ -1,7 +1,7 @@
 package cn.ken.question.answering.system.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * author: shangkun <br/>
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class IdWorker {
     // 基准时间
-    private final static Logger logger = LoggerFactory.getLogger(IdWorker.class);
+    private final static Logger logger = LogManager.getLogger(IdWorker.class);
     private static IdWorker flowIdWorker;
     private long workerId;
     // 时间起始标记点，作为基准，一般取系统的最近时间

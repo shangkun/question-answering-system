@@ -19,12 +19,17 @@
 <script type="text/javascript" src="../../lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>3D柱状图</title>
+<title>知识访问数前十名</title>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 统计管理 <span class="c-gray en">&gt;</span> 3D柱状图 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 统计分析 <span class="c-gray en">&gt;</span> 知识访问数前十名 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
-	<div class="f-14 c-error">特别声明：Highcharts 是一个用纯 JavaScript编写的一个图表库，仅免费提供给个人学习、个人网站，如果在商业项目中使用，请去Highcharts官网网站购买商业授权。或者您也可以选择其他免费的第三方图表插件，例如百度echarts。H-ui.admin不承担任何版权问题。</div>
+    <div class="text-c"> 日期范围：
+        <input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin" class="input-text Wdate" style="width:120px;">
+        -
+        <input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax" class="input-text Wdate" style="width:120px;">
+        <button type="submit" class="btn btn-success radius" onclick="load_response_type();"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+    </div>
 	<div id="container" style="min-width:700px;height:400px"></div>
 </div>
 <!--_footer 作为公共模版分离出去-->
@@ -54,10 +59,10 @@
             }
         },
         title: {
-            text: 'Chart rotation demo'
+            text: '知识访问数前十名'
         },
         subtitle: {
-            text: 'Test options by dragging the sliders below'
+            text: '默认显示本月数据'
         },
         plotOptions: {
             column: {
@@ -65,7 +70,7 @@
             }
         },
         series: [{
-            data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+            data: [['一月',29.9], ['一月',71.5], ['一月',106.4], ['一月',129.2], ['一月',144.0], ['一月',176.0], ['一月',135.6], ['一月',148.5], ['一月',216.4], ['一月',194.1], ['一月',95.6], ['一月',54.4],['一月',12.3]]
         }]
     });
     
