@@ -59,9 +59,9 @@ function loadMenu(){
             html2+='<i class="Hui-iconfont">&#xe616;</i> 词库</a></li>';
             html2+='<li><a href="javascript:;" onclick="layer_show(\'添加分类\',\'knowledge/classification-add.html\',\'510\',\'400\')">';
             html2+='<i class="Hui-iconfont">&#xe681;</i> 分类</a></li>';
-            html2+='<li><a href="javascript:;" onclick="layer_show(\'添加知识\',\'knowledge/knowledge-add-update.html\')">';
+            html2+='<li><a href="javascript:;" onclick="open_full(\'添加知识\',\'knowledge/knowledge-add-update.html\')">';
             html2+='<i class="Hui-iconfont">&#xe620;</i> 知识</a></li>';
-            html2+='<li><a href="javascript:;" onclick="layer_show(\'添加寒暄知识\',\'knowledge/greeting-add-update.html\')">';
+            html2+='<li><a href="javascript:;" onclick="open_full(\'添加寒暄知识\',\'knowledge/greeting-add-update.html\')">';
             html2+='<i class="Hui-iconfont">&#xe60d;</i> 寒暄知识</a></li>';
             html2+='</ul>';
             html2+='</li>';
@@ -90,11 +90,11 @@ function loadMenu(){
             html += '<ul>';
             html += '<li><a data-href="statistics/response_type_trend.html" data-title="问答回复类型趋势图" href="javascript:void(0)">问答回复类型趋势图</a></li>';
             html += '<li><a data-href="statistics/response_type.html" data-title="问答回复类型占比" href="javascript:void(0)">问答回复类型占比</a></li>';
-            html += '<li><a data-href="charts-2.html" data-title="时间轴折线图" href="javascript:void(0)">时间轴折线图</a></li>';
+            /*html += '<li><a data-href="charts-2.html" data-title="时间轴折线图" href="javascript:void(0)">时间轴折线图</a></li>';
             html += '<li><a data-href="statistics/charts-3.html" data-title="区域图" href="javascript:void(0)">区域图</a></li>';
             html += '<li><a data-href="statistics/charts-4.html" data-title="柱状图" href="javascript:void(0)">柱状图</a></li>';
             html += '<li><a data-href="statistics/charts-5.html" data-title="饼状图" href="javascript:void(0)">饼状图</a></li>';
-            html += '<li><a data-href="statistics/charts-6.html" data-title="3D柱状图" href="javascript:void(0)">3D柱状图</a></li>';
+            html += '<li><a data-href="statistics/charts-6.html" data-title="3D柱状图" href="javascript:void(0)">3D柱状图</a></li>';*/
             html += '</ul>';
             html += '</dd>';
             html += '</dl>';
@@ -110,11 +110,4 @@ function logout(){
     delCookie("user");
     delCookie("role");
     window.location.href="./../../login.html";
-}
-/**
- * 打开词库界面
- */
-function openLexicon(){
-    console.log("=============");
-    $("#lexicon-quick").trigger("click");
 }

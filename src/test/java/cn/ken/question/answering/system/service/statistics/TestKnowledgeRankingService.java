@@ -45,5 +45,19 @@ public class TestKnowledgeRankingService extends JUnit4BaseConfig {
         PageData pageData = knowledgeRankingService.get(request);
         pageData.getTotal();
     }
+
+    @Test
+    public void task() throws Exception{
+        List<String> timeList = TimeUtils.getTimeSlot("2018-07-01","2018-08-01");
+        for(String time:timeList){
+            KnowledgeRankingRequest request = new KnowledgeRankingRequest(time+TimeUtils.START_HOUR,time+TimeUtils.END_HOUR);
+            request.setTime(time);
+            List<KnowledgeRanking> knowledgeRankingList = knowledgeRankingService.statistics(request);
+            if(CollectionUtils.isEmpty(knowledgeRankingList)){
+                continue;
+            }
+            knowledegRankingMapper.batchInsert(knowledgeRankingList);
+        }
+    }
 }
 

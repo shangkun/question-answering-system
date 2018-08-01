@@ -73,6 +73,14 @@ public class ResponseTypeStatisticsServiceImpl extends Base implements ResponseT
         String endTime = map.get(TimeUtils.END_TIME);
         ResponseTypeStatisticsRequest request = new ResponseTypeStatisticsRequest(startTime,endTime);
         ResponseTypeStatistics statistics = statistics(request);
+        if(statistics.getGreeting()==0 &&
+                statistics.getHasAnswer()==0 &&
+                statistics.getHasAnswerAndRecommend()==0 &&
+                statistics.getHasRecommend()==0 &&
+                statistics.getOthers()==0 &&
+                statistics.getUnknown()==0){
+            return;
+        }
         statistics.setTime(map.get(TimeUtils.TIME));
         responseTypeStatisticsMapper.insert(statistics);
     }

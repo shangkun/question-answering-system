@@ -3,14 +3,14 @@ Navicat MySQL Data Transfer
 
 Source Server         : localhost
 Source Server Version : 50549
-Source Host           : localhost:3306
+Source Host           : 127.0.0.1:3306
 Source Database       : question_answering_system
 
 Target Server Type    : MYSQL
 Target Server Version : 50549
 File Encoding         : 65001
 
-Date: 2018-07-31 23:58:15
+Date: 2018-08-01 15:02:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24751,6 +24751,10 @@ CREATE TABLE `info_statistics` (
 -- ----------------------------
 -- Records of info_statistics
 -- ----------------------------
+INSERT INTO `info_statistics` VALUES ('2018-07-25', '0000000004', '0000000000', '0000000000', '0000000000', '0000000000');
+INSERT INTO `info_statistics` VALUES ('2018-07-27', '0000000000', '0000000000', '0000000002', '0000000000', '0000000000');
+INSERT INTO `info_statistics` VALUES ('2018-07-30', '0000000000', '0000000300', '0000000002', '0000012139', '0000000005');
+INSERT INTO `info_statistics` VALUES ('2018-07-31', '0000000000', '0000000000', '0000000000', '0000000000', '0000000029');
 
 -- ----------------------------
 -- Table structure for knowledge
@@ -25076,15 +25080,26 @@ INSERT INTO `knowledge` VALUES ('541497395557433344', '什么是非路由 IP 地
 -- ----------------------------
 DROP TABLE IF EXISTS `knowledge_ranking`;
 CREATE TABLE `knowledge_ranking` (
-  `knwoledge_id` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '知识id',
+  `knowledge_id` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '知识id',
   `access_number` int(11) DEFAULT NULL COMMENT '访问数',
   `time` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '统计时间',
-  PRIMARY KEY (`knwoledge_id`,`time`)
+  PRIMARY KEY (`knowledge_id`,`time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='知识点排名';
 
 -- ----------------------------
 -- Records of knowledge_ranking
 -- ----------------------------
+INSERT INTO `knowledge_ranking` VALUES ('541497211616231424', '1', '2018-07-31');
+INSERT INTO `knowledge_ranking` VALUES ('541497237360869376', '3', '2018-07-31');
+INSERT INTO `knowledge_ranking` VALUES ('541497281099071488', '2', '2018-07-31');
+INSERT INTO `knowledge_ranking` VALUES ('541497292675350528', '1', '2018-07-31');
+INSERT INTO `knowledge_ranking` VALUES ('541497305296011264', '2', '2018-07-31');
+INSERT INTO `knowledge_ranking` VALUES ('541497339102101504', '2', '2018-07-31');
+INSERT INTO `knowledge_ranking` VALUES ('541497346370830336', '14', '2018-07-31');
+INSERT INTO `knowledge_ranking` VALUES ('541497359444475904', '1', '2018-07-30');
+INSERT INTO `knowledge_ranking` VALUES ('541497368923602944', '1', '2018-07-31');
+INSERT INTO `knowledge_ranking` VALUES ('541497390276804608', '2', '2018-07-31');
+INSERT INTO `knowledge_ranking` VALUES ('541497393753882624', '1', '2018-07-31');
 
 -- ----------------------------
 -- Table structure for lexicon
@@ -25248,9 +25263,8 @@ CREATE TABLE `response_type_statistics` (
 -- ----------------------------
 -- Records of response_type_statistics
 -- ----------------------------
-INSERT INTO `response_type_statistics` VALUES ('2018-07-28', '0000000056', '0000000009', '3', '7', '0', '0');
-INSERT INTO `response_type_statistics` VALUES ('2018-07-29', '0000000234', '0000000432', '1', '1', '0', '6');
-INSERT INTO `response_type_statistics` VALUES ('2018-07-30', '0000000023', '0000000045', '78', '90', '1', '0');
+INSERT INTO `response_type_statistics` VALUES ('2018-07-30', '0000000001', '0000000000', '2', '2', '0', '0');
+INSERT INTO `response_type_statistics` VALUES ('2018-07-31', '0000000006', '0000000023', '0', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for role
@@ -25341,5 +25355,5 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('538559372305891328', 'admin', 'admin', 'admin.1234', '538945468713926656', '2018-07-31 23:27:56', '1157317608@qq.com', '15810503656', '127.0.0.1', '2018-07-31 23:27:56', '0000000035', '1');
+INSERT INTO `user` VALUES ('538559372305891328', 'admin', 'admin', 'admin.1234', '538945468713926656', '2018-08-01 14:38:18', '1157317608@qq.com', '15810503656', '0:0:0:0:0:0:0:1', '2018-08-01 14:37:59', '0000000037', '1');
 INSERT INTO `user` VALUES ('539229683674251264', 'shangkun', '尚坤', '12345678', '539269705655910400', '2018-07-24 19:38:50', '1157317608@qq.com', '15810503656', '0:0:0:0:0:0:0:1', '2018-07-24 18:09:53', '0000000001', '1');

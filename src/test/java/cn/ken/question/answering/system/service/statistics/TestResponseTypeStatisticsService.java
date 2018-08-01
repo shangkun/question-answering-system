@@ -8,6 +8,7 @@ import cn.ken.question.answering.system.utils.TimeUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -38,6 +39,24 @@ public class TestResponseTypeStatisticsService extends JUnit4BaseConfig {
         request = new ResponseTypeStatisticsRequest(startTime,endTime);
         ResponseTypeStatistics responseTypeStatistics = responseTypeStatisticsService.sum(request);
         responseTypeStatistics.getGreeting();
+    }
+    @Test
+    public void task() throws Exception{
+        List<String> timeList = TimeUtils.getTimeSlot("2018-07-01","2018-08-01");
+        for(String time:timeList){
+            ResponseTypeStatisticsRequest request = new ResponseTypeStatisticsRequest(time+TimeUtils.START_HOUR,time+TimeUtils.END_HOUR);
+            ResponseTypeStatistics statistics = responseTypeStatisticsService.statistics(request);
+            if(statistics.getGreeting()==0 &&
+                    statistics.getHasAnswer()==0 &&
+                    statistics.getHasAnswerAndRecommend()==0 &&
+                    statistics.getHasRecommend()==0 &&
+                    statistics.getOthers()==0 &&
+                    statistics.getUnknown()==0){
+                continue;
+            }
+            statistics.setTime(time);
+            responseTypeStatisticsMapper.insert(statistics);
+        }
     }
 }
 

@@ -91,6 +91,13 @@ public class InfoStatisticsServiceImpl extends Base implements InfoStatisticsSer
         InfoStatisticsRequest request = new InfoStatisticsRequest(startTime,endTime);
         request.setTime(map.get(TimeUtils.TIME));
         InfoStatistics infoStatistics = statistics(request);
+        if(infoStatistics.getGreeting()==0 &&
+                infoStatistics.getClassification()==0 &&
+                infoStatistics.getKnowledge()==0 &&
+                infoStatistics.getLexicon()==0 &&
+                infoStatistics.getQa()==0){
+            return;
+        }
         infoStatisticsMapper.insert(infoStatistics);
     }
 

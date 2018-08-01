@@ -7,6 +7,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -19,12 +20,13 @@ import java.nio.charset.Charset;
  * date: 2018/7/13 <br/>
  * what: JUnit4BaseConfig <br/>
  */
-@RunWith(JUnit4ClassRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration(value = "src/main/webapp")
 @ContextConfiguration
         (
                 locations = {
                         "classpath*:config/applicationContext-dao.xml",
+                        "classpath*:config/applicationContext-config.xml",
                         "classpath*:config/applicationContext-mvc.xml"
                 }
         )
