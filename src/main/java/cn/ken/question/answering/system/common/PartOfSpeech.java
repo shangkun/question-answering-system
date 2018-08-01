@@ -153,7 +153,8 @@ public enum PartOfSpeech {
     Y("y","语气词(deleteyg)"),
     YG("yg","语气语素"),
     Z("z","状态词"),
-    ZG("zg","状态词");
+    ZG("zg","状态词"),
+    BUSINESS("business","业务词");
 
     private PartOfSpeech(String key,String value){
         this.key=key;

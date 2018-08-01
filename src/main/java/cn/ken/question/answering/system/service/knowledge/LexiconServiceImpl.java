@@ -32,7 +32,7 @@ public class LexiconServiceImpl extends Base implements LexiconService{
 
     @Override
     public void initCustomNature() {
-        Nature pcNature = Nature.fromString(cn.ken.question.answering.system.common.Enum.businessWord.getInfo());
+        Nature pcNature = Nature.fromString(Enum.businessWord.getInfo());
         if(pcNature==null){
             Nature.create(Enum.businessWord.getInfo());
         }

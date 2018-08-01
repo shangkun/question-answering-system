@@ -197,6 +197,7 @@ public class QAServiceImpl extends Base implements QAService{
      * @param retrievalList
      */
     private void greetingReporsitoryRetrieval(QuestionAnswer questionAnswer, List<Retrieval> retrievalList) {
+        List<Term> termList = questionAnswer.getDeleteStopWordsResult().size()>0?questionAnswer.getDeleteStopWordsResult():questionAnswer.getSegmentResult();
         for(Map.Entry<String,Greeting> entry: KnowledgeDB.greetingMap.entrySet()){
             String knowledgeTitle = entry.getValue().getTitle();
             double similarity = 0.00d;
@@ -208,7 +209,7 @@ public class QAServiceImpl extends Base implements QAService{
                 return;
             }
             //在匹配单个知识的标题与扩展问时,只取最高的那个相似度
-            similarity = StringUtils.getJaroWinklerDistance(questionAnswer.getDeleteStopWordsResult().size()>0?questionAnswer.getDeleteStopWordsResultToString():questionAnswer.getSegmentResultToString(), entry.getValue().getTermList().toString());
+            similarity = StringUtils.getJaroDistance(termList, entry.getValue().getTermList());
             if(!CollectionUtils.isEmpty(entry.getValue().getGreetingExtensionQuestionList())){
                 for(GreetingExtensionQuestion extensionQuestion:entry.getValue().getGreetingExtensionQuestionList()){
                     double temp = 0.00d;
@@ -217,11 +218,8 @@ public class QAServiceImpl extends Base implements QAService{
                         similarity = 1.00d;
                         break;
                     }
-                    if(CollectionUtils.isEmpty(extensionQuestion.getTermList())){
-                        temp = StringUtils.getJaroWinklerDistance(questionAnswer.getDeleteStopWordsResult().size()>0?questionAnswer.getDeleteStopWordsResultToString():questionAnswer.getSegmentResultToString(), extensionQuestion.getTitle());
-                    }else{
-                        temp = StringUtils.getJaroWinklerDistance(questionAnswer.getDeleteStopWordsResult().size()>0?questionAnswer.getDeleteStopWordsResultToString():questionAnswer.getSegmentResultToString(), extensionQuestion.getTermList().toString());
-                    }
+
+                    temp = StringUtils.getJaroDistance(termList, extensionQuestion.getTermList());
                     if(temp>similarity){
                         knowledgeTitle = extensionQuestion.getTitle();
                         similarity=temp;
@@ -248,6 +246,7 @@ public class QAServiceImpl extends Base implements QAService{
      * @param retrievalList
      */
     private void knowledgeReporsityRetrieval(QuestionAnswer questionAnswer, List<Retrieval> retrievalList) {
+        List<Term> termList = questionAnswer.getDeleteStopWordsResult().size()>0?questionAnswer.getDeleteStopWordsResult():questionAnswer.getSegmentResult();
         //知识库信息检索
         for(Map.Entry<String,Knowledge> entry: KnowledgeDB.knowledgeMap.entrySet()){
             String knowledgeTitle = entry.getValue().getTitle();
@@ -260,7 +259,7 @@ public class QAServiceImpl extends Base implements QAService{
                 break;
             }
             //在匹配单个知识的标题与扩展问时,只取最高的那个相似度
-            similarity = StringUtils.getJaroWinklerDistance(questionAnswer.getDeleteStopWordsResult().size()>0?questionAnswer.getDeleteStopWordsResultToString():questionAnswer.getSegmentResultToString(), entry.getValue().getTermList().toString());
+            similarity = StringUtils.getJaroDistance(termList, entry.getValue().getTermList());
             if(!CollectionUtils.isEmpty(entry.getValue().getExtensionQuestionList())){
                 for(ExtensionQuestion extensionQuestion:entry.getValue().getExtensionQuestionList()){
                     double temp = 0.00d;
@@ -269,11 +268,7 @@ public class QAServiceImpl extends Base implements QAService{
                         similarity = 1.00d;
                         break;
                     }
-                    if(CollectionUtils.isEmpty(extensionQuestion.getTermList())){
-                        temp = StringUtils.getJaroWinklerDistance(questionAnswer.getDeleteStopWordsResult().size()>0?questionAnswer.getDeleteStopWordsResultToString():questionAnswer.getSegmentResultToString(), extensionQuestion.getTitle());
-                    }else{
-                        temp = StringUtils.getJaroWinklerDistance(questionAnswer.getDeleteStopWordsResult().size()>0?questionAnswer.getDeleteStopWordsResultToString():questionAnswer.getSegmentResultToString(), extensionQuestion.getTermList().toString());
-                    }
+                    temp = StringUtils.getJaroDistance(termList, extensionQuestion.getTermList());
                     if(temp>similarity){
                         knowledgeTitle = extensionQuestion.getTitle();
                         similarity=temp;

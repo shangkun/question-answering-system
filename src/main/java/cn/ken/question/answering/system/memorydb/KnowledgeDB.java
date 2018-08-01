@@ -71,9 +71,11 @@ public class KnowledgeDB extends Base {
 
         for(Knowledge knowledge:knowledgeList){
             try {
+                List<Term> termListTemp = new ArrayList<>();
                 List<Term> termList = HanLP.segment(knowledge.getTitle());
+                termListTemp = termList;
                 CoreStopWordDictionary.apply(termList);
-                knowledge.setTermList(termList);
+                knowledge.setTermList(termList.size()==0?termListTemp:termList);
                 suggester.addSentence(knowledge.getTitle());
                 knowledge.setExtensionQuestionList(new ArrayList<ExtensionQuestion>());
                 knowledge.setAnswerList(new ArrayList<Answer>());
@@ -85,10 +87,12 @@ public class KnowledgeDB extends Base {
         }
         for(ExtensionQuestion extensionQuestion:extensionQuestionList){
             try {
+                List<Term> termListTemp = new ArrayList<>();
                 Knowledge knowledge = knowledgeMap.get(extensionQuestion.getKnowledgeId());
                 List<Term> termList1 = HanLP.segment(extensionQuestion.getTitle());
+                termListTemp = termList1;
                 CoreStopWordDictionary.apply(termList1);
-                extensionQuestion.setTermList(termList1);
+                extensionQuestion.setTermList(termList1.size()==0?termListTemp:termList1);
                 suggester.addSentence(extensionQuestion.getTitle());
                 knowledge.getExtensionQuestionList().add(extensionQuestion);
             }catch (Exception e){
@@ -118,7 +122,6 @@ public class KnowledgeDB extends Base {
         for(Greeting greeting:greetingList){
             try {
                 List<Term> termList = HanLP.segment(greeting.getTitle());
-                CoreStopWordDictionary.apply(termList);
                 greeting.setTermList(termList);
                 greeting.setGreetingExtensionQuestionList(new ArrayList<GreetingExtensionQuestion>());
                 greeting.setGreetingAnswerList(new ArrayList<GreetingAnswer>());
@@ -131,7 +134,6 @@ public class KnowledgeDB extends Base {
             try {
                 Greeting greeting = greetingMap.get(extensionQuestion.getGreetingId());
                 List<Term> termList1 = HanLP.segment(extensionQuestion.getTitle());
-                CoreStopWordDictionary.apply(termList1);
                 extensionQuestion.setTermList(termList1);
                 greeting.getGreetingExtensionQuestionList().add(extensionQuestion);
             }catch (Exception e){

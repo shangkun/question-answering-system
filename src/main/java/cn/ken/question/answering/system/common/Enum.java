@@ -19,7 +19,8 @@ public enum Enum {
     unknowResponse(108,"未知回复"),
     othersResponse(109,"其他类型回复"),
 
-    businessWord(1,"业务词");
+    businessWord(1,"业务词"),
+    businessNature(1,"business");
 
     private int value;
     private String info;

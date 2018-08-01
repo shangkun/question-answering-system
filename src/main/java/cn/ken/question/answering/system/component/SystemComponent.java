@@ -23,7 +23,9 @@ import cn.ken.question.answering.system.service.knowledge.LexiconService;
 import com.hankcs.hanlp.dictionary.CustomDictionary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -69,6 +71,25 @@ public class SystemComponent extends Base {
         initConfig();
         logger.info(Constant.printPattern+"init knowledge"+Constant.printPattern);
         initKnowledge();
+    }
+
+    /**
+     * 重新加载推荐器
+     * 每一个小时执行一次
+     */
+    @Scheduled(cron="0 30 0/1 * * ?")
+    public void reloadSuggest() throws Exception{
+        //清理所有推荐文本
+        KnowledgeDB.suggester.removeAllSentences();
+
+        List<ExtensionQuestion> extensionQuestionList = knowledgeService.getExtensionQuestion();
+        if(CollectionUtils.isEmpty(extensionQuestionList)){
+            return;
+        }
+
+        for(ExtensionQuestion extensionQuestion:extensionQuestionList){
+            KnowledgeDB.suggester.addSentence(extensionQuestion.getTitle());
+        }
     }
 
     /**
@@ -127,7 +148,7 @@ public class SystemComponent extends Base {
             for(Lexicon lexicon:listPageData.getData()){
                 String[] topicSet = lexicon.getTopicSet().split(Constant.TOPIC_SPLITER);
                 for(String topic:topicSet){
-                    CustomDictionary.add(topic,Enum.businessWord.getInfo());
+                    CustomDictionary.add(topic);
                 }
             }
 

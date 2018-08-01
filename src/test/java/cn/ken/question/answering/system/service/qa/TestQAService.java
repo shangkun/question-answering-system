@@ -30,8 +30,8 @@ public class TestQAService extends JUnit4BaseConfig {
         questionAnswer.setDebugMode(true);
         questionAnswer.setUserId(IdWorker.getInstance().nextId());
         questionAnswer.setChannelId(cn.ken.question.answering.system.common.Enum.webChannel.getValue());
-        questionAnswer.setQuestion("系统的关闭");
-        QuestionAnswer questionAnswer1  = qaService.qa(questionAnswer);
+        questionAnswer.setQuestion("攻城狮逆袭单身狗，迎娶白富美，走上人生巅峰");
+        QuestionAnswer questionAnswer1 = qaService.qa(questionAnswer);
         questionAnswer1.getAnswer();
     }
 }
