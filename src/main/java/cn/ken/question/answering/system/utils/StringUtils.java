@@ -1,8 +1,7 @@
 package cn.ken.question.answering.system.utils;
 
-import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
+import cn.ken.question.answering.system.utils.hanlp.HanlpUtils;
 import com.hankcs.hanlp.seg.common.Term;
-import com.hankcs.hanlp.tokenizer.NLPTokenizer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,8 +94,8 @@ public class StringUtils {
         }
 
         int halflength = shorter.size()/2 +1;
-        List<String> m1 = getListOfMatchingTermWithin(shorter, longer, halflength);
-        List<String> m2 = getListOfMatchingTermWithin(longer, shorter, halflength);
+        List<String> m1 = getListOfMatchingTermWithinOrInSynonymWord(shorter, longer, halflength);
+        List<String> m2 = getListOfMatchingTermWithinOrInSynonymWord(longer, shorter, halflength);
         if(m1.size() != 0 && m2.size() != 0) {
             if(m1.size() != m2.size()) {
                 return 0.0D;
@@ -117,7 +116,7 @@ public class StringUtils {
      * @param limit
      * @return
      */
-    private static List<String> getListOfMatchingTermWithin(List<Term> first, List<Term> second, int limit) {
+    private static List<String> getListOfMatchingTermWithinOrInSynonymWord(List<Term> first, List<Term> second, int limit) {
         List<String> common = new ArrayList<>();
         List<Term> copy = second;
 
@@ -126,7 +125,7 @@ public class StringUtils {
             boolean found = false;
 
             for(int j = Math.max(0, i - limit); !found && j < Math.min(i + limit, second.size()); ++j) {
-                if(copy.get(j).equals(term)) {
+                if(copy.get(j).equals(term) || HanlpUtils.equalsInSynonym(copy.get(j).word,term.word)) {
                     found = true;
                     common.add(term.toString());
                 }
@@ -146,7 +145,7 @@ public class StringUtils {
         int transpositions = 0;
 
         for(int i = 0; i < first.size(); ++i) {
-            if(!first.get(i).equals(second.get(i))) {
+            if(!first.get(i).equals(second.get(i)) && !HanlpUtils.equalsInSynonym(first.get(i),second.get(i))) {
                 ++transpositions;
             }
         }

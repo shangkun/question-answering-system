@@ -178,7 +178,14 @@ public class HanlpUtils {
 //            if (head == CoNLLWord.ROOT) System.out.println(head.LEMMA);
 //            else System.out.printf("%s --(%s)--> ", head.LEMMA, head.DEPREL);
 //        }
-        System.out.println(Math.random());
+//        System.out.println(Math.random());
+        String str1 = "关闭系统";
+        String str2 = "系统关闭";
+        List<Term> terms1 = HanLP.segment(str1);
+        CoreStopWordDictionary.apply(terms1);
+        List<Term> terms2 = HanLP.segment(str2);
+        CoreStopWordDictionary.apply(terms2);
+        System.out.println(StringUtils.getJaroDistance(terms1,terms2));
     }
 
     public static Map<String,String> knowledgeMap(){
@@ -203,44 +210,14 @@ public class HanlpUtils {
         return HanLP.segment(string);
     }
 
-    public static void removeCustomDictionary(String word){
-        if(StringUtils.isEmpty(word)){
-            return;
-        }
-        CustomDictionary.remove(word);
-    }
-
-    public static boolean addCustomDictionary(String word){
-        if(StringUtils.isEmpty(word)){
-            return false;
-        }
-        return CustomDictionary.add(word);
-    }
-
-    public static boolean insertCustomDictionary(String word){
-        if(StringUtils.isEmpty(word)){
-            return false;
-        }
-        return CustomDictionary.insert(word);
-    }
-
-    public static boolean addCustomDictionary(String word, String natureWithFrequency){
-        if(StringUtils.isEmpty(word) || StringUtils.isEmpty(natureWithFrequency)){
-            return false;
-        }
-        return CustomDictionary.add(word,natureWithFrequency);
-    }
-
-    public static boolean insertCustomDictionary(String word, String natureWithFrequency){
-        if(StringUtils.isEmpty(word) || StringUtils.isEmpty(natureWithFrequency)){
-            return false;
-        }
-        return CustomDictionary.insert(word, natureWithFrequency);
-    }
-
+    /**
+     * 同义词匹配
+     * @param a
+     * @param b
+     * @return
+     */
     public static boolean equalsInSynonym(String a,String b){
         CommonSynonymDictionary.SynonymItem synonymItema = CoreSynonymDictionary.get(a);
-        CommonSynonymDictionary.SynonymItem synonymItemb = CoreSynonymDictionary.get(b);
         if(synonymItema!=null && synonymItema.synonymList!=null && synonymItema.synonymList.size()>0){
             for(Synonym synonym:synonymItema.synonymList){
                 if(b.equals(synonym.realWord)){
@@ -248,6 +225,7 @@ public class HanlpUtils {
                 }
             }
         }
+        CommonSynonymDictionary.SynonymItem synonymItemb = CoreSynonymDictionary.get(b);
         if(synonymItemb!=null && synonymItemb.synonymList!=null && synonymItemb.synonymList.size()>0){
             for(Synonym synonym:synonymItemb.synonymList){
                 if(a.equals(synonym.realWord)){
@@ -258,6 +236,11 @@ public class HanlpUtils {
         return false;
     }
 
+    /**
+     * 转为可读性词性
+     * @param termList
+     * @return
+     */
     public static String transNatureToString(List<Term> termList){
         StringBuilder stringBuilder = new StringBuilder();
         for (int i=0;i<termList.size();i++){
