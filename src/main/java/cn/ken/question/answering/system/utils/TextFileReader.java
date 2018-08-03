@@ -1,6 +1,11 @@
 package cn.ken.question.answering.system.utils;
 
+import com.hankcs.hanlp.HanLP;
+import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
+import com.hankcs.hanlp.seg.common.Term;
+
 import java.io.*;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +61,33 @@ public class TextFileReader{
                     answer+=tempString;
                 }
 
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void readByLines(Map<String,String> map,String fileName){
+        File file = new File(fileName);
+        if(!file.exists()){
+            return;
+        }
+        try (FileInputStream fileInputStream = new FileInputStream(fileName);
+             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+             BufferedReader reader = new BufferedReader(inputStreamReader)){
+            String tempString = null;
+            while ((tempString = reader.readLine()) != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+//                List<Term> terms = HanLP.segment(tempString);
+//                CoreStopWordDictionary.apply(terms);
+//                for(Term term:terms){
+//                    stringBuilder.append(term.word);
+//                }
+                List<String> terms = HanLP.extractKeyword(tempString,3);
+                for(String term:terms){
+                    stringBuilder.append(term);
+                }
+                map.put(tempString,stringBuilder.toString());
             }
         } catch (IOException e) {
             e.printStackTrace();

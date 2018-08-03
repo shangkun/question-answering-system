@@ -1,11 +1,11 @@
 package cn.ken.question.answering.system.utils;
 
 import cn.ken.question.answering.system.utils.hanlp.HanlpUtils;
+import com.hankcs.hanlp.HanLP;
+import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
 import com.hankcs.hanlp.seg.common.Term;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -73,7 +73,7 @@ public class StringUtils {
      * @return
      */
     public static double getJaroDistance(List<Term> first,List<Term> second) {
-        return score(first, second);
+        return cosineScore(first, second);
     }
 
     /**
@@ -162,5 +162,86 @@ public class StringUtils {
      */
     public static boolean regular(String regular,String str) {
         return Pattern.compile(regular).matcher(str).find();
+    }
+
+    /**
+     * 余弦距离
+     * @param first
+     * @param second
+     * @return
+     */
+    public static double cosineScore(List<Term> first, List<Term> second) {
+        double result = 0.0D;
+
+        Map<String, int[]> vectorMap = new HashMap<>();
+
+        int[] tempArray = null;
+
+        for (Term term : first) {
+            if (vectorMap.containsKey(term.word)) {
+                vectorMap.get(term.word)[0]++;
+            } else {
+                tempArray = new int[2];
+                tempArray[0] = 1;
+                tempArray[1] = 0;
+                vectorMap.put(term.word, tempArray);
+            }
+        }
+        for (Term term : second) {
+            if (vectorMap.containsKey(term.word)) {
+                vectorMap.get(term.word)[1]++;
+            } else {
+                tempArray = new int[2];
+                tempArray[0] = 0;
+                tempArray[1] = 1;
+                vectorMap.put(term.word, tempArray);
+            }
+        }
+        result = pointMulti(vectorMap) / sqrtMulti(vectorMap);
+        return result;
+    }
+
+    /**
+     * 平方和
+     * @param paramMap
+     * @return
+     */
+    private static double sqrtMulti(Map<String, int[]> paramMap) {
+        double result = 0;
+        result = squares(paramMap);
+        result = Math.sqrt(result);
+        return result;
+    }
+
+    /**
+     * 求平方和
+     * @param paramMap
+     * @return
+     */
+    private static double squares(Map<String, int[]> paramMap) {
+        double result1 = 0;
+        double result2 = 0;
+        Set<String> keySet = paramMap.keySet();
+        for (String word : keySet) {
+            int temp[] = paramMap.get(word);
+            result1 += (temp[0] * temp[0]);
+            result2 += (temp[1] * temp[1]);
+        }
+        return result1 * result2;
+    }
+
+    /**
+     * 点乘法
+     * @param paramMap
+     * @return
+     */
+    private static double pointMulti(Map<String, int[]> paramMap) {
+        double result = 0;
+        Set<String> keySet = paramMap.keySet();
+        for (String word : keySet) {
+            int temp[] = paramMap.get(word);
+            result += (temp[0] * temp[1]);
+        }
+        return result;
     }
 }
