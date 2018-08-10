@@ -5,6 +5,7 @@ import cn.ken.question.answering.system.model.knowledge.Answer;
 import cn.ken.question.answering.system.model.response.PageData;
 import cn.ken.question.answering.system.utils.TextFileReader;
 import cn.ken.question.answering.system.model.knowledge.KnowledgeRequest;
+import cn.ken.question.answering.system.utils.excel.ExcelReader;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,9 +26,14 @@ public class TestKnowledgeService extends JUnit4BaseConfig {
     @Test
     public void test() throws Exception{
         Map<String,String> map = new HashMap<>();
-        for(int i=0;i<=12;i++){
-            TextFileReader.readFileByLines(map, "D:\\work\\毕业设计资料\\10wwhy\\00" + i + ".txt");
+        int[] arr = {0,1};
+        ArrayList<ArrayList<String>> arrayLists = ExcelReader.xlsxReader("F:\\desktop\\backup\\计算机科学.xlsx", arr);
+        for(ArrayList<String> arrayList:arrayLists){
+            map.put(arrayList.get(0),arrayList.get(1));
         }
+//        for(int i=0;i<=12;i++){
+//            TextFileReader.readFileByLines(map, "D:\\work\\毕业设计资料\\10wwhy\\00" + i + ".txt");
+//        }
         for (Map.Entry<String,String> entry:map.entrySet()){
             KnowledgeRequest knowledgeRequest = new KnowledgeRequest();
             knowledgeRequest.setTitle(entry.getKey());

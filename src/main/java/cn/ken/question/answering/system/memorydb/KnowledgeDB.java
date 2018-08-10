@@ -161,7 +161,8 @@ public class KnowledgeDB extends Base {
             CoreStopWordDictionary.apply(termList);
             knowledge.setTermList(termList);
             if(CollectionUtils.isEmpty(knowledge.getExtensionQuestionList())){
-                for(ExtensionQuestion extensionQuestion:knowledge.getExtensionQuestionList()){
+                List<ExtensionQuestion> extensionQuestionList = knowledge.getExtensionQuestionList();
+                for(ExtensionQuestion extensionQuestion:extensionQuestionList){
                     List<Term> termList1 = HanLP.segment(knowledge.getTitle());
                     CoreStopWordDictionary.apply(termList1);
                     extensionQuestion.setTermList(termList1);

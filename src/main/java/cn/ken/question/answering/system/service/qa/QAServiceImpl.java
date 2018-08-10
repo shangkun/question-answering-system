@@ -209,7 +209,7 @@ public class QAServiceImpl extends Base implements QAService{
                 return;
             }
             //在匹配单个知识的标题与扩展问时,只取最高的那个相似度
-            similarity = StringUtils.getJaroDistance(termList, entry.getValue().getTermList());
+            similarity = StringUtils.getSimilarity(termList, entry.getValue().getTermList());
             if(!CollectionUtils.isEmpty(entry.getValue().getGreetingExtensionQuestionList())){
                 for(GreetingExtensionQuestion extensionQuestion:entry.getValue().getGreetingExtensionQuestionList()){
                     double temp = 0.00d;
@@ -219,7 +219,7 @@ public class QAServiceImpl extends Base implements QAService{
                         break;
                     }
 
-                    temp = StringUtils.getJaroDistance(termList, extensionQuestion.getTermList());
+                    temp = StringUtils.getSimilarity(termList, extensionQuestion.getTermList());
                     if(temp>similarity){
                         knowledgeTitle = extensionQuestion.getTitle();
                         similarity=temp;
@@ -259,7 +259,7 @@ public class QAServiceImpl extends Base implements QAService{
                 break;
             }
             //在匹配单个知识的标题与扩展问时,只取最高的那个相似度
-            similarity = StringUtils.getJaroDistance(termList, entry.getValue().getTermList());
+            similarity = StringUtils.getSimilarity(termList, entry.getValue().getTermList());
             if(!CollectionUtils.isEmpty(entry.getValue().getExtensionQuestionList())){
                 for(ExtensionQuestion extensionQuestion:entry.getValue().getExtensionQuestionList()){
                     double temp = 0.00d;
@@ -268,7 +268,7 @@ public class QAServiceImpl extends Base implements QAService{
                         similarity = 1.00d;
                         break;
                     }
-                    temp = StringUtils.getJaroDistance(termList, extensionQuestion.getTermList());
+                    temp = StringUtils.getSimilarity(termList, extensionQuestion.getTermList());
                     if(temp>similarity){
                         knowledgeTitle = extensionQuestion.getTitle();
                         similarity=temp;

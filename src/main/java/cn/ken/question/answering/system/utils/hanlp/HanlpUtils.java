@@ -6,11 +6,9 @@ import cn.ken.question.answering.system.utils.excel.ExcelReader;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.corpus.synonym.Synonym;
 import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
-import com.hankcs.hanlp.dictionary.CustomDictionary;
 import com.hankcs.hanlp.dictionary.common.CommonSynonymDictionary;
 import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
 import com.hankcs.hanlp.seg.common.Term;
-import com.hankcs.hanlp.tokenizer.NLPTokenizer;
 
 import java.util.*;
 
@@ -185,7 +183,7 @@ public class HanlpUtils {
         CoreStopWordDictionary.apply(terms1);
         List<Term> terms2 = HanLP.segment(str2);
         CoreStopWordDictionary.apply(terms2);
-        System.out.println(StringUtils.getJaroDistance(terms1,terms2));
+        System.out.println(StringUtils.getSimilarity(terms1, terms2));
     }
 
     public static Map<String,String> knowledgeMap(){

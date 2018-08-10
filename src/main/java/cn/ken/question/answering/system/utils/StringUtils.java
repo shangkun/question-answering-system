@@ -1,9 +1,8 @@
 package cn.ken.question.answering.system.utils;
 
 import cn.ken.question.answering.system.utils.hanlp.HanlpUtils;
-import com.hankcs.hanlp.HanLP;
-import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
 import com.hankcs.hanlp.seg.common.Term;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -67,12 +66,12 @@ public class StringUtils {
     }
 
     /**
-     * 获取Jaro编辑距离
+     * 获取字符串相似度
      * @param first
      * @param second
      * @return
      */
-    public static double getJaroDistance(List<Term> first,List<Term> second) {
+    public static double getSimilarity(List<Term> first, List<Term> second) {
         return cosineScore(first, second);
     }
 
@@ -83,6 +82,9 @@ public class StringUtils {
      * @return
      */
     private static double score(List<Term> first, List<Term> second) {
+        if(CollectionUtils.isEmpty(first) || CollectionUtils.isEmpty(second)){
+            return 0.0D;
+        }
         List<Term> shorter;
         List<Term> longer;
         if(first.size() > second.size()) {
@@ -172,7 +174,9 @@ public class StringUtils {
      */
     public static double cosineScore(List<Term> first, List<Term> second) {
         double result = 0.0D;
-
+        if(CollectionUtils.isEmpty(first) || CollectionUtils.isEmpty(second)){
+            return result;
+        }
         Map<String, int[]> vectorMap = new HashMap<>();
 
         int[] tempArray = null;

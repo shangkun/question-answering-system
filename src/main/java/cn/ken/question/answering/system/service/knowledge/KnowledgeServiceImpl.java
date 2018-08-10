@@ -257,7 +257,9 @@ public class KnowledgeServiceImpl extends Base implements KnowledgeService{
         }
         knowledgeMapper.update(knowledge);
         extensionQuestionMapper.deleteByKnowledgeId(knowledge.getId());
-        extensionQuestionMapper.batchInsert(extensionQuestionList);
+        if(!CollectionUtils.isEmpty(extensionQuestionList)){
+            extensionQuestionMapper.batchInsert(extensionQuestionList);
+        }
         answerMapper.deleteByKnowledgeId(knowledge.getId());
         answerMapper.batchInsert(request.getAnswerList());
 
