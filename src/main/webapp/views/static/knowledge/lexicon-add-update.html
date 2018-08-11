@@ -129,13 +129,13 @@ $(function(){
 		GET(lexiconUrl+"get/"+id,null,function(data){
 			if(data.statusCode==200){
 				$("#topicSet").html(data.data.topicSet);
-				$('#topicSet').tagEditor({ initialTags:tagArray, delimiter: ';', placeholder: '请输入词库集合' });
+				$('#topicSet').tagEditor({ initialTags:tagArray, delimiter: ';', forceLowercase: false, placeholder: '请输入词库集合' });
 				$(".tag-editor").attr("style","height:100px;");
 			}
 		},true);
 	}else{
 		$("#lexicon-form").attr("action",lexiconUrl+"add");
-		$('#topicSet').tagEditor({ initialTags:tagArray, delimiter: ';', placeholder: '请输入词库集合' });
+		$('#topicSet').tagEditor({ initialTags:tagArray, delimiter: ';', forceLowercase: false, placeholder: '请输入词库集合' });
 		$(".tag-editor").attr("style","height:100px;");
 	}
 

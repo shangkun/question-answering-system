@@ -116,13 +116,13 @@ $(function(){
 		GET(sensitiveWordUrl+"get/"+id,null,function(data){
 			if(data.statusCode==200){
 				$("#topicSet").html(data.data.topicSet);
-				$('#topicSet').tagEditor({ initialTags:tagArray, delimiter: ';', placeholder: '请输入敏感词集合' });
+				$('#topicSet').tagEditor({ initialTags:tagArray, delimiter: ';', forceLowercase: false, placeholder: '请输入敏感词集合' });
 				$(".tag-editor").attr("style","height:100px;");
 			}
 		},true);
 	}else{
 		$("#sensitive-word-form").attr("action",sensitiveWordUrl+"add");
-		$('#topicSet').tagEditor({ initialTags:tagArray, delimiter: ';', placeholder: '请输入敏感词集合' });
+		$('#topicSet').tagEditor({ initialTags:tagArray, delimiter: ';', forceLowercase: false, placeholder: '请输入敏感词集合' });
 		$(".tag-editor").attr("style","height:100px;");
 	}
 
