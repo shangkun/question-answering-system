@@ -1,10 +1,12 @@
 package cn.ken.question.answering.system.utils;
 
+import cn.ken.question.answering.system.model.knowledge.LemmaList;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
 import com.hankcs.hanlp.seg.common.Term;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -91,6 +93,26 @@ public class TextFileReader{
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static String readByLines(String fileName){
+        File file = new File(fileName);
+        if(!file.exists()){
+            return null;
+        }
+        try (FileInputStream fileInputStream = new FileInputStream(fileName);
+             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+             BufferedReader reader = new BufferedReader(inputStreamReader)){
+            String tempString = null;
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((tempString = reader.readLine()) != null) {
+                stringBuilder.append(tempString);
+            }
+            return stringBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

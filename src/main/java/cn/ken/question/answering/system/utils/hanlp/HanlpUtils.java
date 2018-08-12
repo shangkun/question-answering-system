@@ -2,6 +2,7 @@ package cn.ken.question.answering.system.utils.hanlp;
 
 import cn.ken.question.answering.system.common.PartOfSpeech;
 import cn.ken.question.answering.system.utils.StringUtils;
+import cn.ken.question.answering.system.utils.TextFileReader;
 import cn.ken.question.answering.system.utils.excel.ExcelReader;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.corpus.synonym.Synonym;
@@ -176,7 +177,7 @@ public class HanlpUtils {
 //            if (head == CoNLLWord.ROOT) System.out.println(head.LEMMA);
 //            else System.out.printf("%s --(%s)--> ", head.LEMMA, head.DEPREL);
 //        }
-//        System.out.println(Math.random());
+        System.out.println(Math.random());
         String str1 = "关闭系统";
         String str2 = "系统关闭";
         List<Term> terms1 = HanLP.segment(str1);

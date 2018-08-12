@@ -1,7 +1,9 @@
 package cn.ken.question.answering.system.service.knowledge;
 
 import cn.ken.question.answering.system.JUnit4BaseConfig;
+import cn.ken.question.answering.system.mapper.knowledge.LemmaMapper;
 import cn.ken.question.answering.system.model.knowledge.Answer;
+import cn.ken.question.answering.system.model.knowledge.Lemma;
 import cn.ken.question.answering.system.model.response.PageData;
 import cn.ken.question.answering.system.utils.TextFileReader;
 import cn.ken.question.answering.system.model.knowledge.KnowledgeRequest;
@@ -22,6 +24,8 @@ import java.util.Map;
 public class TestKnowledgeService extends JUnit4BaseConfig {
     @Autowired
     private KnowledgeService knowledgeService;
+    @Autowired
+    private LemmaMapper lemmaMapper;
 
     @Test
     public void test() throws Exception{
@@ -43,6 +47,30 @@ public class TestKnowledgeService extends JUnit4BaseConfig {
             List<Answer> answerList = new ArrayList<>();
             Answer answer = new Answer();
             answer.setContent(entry.getValue());
+            answer.setChannelId(cn.ken.question.answering.system.common.Enum.allChannel.getValue());
+            answerList.add(answer);
+            knowledgeRequest.setAnswerList(answerList);
+            knowledgeService.add(knowledgeRequest);
+        }
+        KnowledgeRequest knowledgeRequest = new KnowledgeRequest();
+        knowledgeRequest.setIndex(0);
+        knowledgeRequest.setPageSize(10);
+        PageData pageData = knowledgeService.get(knowledgeRequest);
+        pageData.getData();
+    }
+
+    @Test
+    public void lemma() throws Exception{
+        List<Lemma> list = lemmaMapper.selectByPage(0,lemmaMapper.count());
+        for (Lemma lemma:list){
+            KnowledgeRequest knowledgeRequest = new KnowledgeRequest();
+            knowledgeRequest.setTitle(lemma.getLemmaTitle());
+            knowledgeRequest.setModifierId("538559372305891328");
+            knowledgeRequest.setClassificationId("540256092177825792");
+            knowledgeRequest.setStatus(1);
+            List<Answer> answerList = new ArrayList<>();
+            Answer answer = new Answer();
+            answer.setContent(lemma.getLemmaDesc()+"\n<a href='"+lemma.getLemmaUrl()+"' target='_blank' >"+lemma.getLemmaCroppedTitle()+"</a>");
             answer.setChannelId(cn.ken.question.answering.system.common.Enum.allChannel.getValue());
             answerList.add(answer);
             knowledgeRequest.setAnswerList(answerList);

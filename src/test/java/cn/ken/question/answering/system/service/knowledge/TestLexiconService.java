@@ -3,10 +3,8 @@ package cn.ken.question.answering.system.service.knowledge;
 import cn.ken.question.answering.system.JUnit4BaseConfig;
 import cn.ken.question.answering.system.common.*;
 import cn.ken.question.answering.system.common.Enum;
-import cn.ken.question.answering.system.model.knowledge.Answer;
-import cn.ken.question.answering.system.model.knowledge.KnowledgeRequest;
-import cn.ken.question.answering.system.model.knowledge.Lexicon;
-import cn.ken.question.answering.system.model.knowledge.LexiconRequest;
+import cn.ken.question.answering.system.mapper.knowledge.LemmaMapper;
+import cn.ken.question.answering.system.model.knowledge.*;
 import cn.ken.question.answering.system.model.response.PageData;
 import cn.ken.question.answering.system.utils.excel.ExcelReader;
 import org.junit.Test;
@@ -22,6 +20,8 @@ import java.util.*;
 public class TestLexiconService extends JUnit4BaseConfig {
     @Autowired
     private LexiconService lexiconService;
+    @Autowired
+    private LemmaMapper lemmaMapper;
 
     @Test
     public void test() throws Exception{
@@ -38,6 +38,26 @@ public class TestLexiconService extends JUnit4BaseConfig {
             request.setStatus(1);
             request.setTopic(string);
             request.setTopicSet(string);
+            request.setType(Enum.businessWord.getValue());
+            lexiconService.add(request);
+        }
+        LexiconRequest lexiconRequest = new LexiconRequest();
+        lexiconRequest.setIndex(0);
+        lexiconRequest.setPageSize(10);
+        PageData pageData = lexiconService.getByAttribute(lexiconRequest);
+        pageData.getData();
+    }
+
+    @Test
+    public void lemma() throws Exception{
+        List<Lemma> list = lemmaMapper.selectByPage(0,lemmaMapper.count());
+        for (Lemma lemma:list){
+            Lexicon request = new Lexicon();
+            request.setModifierId("538559372305891328");
+            request.setModifyTime(new Date());
+            request.setStatus(1);
+            request.setTopic(lemma.getLemmaTitle());
+            request.setTopicSet(lemma.getLemmaTitle());
             request.setType(Enum.businessWord.getValue());
             lexiconService.add(request);
         }
