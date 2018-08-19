@@ -72,12 +72,6 @@ function loadKnowledge(id){
         if(data.statusCode==200){
             var greeting = data.data;
             $("#title").val(greeting.title);
-            $("#classificationId").val(greeting.classificationId);
-
-            //使当前节点处于选中状态
-            var node = classificationTree.getNodeByParam("id",greeting.classificationId);
-            $("#classificationName").val(node.name);
-            classificationTree.checkNode(node, true, true);
 
             var extensionQuestionList = greeting.extensionQuestionList;
             if(extensionQuestionList!=null && extensionQuestionList.length>0){

@@ -75,7 +75,7 @@
             <div class="abs right pnl-right">
                 <div class="pnl-right-content">
                     <div class="pnl-tabs">
-                        <div class="tab-btn active" id="hot-tab" style="width: 90%;">常见问题</div>
+                        <div class="tab-btn active" id="hot-tab" style="width: 90%;">热点问题</div>
                     </div>
                     <div class="pnl-hot">
                         <ul class="rel-list unselect" id="hots"></ul>
@@ -138,13 +138,16 @@
     function getSuggest() {
         var suggest = "";
         var request = new Object();
+        if($.trim(current_question).length<=2){
+            return;
+        }
         request.question = $.trim(current_question);
         request.userId = getUserId();
 
         POST(qaUrl2+"suggest", request, function (data){
             if (data.statusCode == 200) {
                 $.each(data.data, function (i, v) {
-                    suggest += "<p><a href='javascript:;' onclick='suggestRequest(this)'>" + v + "</a></p>";
+                    suggest += "<p class='mine_p'><a href='javascript:;' onclick='suggestRequest(this)'>" + v + "</a></p>";
                 });
                 $(".suggest").append(suggest);
                 $(".suggest").css("display", "block");

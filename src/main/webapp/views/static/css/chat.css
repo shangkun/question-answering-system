@@ -59,6 +59,12 @@ p {
     margin: 0
 }
 
+.mine_p {
+    font-size: 12px;
+    padding: .1em;
+    margin: 0
+}
+
 input[type=text], input[type=email], input[type=date], input[type=password], input[type=number], input[type=url], input[type=tel], textarea, select {
     padding: .85em 1.2em;
     line-height: 1;
@@ -5216,8 +5222,9 @@ body[lang='tw'] #humanBtn::after {
     left: 5px;
     z-index: 999;
     width: 80%;
-    height: 100%;
+    height: 95%;
     overflow: auto;
+    margin-top: 25px;
 }
 
 .suggest a {
