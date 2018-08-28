@@ -94,14 +94,35 @@ public class QAServiceImpl extends Base implements QAService{
 
     @Override
     public List<String> suggest(QuestionAnswer questionAnswer) throws Exception {
+        List<String> suggestList = new ArrayList<>();
         //数据合法性校验
         if(!StringUtils.lengthCheck(questionAnswer.getQuestion(),0,500)){
-            return Collections.emptyList();
+            return suggestList;
         }
         if(questionAnswer.getSuggestNumber()==null){
             questionAnswer.setSuggestNumber(5);
         }
         return KnowledgeDB.suggester.suggest(questionAnswer.getQuestion(),questionAnswer.getSuggestNumber());
+//        List<Term> termList = HanLP.segment(questionAnswer.getQuestion());
+//        questionAnswer.setSegmentResult(termList);
+//        //去除停用词
+//        CoreStopWordDictionary.apply(termList);
+//        questionAnswer.setDeleteStopWordsResult(termList);
+//
+//        List<Retrieval> retrievalList = new ArrayList<>();
+//
+//        knowledgeReporsityRetrieval(questionAnswer,retrievalList);
+//
+//        if(CollectionUtils.isEmpty(retrievalList)){
+//            return suggestList;
+//        }
+//        for(Retrieval retrieval:retrievalList){
+//            if(suggestList.size()>questionAnswer.getSuggestNumber().intValue()){
+//                break;
+//            }
+//            suggestList.add(retrieval.getKnowledgeTitle());
+//        }
+//        return suggestList;
     }
 
     @Override

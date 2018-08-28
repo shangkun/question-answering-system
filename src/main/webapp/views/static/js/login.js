@@ -35,7 +35,7 @@ $(function(){
                         layer.msg(data.info,{icon: 5,time:1000});
                     }
                 },
-                resetForm: true,
+                resetForm: false,
                 dataType: "json"
             });
         }
