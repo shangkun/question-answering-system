@@ -112,6 +112,9 @@ public class SystemComponent extends Base {
 
             List<RoleMenu> roleMenuList = roleService.getRoleMenu();
             Admin.putAllRoleMenuMap(roleMenuList);
+
+            List<Menu> menuList = roleService.getMenu();
+            Admin.putAllMenuMap(menuList);
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
             return false;

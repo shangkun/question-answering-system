@@ -200,7 +200,7 @@ public class UserServiceImpl extends Base implements UserService{
             String token = IdWorker.getInstance().nextId();
             response.setAccessToken(token);
             response.setRole(roleService.getRole(user.getRoleId()));
-            redisUtils.set(Constant.ACCESS_TOKEN_WITH_PREFIX+token,gson.toJson(user1), Constant.TIMEOUT);
+            redisUtils.set(Constant.ACCESS_TOKEN_WITH_PREFIX+token,gson.toJson(user), Constant.TIMEOUT);
 
             //修改最后登录时间与登录ip
             user.setLastLoginTime(new Date());

@@ -1,5 +1,6 @@
 package cn.ken.question.answering.system.memorydb;
 
+import cn.ken.question.answering.system.model.admin.Menu;
 import cn.ken.question.answering.system.utils.Base;
 import cn.ken.question.answering.system.model.admin.Role;
 import cn.ken.question.answering.system.model.admin.RoleMenu;
@@ -21,6 +22,8 @@ public class Admin extends Base {
     public static Map<String,Role> roleMap = new ConcurrentHashMap<>();
 
     public static Map<String,RoleMenu> roleMenuMap = new ConcurrentHashMap<>();
+
+    public static Map<String,Menu> menuMap = new ConcurrentHashMap<>();
 
     public static void putAllUserMap(List<User> list){
         for(User user:list){
@@ -49,6 +52,12 @@ public class Admin extends Base {
     public static void putAllRoleMenuMap(List<RoleMenu> list){
         for(RoleMenu roleMenu:list){
             roleMenuMap.put(roleMenu.getId(),roleMenu);
+        }
+    }
+
+    public static void putAllMenuMap(List<Menu> list){
+        for(Menu menu:list){
+            menuMap.put(menu.getId(),menu);
         }
     }
 
