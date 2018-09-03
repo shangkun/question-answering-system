@@ -177,14 +177,25 @@ public class HanlpUtils {
 //            if (head == CoNLLWord.ROOT) System.out.println(head.LEMMA);
 //            else System.out.printf("%s --(%s)--> ", head.LEMMA, head.DEPREL);
 //        }
-        System.out.println(Math.random());
-        String str1 = "关闭系统";
-        String str2 = "系统关闭";
-        List<Term> terms1 = HanLP.segment(str1);
-        CoreStopWordDictionary.apply(terms1);
-        List<Term> terms2 = HanLP.segment(str2);
-        CoreStopWordDictionary.apply(terms2);
-        System.out.println(StringUtils.getSimilarity(terms1, terms2));
+//        System.out.println(Math.random());
+//        String str1 = "关闭系统";
+//        String str2 = "系统关闭";
+//        List<Term> terms1 = HanLP.segment(str1);
+//        CoreStopWordDictionary.apply(terms1);
+//        List<Term> terms2 = HanLP.segment(str2);
+//        CoreStopWordDictionary.apply(terms2);when where why who what how which
+//        System.out.println(StringUtils.getSimilarity(terms1, terms2));
+//        System.out.println(transNatureToString(HanLP.segment("什么是机器学习？")));
+//        System.out.println(transNatureToString(HanLP.segment("冰岛在哪？")));
+//        System.out.println(transNatureToString(HanLP.segment("请问你今年几岁了？")));
+//        System.out.println(transNatureToString(HanLP.segment("中国的直辖市有哪几个？")));
+//        System.out.println(transNatureToString(HanLP.segment("什么时候过年？")));
+//        System.out.println(transNatureToString(HanLP.segment("你怎么去上海？")));
+//        System.out.println(transNatureToString(HanLP.segment("为什么去那？")));
+//        System.out.println(transNatureToString(HanLP.segment("你是谁？")));
+        if(equalsInSynonym("什么","啥")){
+            System.out.println("4564");
+        }
     }
 
     public static Map<String,String> knowledgeMap(){

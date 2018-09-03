@@ -5,15 +5,15 @@ package cn.ken.question.answering.system.model.admin;
  * what: 菜单 <br/>
  */
 public class Menu {
-
+    //主键
     private String id;
-
+    //菜单名称
     private String name;
-
+    //菜单URL
     private String url;
-
+    //菜单描述
     private String description;
-
+    //菜单状态
     private Integer status;
 
     public String getId() {

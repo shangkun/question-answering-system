@@ -3,6 +3,9 @@ package cn.ken.question.answering.system.service.qa;
 import cn.ken.question.answering.system.JUnit4BaseConfig;
 import cn.ken.question.answering.system.common.*;
 import cn.ken.question.answering.system.common.Enum;
+import cn.ken.question.answering.system.mapper.knowledge.KnowledgeMapper;
+import cn.ken.question.answering.system.model.knowledge.Knowledge;
+import cn.ken.question.answering.system.model.knowledge.KnowledgeRequest;
 import cn.ken.question.answering.system.model.qa.QuestionAnswer;
 import cn.ken.question.answering.system.utils.IdWorker;
 import cn.ken.question.answering.system.utils.TextFileReader;
@@ -22,6 +25,8 @@ import java.util.Map;
 public class TestQAService extends JUnit4BaseConfig {
     @Autowired
     private QAService qaService;
+    @Autowired
+    private KnowledgeMapper knowledgeMapper;
     @Test
     public void suggest() throws Exception{
         QuestionAnswer questionAnswer = new QuestionAnswer();
@@ -42,24 +47,26 @@ public class TestQAService extends JUnit4BaseConfig {
     }
     @Test
     public void qaAccuracyRate() throws Exception{
-        Map<String,String> map = new HashMap<>();
-        TextFileReader.readByLines(map,"C:\\Users\\shangkun\\Desktop\\knowledge.txt");
+        KnowledgeRequest knowledgeRequest = new KnowledgeRequest();
+        knowledgeRequest.setIndex(0);
+        knowledgeRequest.setPageSize(3000);
+        List<Knowledge> knowledgeList = knowledgeMapper.getByAttribute(knowledgeRequest);
         int answered = 0;
-        for(Map.Entry<String,String> entry:map.entrySet()){
+        for(Knowledge knowledge:knowledgeList){
             QuestionAnswer questionAnswer = new QuestionAnswer();
             questionAnswer.setUserId(IdWorker.getInstance().nextId());
             questionAnswer.setChannelId(cn.ken.question.answering.system.common.Enum.webChannel.getValue());
-            questionAnswer.setQuestion(entry.getValue());
+            questionAnswer.setQuestion(knowledge.getTitle()+"是什么?");
             QuestionAnswer questionAnswer1 = qaService.qa(questionAnswer);
             if(questionAnswer1.getResponseType()== Enum.hasAnswerResponse.getValue() ||
                     questionAnswer1.getResponseType()==Enum.hasAnswerAndRecommendResponse.getValue() ||
                     questionAnswer1.getResponseType()==Enum.hasRecommendResponse.getValue()){
                 answered++;
             }else{
-                System.out.println(entry.getKey()+":"+questionAnswer1.getQuestion()+":"+questionAnswer1.getResponseType());
+                System.out.println(knowledge.getTitle()+":"+questionAnswer1.getQuestion()+":"+questionAnswer1.getResponseType());
             }
         }
-        double accuraryRate = (double)answered/(double)map.size();
+        double accuraryRate = (double)answered/(double)knowledgeList.size();
         System.out.println(accuraryRate);
     }
 }
